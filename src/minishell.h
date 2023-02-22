@@ -42,6 +42,13 @@ typedef struct s_env
 	char	*value;
 }	t_env;
 
+typedef struct s_tokens
+{
+	char			*token;
+	struct s_tokens	*previous;
+	struct s_tokens	*next;
+}	t_tokens;
+
 /* Estrutura que guarda a informacao sobre o input*/
 typedef struct s_info
 {
@@ -51,5 +58,7 @@ typedef struct s_info
 	int		pipes; //takes account if there are pipes in the input
 	t_env	*env_v;
 }		t_info;
+
+//dá feedback disto aqui e se adicionarias ou mudavas qualquer cena
 
 #endif
