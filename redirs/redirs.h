@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:30 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/06 17:25:54 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/10 15:06:54 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,4 +18,4 @@
 #include <stdio.h>
 #include "../get_next_line/get_next_line.h"
 
-void	redir_out(int read_fd, int *fds, int size);
+void	redir_out(int read_fd, int fd);

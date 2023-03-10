@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spawn_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 14:48:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/07 21:50:43 by pedro            ###   ########.fr       */
+/*   Updated: 2023/03/09 22:37:26 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,20 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include "get_next_line/get_next_line.h"
+//#include "get_next_line/get_next_line.h"
 
-int	files_to_be_created(t_list *head)
+int	files_to_be_created(t_vec *expressions)
 {
-	t_expression	*node;
+	t_expression	*expr;
+	size_t			i;
 
-	while (head)
+	i = 0;
+	while (i < expressions->len)
 	{
-		node = ((t_expression *)head->content);
-		if (node->state == OUT || node->state == APPEND)
+		expr = (t_expression *)expressions->buf[i];
+		if (expr->state == OUT || expr->state == APPEND)
 			return (1);
-		head = head->next;
+		i += 1;
 	}
 	return (0);
 }
@@ -45,29 +47,30 @@ int	create_specific_file(char *file_name)
 	return (fd);
 }
 
-int	*create_files(t_list *head, int *size)
+int	*create_files(t_vec *expressions)
 {
-	t_expression	*node;
-	t_expression	*prev_node;
-	int		*file_descriptors;
-	size_t	i;
+	t_expression	*expr;
+	t_expression	*prev_expr;
+	int				*file_descriptors;
+	size_t			i;
+	size_t			j;
 
-	prev_node = NULL;
+	prev_expr = NULL;
 	file_descriptors = malloc(100 * sizeof(int));
 	i = 0;
-	while (head)
+	j = 0;
+	while (j < expressions->len)
 	{
-		node = ((t_expression *)head->content);
-		if (node->state == FL && prev_node)//deal with APPEND in a diferent way
+		expr = (t_expression *)expressions->buf[j];
+		if (expr->state == FL && prev_expr)//deal with APPEND in a diferent way
 		{
-			file_descriptors[i] = create_specific_file(node->args[0]);
-			++i;
-			*size+= 1;
+			file_descriptors[i] = create_specific_file(expr->args.buf[0]);
+			i += 1;
 		}
-		if (head->next && ((t_expression *)((t_list *)head->next)->content)->state == OUT
-			|| head->next && ((t_expression *)((t_list *)head->next)->content)->state == APPEND)
-			prev_node = node;
-		head = head->next;
+		if (j + 1 != expressions->len && ((t_expression *)expressions->buf[j + 1])->state == OUT
+			|| j + 1 != expressions->len && ((t_expression *)expressions->buf[j + 1])->state == APPEND)
+			prev_expr = expr;
+		j += 1;
 	}
 	file_descriptors[i] = 0;
 	return (file_descriptors);

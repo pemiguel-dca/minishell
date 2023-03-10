@@ -6,32 +6,24 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:56 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/06 17:25:30 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/10 15:34:00 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirs.h"
 
-/*Preety much done*/
-void	redir_out(int read_fd, int *fds, int size)
+void	redir_out(int read_fd, int fd)
 {
 	char	*line;
-	size_t	i;
 
-	i = 0;
-	line = get_next_line(read_fd);
-	while (line)
+	while (true)
 	{
-		i = 0;
-		while (i < size)
-		{
-			write(fds[i], line, ft_strlen(line));
-			++i;
-		}
 		line = get_next_line(read_fd);
+		if (line)
+			write(fd, line, ft_strlen(line));
+		else
+			break ;
 	}
 	free(line);
-	i = 0;
-	while (i < size)
-		close(fds[i++]);
+	close(fd);
 }

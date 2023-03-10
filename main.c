@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/09 17:05:28 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/10 16:46:33 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
 		expressions = dumb_shit(&expressions);
-		__debug_parser(&expressions);
+		//__debug_parser(&expressions);
 		//in the future add this to 'spawn'
 		//env = create_envs(envp);
 		//if (ft_strcmp("env",parser->args[0]) == 0)
@@ -86,7 +86,7 @@ int	main(int argc, char **argv, char **envp)
 		//else if (ft_strcmp("cd",parser->args[0]) == 0)
 		//	_cd(parser);
 		// else
-		// spawn(final, STDIN_FILENO, STDOUT_FILENO);
+		spawn(&expressions, STDIN_FILENO, STDOUT_FILENO);
 		//vec_free(&expressions);
 		//vec_free(&tokens);
 		//free(input);

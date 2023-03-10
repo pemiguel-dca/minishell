@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/09 17:15:45 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/10 15:54:58 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,14 @@ t_expression	*get_new_expression(t_vec *expressions, size_t *i);
 t_expression	*get_file_only(t_expression *expr);
 
 /*spawn.c (so para ver a funcionar os comandos)*/
-int			spawn(t_list *nodes, int input_fd, int output_fd);
-void		redir_out(int read_fd, int *fds, int size);
+int			spawn(t_vec *expressions, int input_fd, int output_fd);
 
 /*spawn_utils.c*/
 /*Verifica se existem ficheiros que devem ser criados antes de executar qualquer comando*/
-int			files_to_be_created(t_list *nodes);
+int			files_to_be_created(t_vec *expressions);
 /*Retorna fd de file que foi criado*/
 int			create_specific_file(char *file_name);
-int			*create_files(t_list *head, int *size);
+int			*create_files(t_vec *expressions);
 
 /*assing_env.c*/
 t_list	*create_envs(char **envp);
