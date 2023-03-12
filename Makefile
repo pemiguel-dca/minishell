@@ -10,7 +10,7 @@ SRCS=main.c vector.c spawn.c spawn_utils.c cmd_validations.c\
 lexer/lexer.c \
 parser/parser.c parser/parser_utils.c \
 env_vars/envstuff.c \
-redirs/redir_out.c \
+redirs/redir_out.c redirs/redir_in.c\
 # builtins/env.c builtins/pwd.c builtins/cd.c
 
 OBJS=$(SRCS:.c=.o)

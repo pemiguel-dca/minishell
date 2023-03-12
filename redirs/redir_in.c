@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirs.h                                           :+:      :+:    :+:   */
+/*   redir_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/06 17:24:30 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/12 16:26:28 by pemiguel         ###   ########.fr       */
+/*   Created: 2023/03/12 16:20:26 by pemiguel          #+#    #+#             */
+/*   Updated: 2023/03/12 17:20:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../lexer/lexer.h"
-#include "../parser/parser.h"
-#include "wait.h"
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include "../get_next_line/get_next_line.h"
+#include "redirs.h"
+/*do tomorrow*/
+void	redir_in(int read_fd, char *file_name)
+{
+	int	fd;
 
-void	redir_out_append(int read_fd, int fd);
-void    redir_in(int read_fd, char *file_name);
+	printf("%s", file_name);
+	fd = open(file_name, O_RDONLY);	
+	if (fd < 0)
+	{
+		printf("%s : No such file or directory", file_name);
+	}
+}

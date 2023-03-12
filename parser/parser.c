@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/10 16:09:25 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/12 17:04:11 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,24 @@ t_vec	dumb_shit(t_vec *expressions)
 		i += 1;
 	}
 	return (new);
+}
+
+/*Since we don't have to deal with unclosed quotes I think this is the only case that parser will have any errors*/
+int	check_errors_parser(t_vec *expressions)
+{
+	size_t			i;
+	t_expression	*expr;
+
+	i = 0;
+	while (i < expressions->len)
+	{
+		expr = expressions->buf[i];
+		if (expr->state > 3 && i + 1 == expressions->len)
+		{
+			printf("syntax error near unexpected token `newline'\n");
+			return (EXIT_FAILURE);
+		}
+		i += 1;
+	}
+	return (EXIT_SUCCESS);
 }

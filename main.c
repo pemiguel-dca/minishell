@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/10 16:46:33 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/12 17:15:11 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,13 @@ int	main(int argc, char **argv, char **envp)
 		//else if (ft_strcmp("cd",parser->args[0]) == 0)
 		//	_cd(parser);
 		// else
-		spawn(&expressions, STDIN_FILENO, STDOUT_FILENO);
-		//vec_free(&expressions);
-		//vec_free(&tokens);
-		//free(input);
+		/*problem with this, when parser as an error the next cmd does not work (???)
+		The real problem is that, for example if u write '>' it prints the erros but the next state is going to be a FL*/
+		if (!check_errors_parser(&expressions))
+			spawn(&expressions, STDIN_FILENO, STDOUT_FILENO);
+		vec_free(&expressions);
+		vec_free(&tokens);
+		free(input);
 	}
 	return (0);
 }
