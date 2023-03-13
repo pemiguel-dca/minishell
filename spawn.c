@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:11 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/12 17:12:01 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/13 15:45:25 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	last_out_append(t_vec *expressions, size_t *i)
 {
 	size_t			j;
 	t_expression	*expr;
-	
+
 	j = *i + 1;
 	expr = expressions->buf[j];
 	while (j < expressions->len && expr->state != PIPED)
@@ -40,7 +40,7 @@ int	last_in(t_vec *expressions, size_t *i)
 {
 	size_t			j;
 	t_expression	*expr;
-	
+
 	j = *i + 1;
 	expr = expressions->buf[j];
 	while (j < expressions->len && expr->state != PIPED)
@@ -58,7 +58,7 @@ size_t get_pos_fd(t_vec *expressions, size_t *i)
 	size_t			j;
 	size_t			pos_fd;
 	t_expression	*expr;
-	
+
 	j = 0;
 	pos_fd = 0;
 	expr = expressions->buf[j];
@@ -128,16 +128,17 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 
 	if (i >= expressions->len) //reset ao i para a próxima vez, talvez uma estrutura faria mais sentido talvez, manda msg quando vires para discutirmos isto
 		i = 0;
+	expr = expressions->buf[i];
 	if (pipe(pipe_fd) < 0)
 		exit(EXIT_FAILURE);
 	if (fork() == 0)
 	{
 		// Child process
 		//Algo está errado, às vezes o comando é executado mas dá o msg de erro de longe a longe.
-		expr = expressions->buf[i];
 		replace_in_out(expressions, i, pipe_fd, &input_fd, &output_fd);
 		if (expr->state == CMD)
 			execute_cmd(expr);
+		exit(0);
 	}
 	else
 	{
@@ -164,14 +165,10 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 					pos_fd = get_pos_fd(expressions, &i);
 					redir_out_append(pipe_fd[READ_END], new_file_descriptors[pos_fd]);
 				}
-				if (expr->state == IN)//&& last_in(expressions, &i))
+				if (expr->state == IN && last_in(expressions, &i))
 				{
-					printf("HEY: %ld", i);
-					/*
 					expr = expressions->buf[++i];
-					printf("ola");
-					//redir_in(pipe_fd[READ_END], (char *)expr->args.buf[0]);
-					*/
+					redir_in(pipe_fd[READ_END], (char *)expr->args.buf[0]);
 				}
 				i += 1;
 			}

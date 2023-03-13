@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/12 16:58:11 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:35:02 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int		check_errors_parser(t_vec *expressions);
 
 /*parser_utils.c*/
 int	adicional_args(t_vec *expressions);
-t_states	get_state(const t_vec *args);
+t_states	get_state(const t_vec *args, t_states prev_state);
 t_vec		cmd_args(t_expression *expr);
 t_vec		extra_args(t_expression *expr, t_vec *args);
 t_expression	*get_new_expression(t_vec *expressions, size_t *i);

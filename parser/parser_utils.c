@@ -6,15 +6,14 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 14:51:13 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/09 17:12:13 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:38:52 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_states	get_state(const t_vec *args)
+t_states	get_state(const t_vec *args, t_states prev_state)
 {
-	static int	prev_state;
 	t_states	state;
 
 	state = -1;
@@ -28,7 +27,6 @@ t_states	get_state(const t_vec *args)
 		state = operator_type(args->buf[0]);
 	else if (args->len == 1 && ft_strchr(args->buf[0], '='))
 		state = ENV;
-	prev_state = state;
 	return (state);
 }
 
@@ -37,7 +35,7 @@ int	adicional_args(t_vec *expressions)
 {
 	size_t			i;
 	t_expression	*expr;
-	
+
 	i = 0;
 	while (i < expressions->len)
 	{
@@ -53,7 +51,7 @@ t_vec	cmd_args(t_expression *expr)
 {
 	size_t	j;
 	t_vec	args;
-	
+
 	j = 0;
 	args = vec_new();
 	while (j < expr->args.len)
@@ -67,7 +65,7 @@ t_vec	cmd_args(t_expression *expr)
 t_vec	extra_args(t_expression *expr, t_vec *args)
 {
 	size_t	j;
-	
+
 	j = 1;
 	while (j < expr->args.len)
 	{

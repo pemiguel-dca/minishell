@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/12 17:04:11 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/13 14:38:21 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,19 @@ static t_expression	*get_next(t_parser *parser)
 {
 	t_expression	*expr;
 	t_vec			args;
+	t_states		prev_state;//para verificar se e ficheiro, nao pode ser estatico do outro lado, pois se tivermos um erro deste genero '>', o proximo estado vai ser sempre FL
 
 	args = vec_new();
+	prev_state = 0;
 	while (parser->i < parser->tokens->len)
 	{
 		vec_push(&args, (char *)parser->tokens->buf[parser->i]);
+		prev_state = expr->state;
 		if ((parser->tokens->len != parser->i + 1 && is_operator((char *)parser->tokens->buf[parser->i + 1]))
 			|| is_operator((char *)parser->tokens->buf[parser->i]) || parser->tokens->len == parser->i + 1)
 		{
 			expr = malloc(sizeof(t_expression));
-			*expr = (t_expression){.args = args, .state = get_state(&args)};
+			*expr = (t_expression){.args = args, .state = get_state(&args, prev_state)};
 			parser->i += 1;
 			return (expr);
 		}
