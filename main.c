@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/13 14:39:10 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/15 19:47:17 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,27 @@ void __debug_lexer(const t_vec *tokens)
 
 void	__debug_parser(const t_vec *expressions)
 {
+	printf("[");
 	for (size_t i = 0; i < expressions->len; i += 1)
 	{
 		printf("[");
-		t_expression *expr = expressions->buf[i];
-		for (size_t j = 0; j < expr->args.len; j += 1)
+		t_vec *statement = expressions->buf[i];
+		for (size_t j = 0; j < statement->len; j += 1)
 		{
-			char *arg = expr->args.buf[j];
-			printf("'%s'", arg);
-			if (j + 1 != expr->args.len)
+			t_expression *expr = statement->buf[j];
+			if (expr->union_type == 0) {
+				printf("'%s'", expr->uni.literal);
+			} else {
+				printf("'%d %s'", expr->uni.compound.type, expr->uni.compound.to);
+			}
+			if (j + 1 != statement->len)
 				printf(", ");
 		}
-		printf(" | State = %u", expr->state);
-		printf("]\n");
+		printf("]");
+		if (i + 1 != expressions->len)
+				printf(", ");
 	}
+	printf("]\n");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -65,7 +72,7 @@ int	main(int argc, char **argv, char **envp)
 	// t_list		*env;
 	t_vec		tokens;
 	t_vec		expressions;
-	t_list		*final;
+	// t_list		*final;
 	char		*input;
 
 	while (true)
@@ -73,10 +80,10 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		add_history(input);
 		tokens = tokenize(input);
-		// __debug_lexer(&tokens);
+		__debug_lexer(&tokens);
 		expressions = parse(&tokens);
-		expressions = dumb_shit(&expressions);
-		//__debug_parser(&expressions);
+		// expressions = dumb_shit(&expressions);
+		__debug_parser(&expressions);
 		//in the future add this to 'spawn'
 		//env = create_envs(envp);
 		//if (ft_strcmp("env",parser->args[0]) == 0)
@@ -88,8 +95,8 @@ int	main(int argc, char **argv, char **envp)
 		// else
 		/*problem with this, when parser as an error the next cmd does not work (???)
 		The real problem is that, for example if u write '>' it prints the erros but the next state is going to be a FL*/
-		if (!check_errors_parser(&expressions))
-			spawn(&expressions, STDIN_FILENO, STDOUT_FILENO);
+		//if (!check_errors_parser(&expressions))
+			//spawn(&expressions, STDIN_FILENO, STDOUT_FILENO);
 		vec_free(&expressions);
 		vec_free(&tokens);
 		free(input);
@@ -100,3 +107,18 @@ int	main(int argc, char **argv, char **envp)
 // TODO: 	manage env vars
 //			finish parser w other modes
 //
+
+/*
+ls > a a > b b | c
+
+[[ ls, redir(a), a, redir(b), b ], [ c ]]
+
+{
+	cmd: ['ls', 'a', 'b']
+	redirs: ['a', 'b']
+}
+
+redirs:	create a and b
+cmd:	execute and populate b
+
+*/

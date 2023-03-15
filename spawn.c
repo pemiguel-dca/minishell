@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   spawn.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:11 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/13 15:45:25 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/15 19:20:43 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "lexer/lexer.h"
 #include "parser/parser.h"
 #include "wait.h"
@@ -19,12 +20,12 @@
 #include "get_next_line/get_next_line.h"
 #include "redirs/redirs.h"
 
-int	last_out_append(t_vec *expressions, size_t *i)
+int	last_out_append(t_vec *expressions, size_t i)
 {
 	size_t			j;
 	t_expression	*expr;
 
-	j = *i + 1;
+	j = i + 1;
 	expr = expressions->buf[j];
 	while (j < expressions->len && expr->state != PIPED)
 	{
@@ -36,12 +37,12 @@ int	last_out_append(t_vec *expressions, size_t *i)
 	return (1);
 }
 
-int	last_in(t_vec *expressions, size_t *i)
+int	last_in(t_vec *expressions, size_t i)
 {
 	size_t			j;
 	t_expression	*expr;
 
-	j = *i + 1;
+	j = i + 1;
 	expr = expressions->buf[j];
 	while (j < expressions->len && expr->state != PIPED)
 	{
@@ -53,7 +54,7 @@ int	last_in(t_vec *expressions, size_t *i)
 	return (1);
 }
 
-size_t get_pos_fd(t_vec *expressions, size_t *i)
+size_t get_pos_fd(t_vec *expressions, size_t i)
 {
 	size_t			j;
 	size_t			pos_fd;
@@ -62,7 +63,7 @@ size_t get_pos_fd(t_vec *expressions, size_t *i)
 	j = 0;
 	pos_fd = 0;
 	expr = expressions->buf[j];
-	while (j < *i + 1)
+	while (j < i + 1)
 	{
 		expr = expressions->buf[j];
 		if (expr->state == OUT || expr->state == APPEND)
@@ -72,30 +73,30 @@ size_t get_pos_fd(t_vec *expressions, size_t *i)
 	return (pos_fd - 1);
 }
 
-static void	replace_in_out(t_vec *expressions, size_t i, int *pipe_fd, int *input_fd, int *output_fd)
+static void	set_pipe_channels(t_vec *expressions, size_t i, int *pipe_fd, int input_fd, int output_fd)
 {
 	if (i + 1 < expressions->len)
 	{
 		close(pipe_fd[READ_END]);
-		if (*input_fd != STDIN_FILENO)
+		if (input_fd != STDIN_FILENO)
 		{
-			dup2(*input_fd, STDIN_FILENO);
-			close(*input_fd);
+			dup2(input_fd, STDIN_FILENO);
+			close(input_fd);
 		}
 		dup2(pipe_fd[WRITE_END], STDOUT_FILENO);
 		close(pipe_fd[WRITE_END]);
 	}
 	else
 	{
-		if (*input_fd != STDIN_FILENO)
+		if (input_fd != STDIN_FILENO)
 		{
-			dup2(*input_fd, STDIN_FILENO);
-			close(*input_fd);
+			dup2(input_fd, STDIN_FILENO);
+			close(input_fd);
 		}
-		if (*output_fd != STDOUT_FILENO)
+		if (output_fd != STDOUT_FILENO)
 		{
-			dup2(*output_fd, STDOUT_FILENO);
-			close(*output_fd);
+			dup2(output_fd, STDOUT_FILENO);
+			close(output_fd);
 		}
 	}
 }
@@ -104,14 +105,15 @@ static void	execute_cmd(t_expression *expr)
 {
 	char	*path;
 
-	if (is_valid_args(*expr))
+	path = bin_path(*expr);
+	if (path)
 	{
-		path = get_cmd_path(*expr);
+		vec_push(&expr->args, 0);
 		execve(path, (char **)expr->args.buf, NULL);
 	}
 	else
 	{
-		// TODO: mesma coisa (fazer panic)
+		// TODO: cannot use
 		fprintf(stderr, "Command not found: %s\n", (char *)expr->args.buf[0]);
 		exit(EXIT_FAILURE);
 	}
@@ -133,12 +135,9 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 		exit(EXIT_FAILURE);
 	if (fork() == 0)
 	{
-		// Child process
-		//Algo está errado, às vezes o comando é executado mas dá o msg de erro de longe a longe.
-		replace_in_out(expressions, i, pipe_fd, &input_fd, &output_fd);
+		set_pipe_channels(expressions, i, pipe_fd, input_fd, output_fd);
 		if (expr->state == CMD)
 			execute_cmd(expr);
-		exit(0);
 	}
 	else
 	{
@@ -159,13 +158,13 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 					spawn(expressions, pipe_fd[READ_END], output_fd);
 					break ;
 				}
-				if ((expr->state == OUT || expr->state == APPEND)
-					&& last_out_append(expressions, &i))
+				else if ((expr->state == OUT || expr->state == APPEND)
+					&& last_out_append(expressions, i))
 				{
-					pos_fd = get_pos_fd(expressions, &i);
+					pos_fd = get_pos_fd(expressions, i);
 					redir_out_append(pipe_fd[READ_END], new_file_descriptors[pos_fd]);
 				}
-				if (expr->state == IN && last_in(expressions, &i))
+				else if (expr->state == IN && last_in(expressions, i))
 				{
 					expr = expressions->buf[++i];
 					redir_in(pipe_fd[READ_END], (char *)expr->args.buf[0]);
@@ -185,4 +184,4 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 	}
 	return (0);
 }
-
+*/

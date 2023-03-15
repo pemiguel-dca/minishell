@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:01:35 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/13 14:21:11 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/13 18:17:59 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,5 @@ void  vec_push(t_vec *vec, void *el)
 		update_cap(vec);
 	}
 	vec->buf[vec->len] = el;
-	vec->buf[vec->len + 1] = 0;
 	vec->len += 1;
 }

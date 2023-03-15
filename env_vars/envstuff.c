@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envstuff.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 16:04:49 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/02/28 17:43:10 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/13 18:50:36 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,4 @@ t_list	*create_envs(char **envp)
 		i++;
 	}
 	return (env);
-}
-
-char	**get_path_splited()
-{
-	char	**path_splited;
-
-	path_splited = ft_split(getenv("PATH"), ':');
-	return (path_splited);
 }

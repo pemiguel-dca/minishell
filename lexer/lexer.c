@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pedro <pedro@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/07 20:50:40 by pedro            ###   ########.fr       */
+/*   Updated: 2023/03/15 19:06:01 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ static char	*dispatch_operator(t_lexer *lexer)
 	size_t	n;
 
 	if (
-		ft_strnstr(lexer->input, REDIR_APPEND, sizeof(REDIR_APPEND) - 1)
-		|| ft_strnstr(lexer->input, REDIR_DELIMITER, sizeof(REDIR_DELIMITER) - 1)
+		ft_strnstr(lexer->input, LIT_REDIR_APPEND, sizeof(LIT_REDIR_APPEND) - 1)
+		|| ft_strnstr(lexer->input, LIT_REDIR_DELIMITER, sizeof(LIT_REDIR_DELIMITER) - 1)
 	)
-		n = sizeof(REDIR_APPEND) - 1;
+		n = sizeof(LIT_REDIR_APPEND) - 1;
 	else if (
-		ft_strnstr(lexer->input, PIPE, sizeof(PIPE) - 1)
-		|| ft_strnstr(lexer->input, REDIR_OUT, sizeof(REDIR_OUT) - 1)
-		|| ft_strnstr(lexer->input, REDIR_IN, sizeof(REDIR_IN) - 1)
+		ft_strnstr(lexer->input, LIT_PIPE, sizeof(LIT_PIPE) - 1)
+		|| ft_strnstr(lexer->input, LIT_REDIR_OUT, sizeof(LIT_REDIR_OUT) - 1)
+		|| ft_strnstr(lexer->input, LIT_REDIR_IN, sizeof(LIT_REDIR_IN) - 1)
 	)
-		n = sizeof(PIPE) - 1;
+		n = sizeof(LIT_PIPE) - 1;
 	else
 	{
 		printf("Invalid operator\n");
@@ -97,10 +97,10 @@ static char	*get_next(t_lexer *lexer)
 	{
 		if (ft_isspace(*curr(lexer, i)) || !*curr(lexer, i))
 			return (dispatch_normal(lexer, i));
-		else if (*curr(lexer, i) == QUOTE || *curr(lexer, i) == DOUBLE_QUOTE)
+		else if (*curr(lexer, i) == LIT_QUOTE || *curr(lexer, i) == LIT_DOUBLE_QUOTE)
 			return (dispatch_string(lexer, i));
-		else if (*curr(lexer, i) == *REDIR_OUT || *curr(lexer, i) == *REDIR_IN
-			|| *curr(lexer, i) == *PIPE)
+		else if (*curr(lexer, i) == *LIT_REDIR_OUT || *curr(lexer, i) == *LIT_REDIR_IN
+			|| *curr(lexer, i) == *LIT_PIPE)
 		{
 			if (i == 0)
 				return (dispatch_operator(lexer));

@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_validations.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 16:50:00 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/10 15:44:34 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/15 19:22:02 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "lexer/lexer.h"
 #include "parser/parser.h"
 #include "wait.h"
@@ -17,40 +18,30 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-char	*get_cmd_path(t_expression expr)
+char	*bin_path(t_expression expr)
 {
-	char		**path;
-	struct stat sb;
-	char		*cmd_path;
+	char		*res;
+	char		*with_delim;
+	char		*full_path;
+	char		**path_env;
 	size_t		i;
 
-	path = get_path_splited();
+	res = NULL;
+	with_delim = ft_strjoin("/", expr.args.buf[0]);
+	path_env = ft_split(getenv("PATH"), ':');
 	i = 0;
-	while (path[i])
+	while (path_env[i])
 	{
-		if (stat(ft_strjoin(path[i], ft_strjoin("/", expr.args.buf[0])), &sb) == 0)
-			break ;
+		full_path = ft_strjoin(path_env[i], with_delim);
+		if (access(full_path, F_OK) == 0)
+		{
+			res = full_path;
+			break;
+		}
+		free(full_path);
 		i++;
 	}
-	cmd_path = ft_strdup(ft_strjoin(path[i], ft_strjoin("/", expr.args.buf[0])));
-	return (cmd_path);
+	free(with_delim);
+	return (res);
 }
-
-int	is_valid_args(t_expression expr)
-{
-	char		**path;
-	struct stat sb;
-	int			exists;
-	size_t		i;
-
-	path = get_path_splited();
-	exists = 0;
-	i = 0;
-	while (path[i])
-	{
-		if (stat(ft_strjoin(path[i], ft_strjoin("/", expr.args.buf[0])), &sb) == 0)
-			exists = 1;
-		i++;
-	}
-	return (exists);
-}
+*/

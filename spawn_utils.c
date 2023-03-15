@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   spawn_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 14:48:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/12 15:42:26 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/15 19:20:56 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "lexer/lexer.h"
 #include "parser/parser.h"
 #include "wait.h"
@@ -38,7 +39,7 @@ int	create_specific_file(char *file_name, t_states state)
 {
 	int			fd;
 	struct stat sb;
-	
+
 	if (state == APPEND && stat(file_name, &sb) == 0)
 		fd = open(file_name, O_WRONLY | O_APPEND, 0644);
 	else
@@ -78,3 +79,4 @@ int	*create_files(t_vec *expressions)
 	file_descriptors[i] = 0;
 	return (file_descriptors);
 }
+*/
