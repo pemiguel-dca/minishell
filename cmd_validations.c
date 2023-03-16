@@ -6,11 +6,10 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 16:50:00 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/15 19:22:02 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:10:25 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
 #include "lexer/lexer.h"
 #include "parser/parser.h"
 #include "wait.h"
@@ -44,4 +43,3 @@ char	*bin_path(t_expression expr)
 	free(with_delim);
 	return (res);
 }
-*/

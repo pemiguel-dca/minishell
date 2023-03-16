@@ -6,11 +6,10 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:11 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/15 19:20:43 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:17:00 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
 #include "lexer/lexer.h"
 #include "parser/parser.h"
 #include "wait.h"
@@ -130,25 +129,29 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 
 	if (i >= expressions->len) //reset ao i para a próxima vez, talvez uma estrutura faria mais sentido talvez, manda msg quando vires para discutirmos isto
 		i = 0;
+	if (files_to_be_created(expressions) && i == 0)
+		new_file_descriptors = create_files(expressions);
 	expr = expressions->buf[i];
 	if (pipe(pipe_fd) < 0)
 		exit(EXIT_FAILURE);
-	if (fork() == 0)
+	if ((i + 1 <= expressions->len || ((t_expression *)(expressions->buf[i + 1]))->state != IN) && fork() == 0)
 	{
 		set_pipe_channels(expressions, i, pipe_fd, input_fd, output_fd);
 		if (expr->state == CMD)
+		{
 			execute_cmd(expr);
+		}
 	}
 	else
 	{
 		// Parent process
+		if (!(i + 1 <= expressions->len || ((t_expression *)(expressions->buf[i + 1]))->state != IN))
+			wait(NULL);
 		if (i + 1 < expressions->len)
 		{
 			close(pipe_fd[WRITE_END]);
 			if (input_fd != STDIN_FILENO)
 				close(input_fd);
-			if (files_to_be_created(expressions) && i == 0)
-				new_file_descriptors = create_files(expressions);
 			while (i < expressions->len)
 			{
 				expr = expressions->buf[i];
@@ -166,8 +169,14 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 				}
 				else if (expr->state == IN && last_in(expressions, i))
 				{
-					expr = expressions->buf[++i];
-					redir_in(pipe_fd[READ_END], (char *)expr->args.buf[0]);
+					i -= 1;
+					if (fork() == 0)
+					{
+						int fd_in = redir_in(((t_expression *)expressions->buf[i + 2])->args.buf[0]);
+						set_pipe_channels(expressions, i, pipe_fd, fd_in, output_fd);
+						execute_cmd(expressions->buf[i]);
+					}
+					i += 2;
 				}
 				i += 1;
 			}
@@ -180,8 +189,6 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 			if (output_fd != STDOUT_FILENO)
 				close(output_fd);
 		}
-		wait(NULL);
 	}
 	return (0);
 }
-*/

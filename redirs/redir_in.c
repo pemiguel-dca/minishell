@@ -3,25 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   redir_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:20:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/13 15:55:07 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:05:31 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirs.h"
 
-void	redir_in(int read_fd, char *file_name)
+int	redir_in(char *file_name)
 {
 	int	fd;
-	int	saved_fd;
 
 	fd = open(file_name, O_RDONLY);
-	saved_fd = dup(read_fd);
 	if (fd < 0)
 	{
 		printf("%s : No such file or directory\n", file_name);
 		exit(EXIT_FAILURE);
 	}
+	return (fd);
 }

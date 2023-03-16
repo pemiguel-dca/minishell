@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirs.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:30 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/12 16:26:28 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/16 18:03:09 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,4 @@
 #include "../get_next_line/get_next_line.h"
 
 void	redir_out_append(int read_fd, int fd);
-void    redir_in(int read_fd, char *file_name);
+int		redir_in(char *file_name);

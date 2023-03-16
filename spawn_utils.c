@@ -6,11 +6,10 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 14:48:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/15 19:20:56 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:07:49 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
 #include "lexer/lexer.h"
 #include "parser/parser.h"
 #include "wait.h"
@@ -79,4 +78,3 @@ int	*create_files(t_vec *expressions)
 	file_descriptors[i] = 0;
 	return (file_descriptors);
 }
-*/
