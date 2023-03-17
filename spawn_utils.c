@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spawn_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 14:48:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/16 16:07:49 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/17 21:12:54 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	*create_files(t_vec *expressions)
 	while (j < expressions->len)
 	{
 		expr = (t_expression *)expressions->buf[j];
-		if (expr->state == FL && prev_expr)
+		if (expr->state == FL && (prev_expr->state == OUT || prev_expr->state == APPEND))
 		{
 			file_descriptors[i] = create_specific_file(expr->args.buf[0], prev_expr->state);
 			i += 1;
