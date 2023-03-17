@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:11 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/17 21:36:53 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/17 21:47:07 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 				//para este tipo de casos "wc -l <a >b"
 				if (any_random_in(expressions))
 					i += 2;
-				set_pipe_channels(expressions, i + 2 , pipe_fd, input_fd, output_fd);
+				set_pipe_channels(expressions, i , pipe_fd, input_fd, output_fd);
 				execute_cmd(expr);
 			}
 		}
