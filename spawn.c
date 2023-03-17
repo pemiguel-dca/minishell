@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:03:11 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/17 21:47:07 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:18:06 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,12 @@ static void	execute_cmd(t_expression *expr)
 
 
 /*O unico caso onde vamos ter de redirecionar input é quando o comando tiver mais que um argumento e nenhum desse argumento a mais for uma flag '-'*/
-int	theres_a_need_to_redir(t_vec *expressions)
+int	theres_a_need_to_redir(t_vec *expressions, size_t i)
 {
-	size_t			i;
 	t_expression	*expr;
 	size_t			cmd_as_args;
 	size_t			no_operator_before;
-	
-	i = 0;
+
 	cmd_as_args = 0;
 	expr = expressions->buf[i];
 	no_operator_before = 0;
@@ -159,14 +157,12 @@ int	theres_a_need_to_redir(t_vec *expressions)
 	return (0);
 }
 
-int	any_random_in(t_vec *expressions)
+int	any_random_in(t_vec *expressions, size_t i)
 {
-	size_t			i;
 	t_expression	*expr;
 	
-	i = 0;
 	expr = expressions->buf[i];
-	while (i < expressions->len)
+	while (i < expressions->len && expr->state != PIPED)
 	{
 		expr = expressions->buf[i];
 		if (expr->state == IN)
@@ -174,21 +170,6 @@ int	any_random_in(t_vec *expressions)
 		i += 1;
 	}
 	return (0);
-}
-
-void	skip_in(t_vec *expressions, size_t *i)
-{
-	size_t			j;
-	t_expression	*expr;
-
-	j = 0;
-	expr = expressions->buf[j];
-	while (j < expressions->len && expr->state != IN)
-	{
-		expr = expressions->buf[j];
-		j += 1;
-	}
-	*i = j;
 }
 
 int spawn(t_vec *expressions, int input_fd, int output_fd)
@@ -211,7 +192,7 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 	{
 		if (expr->state == CMD)
 		{
-			if (theres_a_need_to_redir(expressions))
+			if (theres_a_need_to_redir(expressions, i))
 			{
 				//percorre ate ao last in
 				while (!last_in(expressions, i + 1))
@@ -224,7 +205,7 @@ int spawn(t_vec *expressions, int input_fd, int output_fd)
 			else
 			{
 				//para este tipo de casos "wc -l <a >b"
-				if (any_random_in(expressions))
+				if (any_random_in(expressions, i))
 					i += 2;
 				set_pipe_channels(expressions, i , pipe_fd, input_fd, output_fd);
 				execute_cmd(expr);
