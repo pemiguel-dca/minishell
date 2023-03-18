@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 19:52:04 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 23:52:17 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	files_to_be_created(t_vec *expressions)
 int	create_specific_file(char *file_name, t_states state)
 {
 	int			fd;
-	struct stat sb;
+	struct stat	sb;
 
 	if (state == APPEND && stat(file_name, &sb) == 0)
 		fd = open(file_name, O_WRONLY | O_APPEND, 0644);
@@ -91,7 +91,7 @@ char	*bin_path(t_expression expr)
 		if (access(full_path, F_OK) == 0)
 		{
 			res = full_path;
-			break;
+			break ;
 		}
 		free(full_path);
 		i++;

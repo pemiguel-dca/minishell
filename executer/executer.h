@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 20:08:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 23:50:48 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,29 @@
 #define READ_END 0
 #define WRITE_END 1
 
-typedef struct	s_files
+/*Para o executer em geral (só uma maneira de encurtar código)*/
+typedef struct	executer
 {
+	size_t	i;
+	int		input_fd;
+	int		output_fd;
+	int		pipe_fd[2];
 	int		*new_files;
 	size_t	pos_file;
-	int		read_file;
-}	t_files;
+}	t_executer;
 
 /*executer.c*/
 
 /*Where the magic happens*/
-int		executer(t_vec *expressions, int input_fd, int output_fd);
+int		executer(t_vec *expressions, t_executer *params);
+
+static inline char	*file(t_vec *expressions, size_t i)
+{
+	t_expression	*expr;
+	
+	expr = expressions->buf[i];
+	return (expr->args.buf[0]);
+}
 
 /*executer_utils.c*/
 
