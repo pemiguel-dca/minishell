@@ -6,12 +6,13 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/17 17:35:42 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 17:14:00 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.h"
 #include "lexer/lexer.h"
+#include "executer/executer.h"
 #include "parser/parser.h"
 #include "builtins/builtins.h"
 # include <stdlib.h>
@@ -89,7 +90,7 @@ int	main(int argc, char **argv, char **envp)
 		/*problem with this, when parser as an error the next cmd does not work (???)
 		The real problem is that, for example if u write '>' it prints the erros but the next state is going to be a FL*/
 		if (!check_errors_parser(&expressions))
-			spawn(&expressions, STDIN_FILENO, STDOUT_FILENO);
+			executer(&expressions, STDIN_FILENO, STDOUT_FILENO);
 		vec_free(&expressions);
 		vec_free(&tokens);
 		free(input);

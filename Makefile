@@ -6,11 +6,12 @@ GET_NEXT_LINE=get_next_line/get_next_line.a
 RM=rm -f
 
 NAME=minishell
-SRCS=main.c vector.c spawn.c spawn_utils.c cmd_validations.c\
+SRCS=main.c vector.c\
 lexer/lexer.c \
 parser/parser.c parser/parser_utils.c \
 env_vars/envstuff.c \
 redirs/redir_out.c redirs/redir_in.c\
+executer/executer.c executer/executer_utils.c
 # builtins/env.c builtins/pwd.c builtins/cd.c
 
 OBJS=$(SRCS:.c=.o)

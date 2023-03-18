@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:56 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/13 14:41:31 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 17:52:46 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,40 @@ void	redir_out_append(int read_fd, int fd)
 	}
 	free(line);
 	close(fd);
+}
+
+int		last_out_append(t_vec *expressions, size_t i)
+{
+	size_t			j;
+	t_expression	*expr;
+
+	j = i + 1;
+	expr = expressions->buf[j];
+	while (j < expressions->len && expr->state != PIPED)
+	{
+		expr = expressions->buf[j];
+		if (expr->state == OUT || expr->state == APPEND)
+			return (0);
+		j += 1;
+	}
+	return (1);
+}
+
+size_t	get_pos_fd(t_vec *expressions, size_t i)
+{
+	size_t			j;
+	size_t			pos_fd;
+	t_expression	*expr;
+
+	j = 0;
+	pos_fd = 0;
+	expr = expressions->buf[j];
+	while (j < i + 1)
+	{
+		expr = expressions->buf[j];
+		if (expr->state == OUT || expr->state == APPEND)
+			pos_fd++;
+		j += 1;
+	}
+	return (pos_fd - 1);
 }
