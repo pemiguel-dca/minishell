@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 17:49:23 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 19:52:04 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,22 @@ char	*bin_path(t_expression expr)
 	}
 	free(with_delim);
 	return (res);
+}
+
+void	execute_cmd(t_expression *expr)
+{
+	char	*path;
+
+	path = bin_path(*expr);
+	if (path)
+	{
+		vec_push(&expr->args, 0);
+		execve(path, (char **)expr->args.buf, NULL);
+	}
+	else
+	{
+		printf("Command not found: %s\n", (char *)expr->args.buf[0]);
+		exit(EXIT_FAILURE);
+	}
+	free(path);
 }

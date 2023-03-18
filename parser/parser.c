@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/13 14:38:21 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 20:05:36 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_expression	*get_next(t_parser *parser)
 	return (NULL);
 }
 
-t_vec	parse(const t_vec *tokens)
+t_vec	construct_expressions(const t_vec *tokens)
 {
 	t_vec			expressions;
 	t_parser		parser;
@@ -57,7 +57,7 @@ t_vec	parse(const t_vec *tokens)
 	return (expressions);
 }
 
-t_vec	dumb_shit(t_vec *expressions)
+t_vec	parse(t_vec *expressions)
 {
 	size_t			i;
 	t_expression	*expr;

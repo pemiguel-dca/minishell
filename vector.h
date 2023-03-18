@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:53:07 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/10 16:16:32 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 20:10:44 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ typedef struct vec {
 	void	**buf;
 }	t_vec;
 
+/*Update capacity of the vector*/
 static void	update_cap(t_vec *vec);
-
+/*Push content to a vector*/
 void  vec_push(t_vec *vec, void *el);
 
+/*Initialize a vector*/
 inline static t_vec	vec_new()
 {
 	return ((t_vec){
@@ -35,7 +37,7 @@ inline static t_vec	vec_new()
 		.buf = malloc(sizeof(void *) * INIT_CAP)
 	});
 }
-
+/*Free the memory in vector*/
 inline static void vec_free(t_vec *vec)
 {
 	size_t	i;

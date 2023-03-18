@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/18 17:14:00 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 20:06:19 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int	main(int argc, char **argv, char **envp)
 		add_history(input);
 		tokens = tokenize(input);
 		// __debug_lexer(&tokens);
-		expressions = parse(&tokens);
-		expressions = dumb_shit(&expressions);
+		expressions = construct_expressions(&tokens);
+		expressions = parse(&expressions);
 		// __debug_parser(&expressions);
 		//in the future add this to 'spawn'
 		//env = create_envs(envp);

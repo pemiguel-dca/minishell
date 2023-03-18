@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 18:01:57 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 20:18:11 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,33 @@ static void	set_pipe_channels(t_vec *expressions, size_t i, int *pipe_fd, int in
 		}
 	}
 }
-
-static void	execute_cmd(t_expression *expr)
+/*To much arguments passed in function, maybe add a structure (?)*/
+static void	child_process(t_vec *expressions, int *pipe_fd, int input_fd, int output_fd, size_t *i, t_files *files)
 {
-	char	*path;
+	t_expression	*expr;
 
-	path = bin_path(*expr);
-	if (path)
+	expr = expressions->buf[*i];
+	if (expr->state == CMD)
 	{
-		vec_push(&expr->args, 0);
-		execve(path, (char **)expr->args.buf, NULL);
-	}
-	else
-	{
-		// TODO: cannot use
-		fprintf(stderr, "Command not found: %s\n", (char *)expr->args.buf[0]);
-		exit(EXIT_FAILURE);
+		if (theres_a_need_to_redir(expressions, *i))
+		{
+			//Run until last_in but at the same time tries to open the files
+			while (!last_in(expressions, *i))
+			{
+				files->read_file = read_fd(((t_expression *)expressions->buf[*i + 2])->args.buf[0]);
+				*i += 2;
+			}
+			set_pipe_channels(expressions, *i, pipe_fd, files->read_file, output_fd);
+			execute_cmd(expr);
+		}
+		else
+		{
+			*i += times_in(expressions, *i);
+			set_pipe_channels(expressions, *i, pipe_fd, input_fd, output_fd);
+			execute_cmd(expr);
+		}
 	}
 }
-
 
 int executer(t_vec *expressions, int input_fd, int output_fd)
 {
@@ -68,34 +76,11 @@ int executer(t_vec *expressions, int input_fd, int output_fd)
 
 	if (pipe(pipe_fd) < 0)
 		exit(EXIT_FAILURE);
-	expr = expressions->buf[i];
 	files = malloc(sizeof(t_files));
 	if (files_to_be_created(expressions) && i == 0)
 		files->new_files = create_files(expressions);
 	if (fork() == 0)
-	{
-		if (expr->state == CMD)
-		{
-			if (theres_a_need_to_redir(expressions, i))
-			{
-				//percorre ate ao last in
-				while (!last_in(expressions, i))
-				{
-					//pode ter ficheiros antes do final que nao existem
-					files->read_file = read_fd(((t_expression *)expressions->buf[i + 2])->args.buf[0]);
-					i += 2;
-				}
-				set_pipe_channels(expressions, i, pipe_fd, files->read_file, output_fd);
-				execute_cmd(expr);
-			}
-			else
-			{
-				i += times_in(expressions, i);
-				set_pipe_channels(expressions, i, pipe_fd, input_fd, output_fd);
-				execute_cmd(expr);
-			}
-		}
-	}
+		child_process(expressions, pipe_fd, input_fd, output_fd, &i, files);
 	else
 	{
 		// Parent process
@@ -132,7 +117,7 @@ int executer(t_vec *expressions, int input_fd, int output_fd)
 			if (output_fd != STDOUT_FILENO)
 				close(output_fd);
 		}
-		if (i >= expressions->len) //reset ao i para a próxima vez, talvez uma estrutura faria mais sentido talvez, manda msg quando vires para discutirmos isto
+		if (i >= expressions->len)
 			i = 0;
 	}
 	return (0);

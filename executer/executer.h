@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 17:49:57 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 20:08:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,22 @@ typedef struct	s_files
 	int		read_file;
 }	t_files;
 
+/*executer.c*/
+
+/*Where the magic happens*/
 int		executer(t_vec *expressions, int input_fd, int output_fd);
 
-/*Verifica se existem ficheiros que devem ser criados antes de executar qualquer comando*/
+/*executer_utils.c*/
+
+/*Checks if there's any files that need to be created*/
 int		files_to_be_created(t_vec *expressions);
 /*Retorna fd de file que foi criado*/
 int		create_specific_file(char *file_name, t_states action);
-/*Retorna um array com todos os ficheiros que vao ser criados*/
+/*Returns an array with all the new files that need to be created*/
 int		*create_files(t_vec *expressions);
 /*Searchs for binary path*/
 char	*bin_path(t_expression expr);
+/*Execute a specific command*/
+void	execute_cmd(t_expression *expr);
 
 #endif

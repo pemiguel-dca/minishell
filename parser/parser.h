@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 16:06:46 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 20:07:07 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct parser
 	const t_vec	*tokens;
 }	t_parser;
 
+/*Gets the operator state*/
 inline static t_states	operator_type(char *op)
 {
 	if (ft_strcmp(op, LIT_PIPE) == 0)
@@ -62,6 +63,8 @@ inline static t_states	operator_type(char *op)
 }
 
 /*parser.c*/
+
+/*Checks if token is an operator*/
 static inline bool is_operator(char *token)
 {
 	return (ft_strcmp(token, LIT_PIPE) == 0 || ft_strcmp(token, LIT_REDIR_APPEND) == 0
@@ -69,16 +72,26 @@ static inline bool is_operator(char *token)
 		|| ft_strcmp(token, LIT_REDIR_OUT) == 0);
 }
 
-t_vec			parse(const t_vec *tokens);
-t_vec			dumb_shit(t_vec *expressions);
+/*Divide the tokens in expressions*/
+t_vec			construct_expressions(const t_vec *tokens);
+/*Check if expressions need to be refatored (any adicional arguments)*/
+t_vec			parse(t_vec *expressions);
+/*Checks for any parse errors*/
 int				check_errors_parser(t_vec *expressions);
 
 /*parser_utils.c*/
+
+/*Checks if cmd as adicional args after any redir*/
 int				adicional_args(t_vec *expressions);
+/*Get the state of token*/
 t_states		get_state(const t_vec *args, t_states prev_state);
+/*Gets inicial cmd args*/
 t_vec			cmd_args(t_expression *expr);
+/*Gets extra arguments of cmd*/
 t_vec			extra_args(t_expression *expr, t_vec *args);
+/*Gets the new expression with the extra arguments for a specific command*/
 t_expression	*get_new_expression(t_vec *expressions, size_t *i);
+/*Separates file from other expression*/
 t_expression	*get_file_only(t_expression *expr);
 
 #endif

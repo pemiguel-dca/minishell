@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:20:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 17:56:09 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/18 19:49:24 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	read_fd(char *file_name)
 	return (fd);
 }
 
-/*O unico caso onde vamos ter de redirecionar input é quando o comando tiver mais que um argumento e nenhum desse argumento a mais for uma flag '-'*/
 int	theres_a_need_to_redir(t_vec *expressions, size_t i)
 {
 	t_expression	*expr;
