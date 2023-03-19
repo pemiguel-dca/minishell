@@ -1,5 +1,2 @@
-optimise code
 minimize libft for what is necessary
 check for leaks!
-norminette
-Redirect output when is the last command!!!

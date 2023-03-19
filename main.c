@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/18 23:41:10 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:45:10 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,6 @@ void	__debug_parser(const t_vec *expressions)
 	}
 }
 
-t_executer	*initialize_executer(t_vec *expressions)
-{
-	t_executer	*params;
-
-	params = malloc(sizeof(t_executer));
-	params->i = 0;
-	params->input_fd = STDIN_FILENO;
-	params->output_fd = STDOUT_FILENO;
-	params->pos_file = 0;
-	if (files_to_be_created(expressions) && params->i == 0)
-		params->new_files = create_files(expressions);
-	return (params);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -81,7 +67,6 @@ int	main(int argc, char **argv, char **envp)
 	t_vec		tokens;
 	t_vec		expressions;
 	t_executer	*params;
-	// t_list		*final;
 	char		*input;
 
 	while (true)
@@ -90,6 +75,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(input);
 		tokens = tokenize(input);
 		// __debug_lexer(&tokens);
+		/*Find better names for functions*/
 		expressions = construct_expressions(&tokens);
 		expressions = parse(&expressions);
 		// __debug_parser(&expressions);
@@ -104,7 +90,7 @@ int	main(int argc, char **argv, char **envp)
 		// else
 		/*problem with this, when parser as an error the next cmd does not work (???)
 		The real problem is that, for example if u write '>' it prints the erros but the next state is going to be a FL*/
-		params = initialize_executer(&expressions);
+		params = initialize_executer_params(&expressions);
 		if (!check_errors_parser(&expressions))
 			executer(&expressions, params);
 		vec_free(&expressions);
@@ -113,22 +99,3 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
-
-// TODO: 	manage env vars
-//			finish parser w other modes
-//
-
-/*
-ls > a a > b b | c
-
-[[ ls, redir(a), a, redir(b), b ], [ c ]]
-
-{
-	cmd: ['ls', 'a', 'b']
-	redirs: ['a', 'b']
-}
-
-redirs:	create a and b
-cmd:	execute and populate b
-
-*/

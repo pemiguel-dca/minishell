@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 00:00:23 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:19:43 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ static void	run_expressions(t_vec *expressions, t_executer *params)
 			&& last_out_append(expressions, params->i))
 		{
 			params->pos_file = get_pos_fd(expressions, params->i);
-			redir_out_append(params->pipe_fd[READ_END], params->new_files[params->pos_file]);
+			redir_out_append(params->pipe_fd[READ_END],
+				params->new_files[params->pos_file]);
 		}
 		params->i += 1;
 	}

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 00:00:10 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:47:46 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,10 @@
 # include "../redirs/redirs.h"
 # include "../get_next_line/get_next_line.h"
 
-#define READ_END 0
-#define WRITE_END 1
+# define READ_END 0
+# define WRITE_END 1
 
-/*Para o executer em geral (só uma maneira de encurtar código)*/
-typedef struct	executer
+typedef struct executer
 {
 	size_t	i;
 	int		input_fd;
@@ -41,12 +40,12 @@ typedef struct	executer
 /*executer.c*/
 
 /*Where the magic happens*/
-int		executer(t_vec *expressions, t_executer *params);
+int					executer(t_vec *expressions, t_executer *params);
 
 static inline char	*file(t_vec *expressions, size_t i)
 {
 	t_expression	*expr;
-	
+
 	expr = expressions->buf[i];
 	return (expr->args.buf[0]);
 }
@@ -61,15 +60,11 @@ static inline void	close_file_descriptors(t_executer *params)
 
 /*executer_utils.c*/
 
-/*Checks if there's any files that need to be created*/
-int		files_to_be_created(t_vec *expressions);
-/*Retorna fd de file que foi criado*/
-int		create_specific_file(char *file_name, t_states action);
-/*Returns an array with all the new files that need to be created*/
-int		*create_files(t_vec *expressions);
+/*Initialize all the paramaters needed for executer*/
+t_executer			*initialize_executer_params(t_vec *expressions);
 /*Searchs for binary path*/
-char	*bin_path(t_expression expr);
+char				*bin_path(t_expression expr);
 /*Execute a specific command*/
-void	execute_cmd(t_expression *expr);
+void				execute_cmd(t_expression *expr);
 
 #endif

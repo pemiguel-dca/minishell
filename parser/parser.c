@@ -6,18 +6,36 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 20:05:36 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:38:15 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <assert.h>
 #include "parser.h"
 
+t_states	get_state(const t_vec *args, t_states prev_state)
+{
+	t_states	state;
+
+	state = -1;
+	if (prev_state > 3 && prev_state < 8)
+		state = FL;
+	if (((args->len == 1 && !is_operator(args->buf[0])
+				&& !ft_strchr(args->buf[0], '=')) || args->len > 1)
+		&& state == -1)
+		state = CMD;
+	else if (args->len == 1 && is_operator(args->buf[0]))
+		state = operator_type(args->buf[0]);
+	else if (args->len == 1 && ft_strchr(args->buf[0], '='))
+		state = ENV;
+	return (state);
+}
+
 static t_expression	*get_next(t_parser *parser)
 {
 	t_expression	*expr;
 	t_vec			args;
-	t_states		prev_state;//para verificar se e ficheiro, nao pode ser estatico do outro lado, pois se tivermos um erro deste genero '>', o proximo estado vai ser sempre FL
+	t_states		prev_state;
 
 	args = vec_new();
 	prev_state = 0;
@@ -25,11 +43,14 @@ static t_expression	*get_next(t_parser *parser)
 	{
 		vec_push(&args, (char *)parser->tokens->buf[parser->i]);
 		prev_state = expr->state;
-		if ((parser->tokens->len != parser->i + 1 && is_operator((char *)parser->tokens->buf[parser->i + 1]))
-			|| is_operator((char *)parser->tokens->buf[parser->i]) || parser->tokens->len == parser->i + 1)
+		if ((parser->tokens->len != parser->i + 1
+				&& is_operator((char *)parser->tokens->buf[parser->i + 1]))
+			|| is_operator((char *)parser->tokens->buf[parser->i])
+			|| parser->tokens->len == parser->i + 1)
 		{
 			expr = malloc(sizeof(t_expression));
-			*expr = (t_expression){.args = args, .state = get_state(&args, prev_state)};
+			*expr = (t_expression){.args = args,
+				.state = get_state(&args, prev_state)};
 			parser->i += 1;
 			return (expr);
 		}
@@ -86,7 +107,6 @@ t_vec	parse(t_vec *expressions)
 	return (new);
 }
 
-/*Since we don't have to deal with unclosed quotes I think this is the only case that parser will have any errors*/
 int	check_errors_parser(t_vec *expressions)
 {
 	size_t			i;
@@ -98,7 +118,7 @@ int	check_errors_parser(t_vec *expressions)
 		expr = expressions->buf[i];
 		if (expr->state > 3 && i + 1 == expressions->len)
 		{
-			printf("syntax error near unexpected token `newline'\n");
+			printf("syntax error near unexpected token 'newline'\n");
 			return (EXIT_FAILURE);
 		}
 		i += 1;

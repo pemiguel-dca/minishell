@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:20:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 19:49:24 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:24:33 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	times_in(t_vec *expressions, size_t i)
 			count_in++;
 		i += 1;
 	}
-	/* '*2' para passar o seu operador tambem */
 	return (count_in * 2);
 }
 

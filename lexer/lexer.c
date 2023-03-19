@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/15 19:06:01 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:31:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*dispatch_operator(t_lexer *lexer)
 
 	if (
 		ft_strnstr(lexer->input, LIT_REDIR_APPEND, sizeof(LIT_REDIR_APPEND) - 1)
-		|| ft_strnstr(lexer->input, LIT_REDIR_DELIMITER, sizeof(LIT_REDIR_DELIMITER) - 1)
+		|| ft_strnstr(lexer->input, LIT_REDIR_DEL, sizeof(LIT_REDIR_DEL) - 1)
 	)
 		n = sizeof(LIT_REDIR_APPEND) - 1;
 	else if (
@@ -97,9 +97,11 @@ static char	*get_next(t_lexer *lexer)
 	{
 		if (ft_isspace(*curr(lexer, i)) || !*curr(lexer, i))
 			return (dispatch_normal(lexer, i));
-		else if (*curr(lexer, i) == LIT_QUOTE || *curr(lexer, i) == LIT_DOUBLE_QUOTE)
+		else if (*curr(lexer, i) == LIT_QUOTE
+			|| *curr(lexer, i) == LIT_DOUBLE_QUOTE)
 			return (dispatch_string(lexer, i));
-		else if (*curr(lexer, i) == *LIT_REDIR_OUT || *curr(lexer, i) == *LIT_REDIR_IN
+		else if (*curr(lexer, i) == *LIT_REDIR_OUT
+			|| *curr(lexer, i) == *LIT_REDIR_IN
 			|| *curr(lexer, i) == *LIT_PIPE)
 		{
 			if (i == 0)

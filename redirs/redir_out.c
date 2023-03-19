@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:56 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 17:52:46 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:24:59 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	redir_out_append(int read_fd, int fd)
 	close(fd);
 }
 
-int		last_out_append(t_vec *expressions, size_t i)
+int	last_out_append(t_vec *expressions, size_t i)
 {
 	size_t			j;
 	t_expression	*expr;

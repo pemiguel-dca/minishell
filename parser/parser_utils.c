@@ -6,31 +6,12 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 14:51:13 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/13 14:38:52 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:36:55 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_states	get_state(const t_vec *args, t_states prev_state)
-{
-	t_states	state;
-
-	state = -1;
-	if (prev_state > 3 && prev_state < 8)
-		state = FL;
-	if (((args->len == 1 && !is_operator(args->buf[0])
-		&& !ft_strchr(args->buf[0], '=')) || args->len > 1)
-		&& state == -1)
-		state = CMD;
-	else if (args->len == 1 && is_operator(args->buf[0]))
-		state = operator_type(args->buf[0]);
-	else if (args->len == 1 && ft_strchr(args->buf[0], '='))
-		state = ENV;
-	return (state);
-}
-
-/*Checks if there's a need to add more arguments to especif cmd*/
 int	adicional_args(t_vec *expressions)
 {
 	size_t			i;

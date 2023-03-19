@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 20:07:07 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:37:23 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ inline static t_states	operator_type(char *op)
 		return (PIPED);
 	else if (ft_strcmp(op, LIT_REDIR_APPEND) == 0)
 		return (APPEND);
-	else if (ft_strcmp(op, LIT_REDIR_DELIMITER) == 0)
+	else if (ft_strcmp(op, LIT_REDIR_DEL) == 0)
 		return (DELIMITER);
 	else if (ft_strcmp(op, LIT_REDIR_OUT) == 0)
 		return (OUT);
@@ -65,10 +65,12 @@ inline static t_states	operator_type(char *op)
 /*parser.c*/
 
 /*Checks if token is an operator*/
-static inline bool is_operator(char *token)
+static inline bool	is_operator(char *token)
 {
-	return (ft_strcmp(token, LIT_PIPE) == 0 || ft_strcmp(token, LIT_REDIR_APPEND) == 0
-		|| ft_strcmp(token, LIT_REDIR_DELIMITER) == 0 || ft_strcmp(token, LIT_REDIR_IN) == 0
+	return (ft_strcmp(token, LIT_PIPE) == 0
+		|| ft_strcmp(token, LIT_REDIR_APPEND) == 0
+		|| ft_strcmp(token, LIT_REDIR_DEL) == 0
+		|| ft_strcmp(token, LIT_REDIR_IN) == 0
 		|| ft_strcmp(token, LIT_REDIR_OUT) == 0);
 }
 
@@ -78,13 +80,13 @@ t_vec			construct_expressions(const t_vec *tokens);
 t_vec			parse(t_vec *expressions);
 /*Checks for any parse errors*/
 int				check_errors_parser(t_vec *expressions);
+/*Get the state of token*/
+t_states		get_state(const t_vec *args, t_states prev_state);
 
 /*parser_utils.c*/
 
 /*Checks if cmd as adicional args after any redir*/
 int				adicional_args(t_vec *expressions);
-/*Get the state of token*/
-t_states		get_state(const t_vec *args, t_states prev_state);
 /*Gets inicial cmd args*/
 t_vec			cmd_args(t_expression *expr);
 /*Gets extra arguments of cmd*/

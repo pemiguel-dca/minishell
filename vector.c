@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:01:35 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/13 18:17:59 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/19 02:32:17 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	update_cap(t_vec *vec)
 	vec->buf = new_buf;
 }
 
-void  vec_push(t_vec *vec, void *el)
+void	vec_push(t_vec *vec, void *el)
 {
 	if (vec->len >= vec->cap)
 	{
