@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 23:50:48 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 00:00:10 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ static inline char	*file(t_vec *expressions, size_t i)
 	
 	expr = expressions->buf[i];
 	return (expr->args.buf[0]);
+}
+
+static inline void	close_file_descriptors(t_executer *params)
+{
+	if (params->input_fd != STDIN_FILENO)
+		close(params->input_fd);
+	if (params->output_fd != STDOUT_FILENO)
+		close(params->output_fd);
 }
 
 /*executer_utils.c*/

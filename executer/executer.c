@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/18 23:56:20 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 00:00:23 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,7 @@ int	executer(t_vec *expressions, t_executer *params)
 		if (params->i + 1 < expressions->len)
 			run_expressions(expressions, params);
 		else
-		{
-			if (params->input_fd != STDIN_FILENO)
-				close(params->input_fd);
-			if (params->output_fd != STDOUT_FILENO)
-				close(params->output_fd);
-		}
+			close_file_descriptors(params);
 		if (params->i >= expressions->len)
 			params->i = 0;
 	}
