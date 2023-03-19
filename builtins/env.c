@@ -3,24 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:09:47 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/02 16:54:17 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/19 18:09:22 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	_env(t_list	**env)
+void	_env(t_expression *expr, t_vec *env)
 {
-	t_list	*head;
+	size_t	i;
 
-	head = *env;
-	while (head)
+	i = 0;
+	if (expr->args.len > 1)
 	{
-		printf("%s\n", (char *)head->content);
-		head = head->next;
+		printf("env: no adicional arguments allowed \n");
+		exit (EXIT_FAILURE);
 	}
-	return (0);
+	while (i < env->len)
+	{
+		printf("%s\n", (char *)env->buf[i]);
+		i += 1;
+	}
+	exit (EXIT_SUCCESS);
 }

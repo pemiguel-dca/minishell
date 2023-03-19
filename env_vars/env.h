@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envstuff.c                                         :+:      :+:    :+:   */
+/*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/28 16:04:49 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 14:44:43 by pemiguel         ###   ########.fr       */
+/*   Created: 2023/03/19 14:21:12 by pemiguel          #+#    #+#             */
+/*   Updated: 2023/03/19 14:25:13 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
-#include "../libft/libft.h"
+#ifndef ENV_H
+# define ENV_H
 
-t_vec	create_envs(char **envp)
-{
-	size_t	i;
-	t_vec	env;
+#include "../globals.h"
+#include "../vector.h"
 
-	env = vec_new();
-	i = 0;
-	while (envp[i])
-	{
-		vec_push(&env, ft_strdup(envp[i]));
-		i += 1;
-	}
-	return (env);
-}
+/*Puts environment variables in a vector*/
+t_vec	create_envs(char **envp);
+
+#endif

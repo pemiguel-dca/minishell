@@ -11,8 +11,8 @@ lexer/lexer.c \
 parser/parser.c parser/parser_utils.c \
 env_vars/envstuff.c \
 redirs/create_files.c redirs/redir_out.c redirs/redir_in.c\
-executer/executer.c executer/executer_utils.c
-# builtins/env.c builtins/pwd.c builtins/cd.c
+executer/executer.c executer/executer_utils.c \
+builtins/cd.c builtins/pwd.c builtins/env.c builtins/unset.c\
 
 OBJS=$(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:01:35 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/19 02:32:17 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 18:52:20 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ static void	update_cap(t_vec *vec)
 void	vec_push(t_vec *vec, void *el)
 {
 	if (vec->len >= vec->cap)
-	{
 		update_cap(vec);
-	}
 	vec->buf[vec->len] = el;
 	vec->len += 1;
 }

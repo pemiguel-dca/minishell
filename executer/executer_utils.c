@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 02:54:13 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 17:05:19 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_executer	*initialize_executer_params(t_vec *expressions)
 	params->pos_file = 0;
 	if (files_to_be_created(expressions) && params->i == 0)
 		params->new_files = create_files(expressions);
+	else
+		params->new_files = NULL;
 	return (params);
 }
 
@@ -49,19 +51,26 @@ char	*bin_path(t_expression expr)
 		free(full_path);
 		i++;
 	}
+	free(path_env);
 	free(with_delim);
 	return (res);
 }
 
-void	execute_cmd(t_expression *expr)
+void	execute_cmd(t_expression *expr, t_vec *env)
 {
 	char	*path;
 
 	path = bin_path(*expr);
-	if (path)
+	if (path || is_implemented_builtin(expr->args.buf[0]))
 	{
-		vec_push(&expr->args, 0);
-		execve(path, (char **)expr->args.buf, NULL);
+		if (!is_implemented_builtin(expr->args.buf[0]))
+		{
+			vec_push(env, 0);
+			vec_push(&expr->args, 0);
+			execve(path, (char **)expr->args.buf, (char **)env->buf);
+		}
+		else
+			execute_builtin(expr, env);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 02:19:43 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 18:06:18 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	set_pipe_channels(t_vec *expressions, t_executer *params)
 	}
 }
 
-static void	child_process(t_vec *expressions, t_executer *params)
+static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 
@@ -55,18 +55,19 @@ static void	child_process(t_vec *expressions, t_executer *params)
 				params->i += 2;
 			}
 			set_pipe_channels(expressions, params);
-			execute_cmd(expr);
+			execute_cmd(expr, env);
 		}
-		else
+		else if (ft_strcmp("cd", (char *)expr->args.buf[0]) != 0)
 		{
 			params->i += times_in(expressions, params->i);
 			set_pipe_channels(expressions, params);
-			execute_cmd(expr);
+			execute_cmd(expr, env);
 		}
 	}
+	exit(EXIT_SUCCESS);
 }
 
-static void	run_expressions(t_vec *expressions, t_executer *params)
+static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 
@@ -80,7 +81,7 @@ static void	run_expressions(t_vec *expressions, t_executer *params)
 		{
 			params->i += 1;
 			params->input_fd = params->pipe_fd[READ_END];
-			executer(expressions, params);
+			executer(expressions, params, env);
 			break ;
 		}
 		else if ((expr->state == OUT || expr->state == APPEND)
@@ -94,19 +95,24 @@ static void	run_expressions(t_vec *expressions, t_executer *params)
 	}
 }
 
-int	executer(t_vec *expressions, t_executer *params)
+int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 
+	expr = expressions->buf[params->i];
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
 	if (fork() == 0)
-		child_process(expressions, params);
+		child_process(expressions, params, env);
 	else
 	{
 		wait(NULL);
+		/*cd so funciona se estiver sozinho, com pipes ele nao vai fazer nada, e nao e um comando tecnicamente*/
+		if (ft_strcmp("cd", (char *)expr->args.buf[0]) == 0
+			&& expressions->len == 1)
+			_cd(expr);
 		if (params->i + 1 < expressions->len)
-			run_expressions(expressions, params);
+			run_expressions(expressions, params, env);
 		else
 			close_file_descriptors(params);
 		if (params->i >= expressions->len)
