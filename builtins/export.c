@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 22:45:44 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 22:54:23 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	_export(t_expression *expr, t_vec *env)
 			if (ft_strchr((char *)expr->args.buf[i], '=')
 				&& ((char *)expr->args.buf[i])[0] != '=')
 				vec_push(env, ft_strdup(expr->args.buf[i]));
-			else if (((char *)expr->args.buf[i])[0] == '=')
+			else if (!ft_isalpha(((char *)expr->args.buf[i])[0]))
 			{
 				printf("export: '%s': not a valid identifier\n", (char *)expr->args.buf[i]);
 				return (1);
