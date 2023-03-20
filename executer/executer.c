@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 18:06:18 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 23:49:55 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,9 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 		if (ft_strcmp("cd", (char *)expr->args.buf[0]) == 0
 			&& expressions->len == 1)
 			_cd(expr);
+		if (ft_strcmp("unset", (char *)expr->args.buf[0]) == 0
+			&& expressions->len == 1)
+			_unset(expr, &env);
 		if (params->i + 1 < expressions->len)
 			run_expressions(expressions, params, env);
 		else

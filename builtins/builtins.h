@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 19:10:29 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 00:02:26 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@
 # include "../lexer/lexer.h"
 # include "../vector.h"
 
+/*TODO: Separate builtins that belong to the parent*/
 void	_env(t_expression *expr, t_vec *env);
 void	_pwd(t_expression *expr);
 void	_cd(t_expression *expr);
-void	_unset(t_expression *expr, t_vec *env);
+void	_unset(t_expression *expr, t_vec **env);
 
 static inline bool	is_implemented_builtin(char *cmd)
 {
@@ -44,7 +45,7 @@ static inline void	execute_builtin(t_expression *expr, t_vec *env)
 	else if (ft_strcmp((char *)expr->args.buf[0], "env") == 0)
 		_env(expr, env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "unset") == 0)
-		_unset(expr, env);
+		_unset(expr, &env);
 	/*
 	else if (ft_strcmp((char *)expr->args.buf[0], "echo") == 0)
 	else if (ft_strcmp((char *)expr->args.buf[0], "exit") == 0)

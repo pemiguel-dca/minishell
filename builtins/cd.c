@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:34:25 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 17:11:09 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 00:01:04 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,4 @@ void	_cd(t_expression *expr)
 				printf("cd: not a directory: %s\n", (char *)expr->args.buf[1]);
 		}
 	}
-	//return (0);
 }

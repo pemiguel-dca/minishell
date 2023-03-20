@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/19 14:49:02 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/19 20:05:13 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ int	main(int argc, char **argv, char **envp)
 	t_executer	*params;
 	char		*input;
 
+	env = create_envs(envp);
 	while (true)
 	{
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		add_history(input);
-		env = create_envs(envp);
 		tokens = tokenize(input);
 		/*Find better names for this two functions*/
 		expressions = construct_expressions(&tokens);
@@ -94,7 +94,6 @@ int	main(int argc, char **argv, char **envp)
 		params = initialize_executer_params(&expressions);
 		if (!check_errors_parser(&expressions))
 			executer(&expressions, params, &env);
-		vec_free(&env);
 		vec_free(&tokens);
 		vec_free(&expressions);
 		if (params->new_files)
@@ -102,5 +101,6 @@ int	main(int argc, char **argv, char **envp)
 		free(params);
 		free(input);
 	}
+	vec_free(&env);
 	return (0);
 }
