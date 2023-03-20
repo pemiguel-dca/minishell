@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 17:53:48 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/20 22:45:44 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	organized_envs(t_vec *env)
 	print_export(env);
 }
 
+/*Não criar variavel nova se ja existir simplesmente substituir*/
 int	_export(t_expression *expr, t_vec *env)
 {
 	size_t	i;
@@ -80,8 +81,14 @@ int	_export(t_expression *expr, t_vec *env)
 	{
 		while (i < expr->args.len)
 		{
-			printf("VAR: '%s'\n", (char *)expr->args.buf[i]);
-			vec_push(env, ft_strdup(expr->args.buf[i]));
+			if (ft_strchr((char *)expr->args.buf[i], '=')
+				&& ((char *)expr->args.buf[i])[0] != '=')
+				vec_push(env, ft_strdup(expr->args.buf[i]));
+			else if (((char *)expr->args.buf[i])[0] == '=')
+			{
+				printf("export: '%s': not a valid identifier\n", (char *)expr->args.buf[i]);
+				return (1);
+			}
 			i += 1;
 		}
 	}

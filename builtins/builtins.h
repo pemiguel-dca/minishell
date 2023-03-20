@@ -6,14 +6,15 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 15:32:43 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 22:00:03 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-#include <stdbool.h>
+# include <linux/limits.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <dirent.h>
 # include <sys/stat.h>
@@ -25,7 +26,7 @@
 
 int	_env(t_expression *expr, t_vec *env);
 int	_pwd(t_expression *expr);
-int	_cd(t_expression *expr);
+int	_cd(t_expression *expr, t_vec **env);
 int	_unset(t_expression *expr, t_vec **env);
 int	_export(t_expression *expr, t_vec *env);
 
@@ -60,7 +61,7 @@ static inline void	execute_child_builtin(t_expression *expr, t_vec *env)
 static inline void	execute_parent_builtin(t_expression *expr, t_vec *env)
 {
 	if (ft_strcmp((char *)expr->args.buf[0], "cd") == 0)
-		_cd(expr);
+		_cd(expr, &env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "unset") == 0)
 		_unset(expr, &env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "export") == 0)

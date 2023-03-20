@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 18:50:15 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/20 19:46:42 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ static t_expression	*get_next(t_parser *parser)
 		{
 			expr = malloc(sizeof(t_expression));
 			// esta merda provavelmente acaba os leaks
-			t_vec clone = { .buf = args.buf, .cap = args.cap, .len = args.len };
-			*expr = (t_expression){.args = clone,
+			//t_vec clone = { .buf = args.buf, .cap = args.cap, .len = args.len };
+			*expr = (t_expression){.args = args,
 				.state = get_state(&args, prev_state)};
 			parser->i += 1;
-			vec_free(&args);
+			//vec_free(&args);
 			return (expr);
 		}
 		parser->i += 1;
