@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 16:20:07 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:50:15 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 	return (state);
 }
 
+// TODO: algum caralho aqui ta a dar leaks
 static t_expression	*get_next(t_parser *parser)
 {
 	t_expression	*expr;
@@ -38,8 +39,8 @@ static t_expression	*get_next(t_parser *parser)
 	t_states		prev_state;
 
 	expr = NULL;
-	args = vec_new();
 	prev_state = DEFAULT;
+	args = vec_new();
 	while (parser->i < parser->tokens->len)
 	{
 		vec_push(&args, (char *)parser->tokens->buf[parser->i]);
@@ -51,13 +52,17 @@ static t_expression	*get_next(t_parser *parser)
 			|| parser->tokens->len == parser->i + 1)
 		{
 			expr = malloc(sizeof(t_expression));
-			*expr = (t_expression){.args = args,
+			// esta merda provavelmente acaba os leaks
+			t_vec clone = { .buf = args.buf, .cap = args.cap, .len = args.len };
+			*expr = (t_expression){.args = clone,
 				.state = get_state(&args, prev_state)};
 			parser->i += 1;
+			vec_free(&args);
 			return (expr);
 		}
 		parser->i += 1;
 	}
+	vec_free(&args);
 	return (NULL);
 }
 
@@ -103,7 +108,11 @@ t_vec	parse(t_vec expressions)
 			vec_push(&new, new_expr);
 		}
 		else
-			vec_push(&new, expr);
+		{
+			t_expression *pqp = malloc(sizeof(t_expression));
+			*pqp = (t_expression){ .args = expr->args, .state = expr->state };
+			vec_push(&new, pqp);
+		}
 		i += 1;
 	}
 	return (new);

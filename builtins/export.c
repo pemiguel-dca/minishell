@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 15:49:43 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 17:53:48 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	_export(t_expression *expr, t_vec *env)
 		while (i < expr->args.len)
 		{
 			printf("VAR: '%s'\n", (char *)expr->args.buf[i]);
-			vec_push(env, expr->args.buf[i]);
+			vec_push(env, ft_strdup(expr->args.buf[i]));
 			i += 1;
 		}
 	}

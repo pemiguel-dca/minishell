@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/20 16:23:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:11:06 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,24 @@ int	main(int argc, char **argv, char **envp)
 		params = initialize_executer_params(&sex);
 		if (!check_errors_parser(&sex))
 			executer(&sex, params, &env);
-		// vec_free(&expressions);
+		/*
+		size_t i = 0;
+		while (i < expressions.len)
+		{
+			printf("'%s'\n", (char *)(((t_expression *)expressions.buf[i])->args.buf[0]));
+			vec_free(&((t_expression *)expressions.buf[i])->args);
+			++i;
+		}
+		*/
+		/*
+		size_t j = 0;
+		while (j < sex.len)
+		{
+			vec_free(&((t_expression *)sex.buf[j])->args);
+			++j;
+		}
+		*/
+		vec_free(&expressions);
 		vec_free(&tokens);
 		vec_free(&sex);
 		if (params->new_files)

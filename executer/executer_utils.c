@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 16:05:41 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:09:36 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,18 @@ char	*bin_path(t_expression expr)
 	while (path_env[i])
 	{
 		full_path = ft_strjoin(path_env[i], with_delim);
-		free(path_env[i]);
 		if (access(full_path, F_OK) == 0)
 		{
 			res = full_path;
 			break ;
 		}
 		free(full_path);
+		i++;
+	}
+	i = 0;
+	while (path_env[i])
+	{
+		free(path_env[i]);
 		i++;
 	}
 	free(path_env);

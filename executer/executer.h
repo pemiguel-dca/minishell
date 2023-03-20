@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 13:04:46 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 17:45:06 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct executer
 /*executer.c*/
 
 /*Where the magic happens*/
-int					executer(t_vec *expressions, t_executer *params, t_vec *env);
+int	executer(t_vec *expressions, t_executer *params, t_vec *env);
 
 static inline char	*file(t_vec *expressions, size_t i)
 {
