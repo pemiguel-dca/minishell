@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 18:12:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 23:55:31 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 13:05:16 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ Keep in mind that this function belongs to the parent since we need to
 change the vec, and it only unsets variables if expressions->len == 1
 Example: 'ls | unset MY_VAR' , does nothing*/
 
-void	_unset(t_expression *expr, t_vec **env)
+/*Even if variable does not exist the return status will always be the same*/
+int	_unset(t_expression *expr, t_vec **env)
 {
 	t_vec	*temp_env;
 	size_t	i;
@@ -39,8 +40,9 @@ void	_unset(t_expression *expr, t_vec **env)
 			&& env_var[ft_strlen(var_name)] == '=')
 		{
 			vec_del(env, i);
-			return ;
+			break ;
 		}
 		i += 1;
 	}
+	return (0);
 }

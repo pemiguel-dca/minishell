@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:01:35 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/19 22:21:32 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 13:00:19 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,17 @@ void	vec_push(t_vec *vec, void *el)
 
 void vec_del(t_vec **vec, size_t pos)
 {
-	size_t	i;
 	t_vec	*v;
 
-	i = 0;
 	v = *vec;
 	if (pos >= v->len)
 		return;
 	free(v->buf[pos]);
-	while (i < v->len)
+	while (pos < v->len - 1)
 	{
-		if (i == pos)
-			v->buf[i] = v->buf[i + 1];
-		i += 1;
+		v->buf[pos] = v->buf[pos + 1];
+		pos += 1;
 	}
 	v->len -= 1;
+	v->cap /= 2;
 }

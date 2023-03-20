@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 15:17:45 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 13:04:46 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static inline void	close_file_descriptors(t_executer *params)
 
 /*Initialize all the paramaters needed for executer*/
 t_executer			*initialize_executer_params(t_vec *expressions);
-/*Searchs for binary path*/
+/*Searches for binary path*/
 char				*bin_path(t_expression expr);
 /*Execute a specific command*/
 void				execute_cmd(t_expression *expr, t_vec *env);

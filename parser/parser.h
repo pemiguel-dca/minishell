@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 02:37:23 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:17:05 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ typedef enum s_states
 	APPEND,
 	DELIMITER,
 	OUT,
-	IN
+	IN,
+	DEFAULT
 }	t_states;
 
 typedef struct expression
@@ -77,7 +78,7 @@ static inline bool	is_operator(char *token)
 /*Divide the tokens in expressions*/
 t_vec			construct_expressions(const t_vec *tokens);
 /*Check if expressions need to be refatored (any adicional arguments)*/
-t_vec			parse(t_vec *expressions);
+t_vec			parse(t_vec expressions);
 /*Checks for any parse errors*/
 int				check_errors_parser(t_vec *expressions);
 /*Get the state of token*/

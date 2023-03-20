@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 23:49:55 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 15:46:30 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 			set_pipe_channels(expressions, params);
 			execute_cmd(expr, env);
 		}
-		else if (ft_strcmp("cd", (char *)expr->args.buf[0]) != 0)
+		else
 		{
 			params->i += times_in(expressions, params->i);
 			set_pipe_channels(expressions, params);
@@ -107,13 +107,9 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 	else
 	{
 		wait(NULL);
-		/*cd so funciona se estiver sozinho, com pipes ele nao vai fazer nada, e nao e um comando tecnicamente*/
-		if (ft_strcmp("cd", (char *)expr->args.buf[0]) == 0
+		if (is_parent_builtin(expr->args.buf[0])
 			&& expressions->len == 1)
-			_cd(expr);
-		if (ft_strcmp("unset", (char *)expr->args.buf[0]) == 0
-			&& expressions->len == 1)
-			_unset(expr, &env);
+			execute_parent_builtin(expr, env);
 		if (params->i + 1 < expressions->len)
 			run_expressions(expressions, params, env);
 		else

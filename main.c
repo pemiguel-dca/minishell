@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/19 20:05:13 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:23:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	main(int argc, char **argv, char **envp)
 	t_vec		env;
 	t_vec		tokens;
 	t_vec		expressions;
+	t_vec		sex;
 	t_executer	*params;
 	char		*input;
 
@@ -79,7 +80,7 @@ int	main(int argc, char **argv, char **envp)
 		tokens = tokenize(input);
 		/*Find better names for this two functions*/
 		expressions = construct_expressions(&tokens);
-		expressions = parse(&expressions);
+		sex = parse(expressions);
 		// __debug_lexer(&tokens);
 		// __debug_parser(&expressions);
 		//__debug_envs(&env);
@@ -91,11 +92,12 @@ int	main(int argc, char **argv, char **envp)
 		//else if (ft_strcmp("cd",parser->args[0]) == 0)
 		//	_cd(parser);
 		// else
-		params = initialize_executer_params(&expressions);
-		if (!check_errors_parser(&expressions))
-			executer(&expressions, params, &env);
+		params = initialize_executer_params(&sex);
+		if (!check_errors_parser(&sex))
+			executer(&sex, params, &env);
+		// vec_free(&expressions);
 		vec_free(&tokens);
-		vec_free(&expressions);
+		vec_free(&sex);
 		if (params->new_files)
 			free(params->new_files);
 		free(params);

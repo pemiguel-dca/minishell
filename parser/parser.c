@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 02:38:15 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:20:07 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 {
 	t_states	state;
 
-	state = -1;
+	state = DEFAULT;
 	if (prev_state > 3 && prev_state < 8)
 		state = FL;
 	if (((args->len == 1 && !is_operator(args->buf[0])
 				&& !ft_strchr(args->buf[0], '=')) || args->len > 1)
-		&& state == -1)
+		&& state == DEFAULT)
 		state = CMD;
 	else if (args->len == 1 && is_operator(args->buf[0]))
 		state = operator_type(args->buf[0]);
@@ -37,12 +37,14 @@ static t_expression	*get_next(t_parser *parser)
 	t_vec			args;
 	t_states		prev_state;
 
+	expr = NULL;
 	args = vec_new();
-	prev_state = 0;
+	prev_state = DEFAULT;
 	while (parser->i < parser->tokens->len)
 	{
 		vec_push(&args, (char *)parser->tokens->buf[parser->i]);
-		prev_state = expr->state;
+		if (expr)
+			prev_state = expr->state;
 		if ((parser->tokens->len != parser->i + 1
 				&& is_operator((char *)parser->tokens->buf[parser->i + 1]))
 			|| is_operator((char *)parser->tokens->buf[parser->i])
@@ -78,7 +80,7 @@ t_vec	construct_expressions(const t_vec *tokens)
 	return (expressions);
 }
 
-t_vec	parse(t_vec *expressions)
+t_vec	parse(t_vec expressions)
 {
 	size_t			i;
 	t_expression	*expr;
@@ -87,12 +89,12 @@ t_vec	parse(t_vec *expressions)
 
 	new = vec_new();
 	i = 0;
-	while (i < expressions->len)
+	while (i < expressions.len)
 	{
-		expr = expressions->buf[i];
-		if (expr->state == CMD && adicional_args(expressions))
+		expr = expressions.buf[i];
+		if (expr->state == CMD && adicional_args(&expressions))
 		{
-			new_expr = get_new_expression(expressions, &i);
+			new_expr = get_new_expression(&expressions, &i);
 			vec_push(&new, new_expr);
 		}
 		else if (expr->state == FL && expr->args.len > 1)

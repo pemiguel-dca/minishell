@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 12:24:29 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/02/27 23:26:28 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 15:05:33 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int		ft_tolower(int c);
 int		ft_toupper(int c);
 int		ft_isspace(int c);
 
+
 char	*ft_realloc(void *ptr, int new_size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -55,6 +56,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+void	ft_swap(char **s1, char **s2);
 
 typedef struct s_list
 {

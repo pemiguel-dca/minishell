@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 23:50:12 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:05:41 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*bin_path(t_expression expr)
 	while (path_env[i])
 	{
 		full_path = ft_strjoin(path_env[i], with_delim);
+		free(path_env[i]);
 		if (access(full_path, F_OK) == 0)
 		{
 			res = full_path;
@@ -61,16 +62,17 @@ void	execute_cmd(t_expression *expr, t_vec *env)
 	char	*path;
 
 	path = bin_path(*expr);
-	if (path || is_implemented_builtin(expr->args.buf[0]))
+	if (path || is_child_builtin(expr->args.buf[0])
+		|| is_parent_builtin(expr->args.buf[0]))
 	{
-		if (!is_implemented_builtin(expr->args.buf[0]))
+		if (!is_child_builtin(expr->args.buf[0]))
 		{
 			vec_push(env, 0);
 			vec_push(&expr->args, 0);
 			execve(path, (char **)expr->args.buf, (char **)env->buf);
 		}
 		else
-			execute_builtin(expr, env);
+			execute_child_builtin(expr, env);
 	}
 	else
 	{
