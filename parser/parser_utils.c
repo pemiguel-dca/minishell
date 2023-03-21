@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 14:51:13 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 02:36:55 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:25:27 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_vec	extra_args(t_expression *expr, t_vec *args)
 	return (*args);
 }
 
-t_expression	*get_new_expression(t_vec *expressions, size_t *i)
+t_expression	*get_new_expression(t_vec *expressions, size_t i)
 {
 	size_t			j;
 	t_expression	*expr;
@@ -64,8 +64,8 @@ t_expression	*get_new_expression(t_vec *expressions, size_t *i)
 	t_vec			args;
 
 	args = vec_new();
-	j = *i;
-	expr = expressions->buf[*i];
+	j = i;
+	expr = expressions->buf[i];
 	new_expression = malloc(sizeof(t_expression));
 	while (j < expressions->len && expr->state != PIPED)
 	{

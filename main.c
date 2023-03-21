@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/20 18:11:06 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:05:58 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
+*/
 
 void	__debug_parser(const t_vec *expressions)
 {
@@ -47,7 +48,7 @@ void	__debug_parser(const t_vec *expressions)
 	}
 }
 
-
+/*
 void __debug_envs(const t_vec *env)
 {
 	printf("[");
@@ -67,59 +68,38 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	t_vec		env;
 	t_vec		tokens;
+	// t_vec		expressions_old;
 	t_vec		expressions;
-	t_vec		sex;
 	t_executer	*params;
 	char		*input;
 
 	env = create_envs(envp);
-	while (true)
-	{
+	// while (true)
+	// {
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		add_history(input);
 		tokens = tokenize(input);
 		/*Find better names for this two functions*/
 		expressions = construct_expressions(&tokens);
-		sex = parse(expressions);
+		// expressions = parse(expressions_old);
 		// __debug_lexer(&tokens);
-		// __debug_parser(&expressions);
+		__debug_parser(&expressions);
 		//__debug_envs(&env);
-		//in the future add this to 'spawn'
-		//if (ft_strcmp("env",parser->args[0]) == 0)
-		//	_env(&env);
-		//else if (ft_strcmp("pwd",parser->args[0]) == 0)
-		//	_pwd(parser);
-		//else if (ft_strcmp("cd",parser->args[0]) == 0)
-		//	_cd(parser);
-		// else
-		params = initialize_executer_params(&sex);
-		if (!check_errors_parser(&sex))
-			executer(&sex, params, &env);
-		/*
-		size_t i = 0;
-		while (i < expressions.len)
+		params = initialize_executer_params(&expressions);
+		if (!check_errors_parser(&expressions))
+			executer(&expressions, params, &env);
+		for (size_t i = 0; i < expressions.len; ++i)
 		{
-			printf("'%s'\n", (char *)(((t_expression *)expressions.buf[i])->args.buf[0]));
-			vec_free(&((t_expression *)expressions.buf[i])->args);
-			++i;
+			t_expression *sexooo = expressions.buf[i];
+			vec_free(&sexooo->args);
 		}
-		*/
-		/*
-		size_t j = 0;
-		while (j < sex.len)
-		{
-			vec_free(&((t_expression *)sex.buf[j])->args);
-			++j;
-		}
-		*/
 		vec_free(&expressions);
 		vec_free(&tokens);
-		vec_free(&sex);
 		if (params->new_files)
 			free(params->new_files);
 		free(params);
 		free(input);
-	}
+	// }
 	vec_free(&env);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 13:16:34 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:38:19 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,19 +99,21 @@ t_vec	parse(t_vec expressions)
 		expr = expressions.buf[i];
 		if (expr->state == CMD && adicional_args(&expressions))
 		{
-			new_expr = get_new_expression(&expressions, &i);
+			new_expr = get_new_expression(&expressions, i);
 			vec_push(&new, new_expr);
+			vec_free(&expr->args);
+			free(expr);
 		}
 		else if (expr->state == FL && expr->args.len > 1)
 		{
 			new_expr = get_file_only(expr);
 			vec_push(&new, new_expr);
+			vec_free(&expr->args);
+			free(expr);
 		}
 		else
 		{
-			t_expression *pqp = malloc(sizeof(t_expression));
-			*pqp = (t_expression){ .args = expr->args, .state = expr->state };
-			vec_push(&new, pqp);
+			vec_push(&new, expr);
 		}
 		i += 1;
 	}

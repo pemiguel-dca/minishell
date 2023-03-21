@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_out.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:56 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/19 02:24:59 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:41:14 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ void	redir_out_append(int read_fd, int fd)
 	{
 		line = get_next_line(read_fd);
 		if (line)
+		{
 			write(fd, line, ft_strlen(line));
+			free(line);
+		}
 		else
 			break ;
 	}
-	free(line);
 	close(fd);
 }
 

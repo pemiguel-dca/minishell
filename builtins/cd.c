@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:34:25 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 16:05:12 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 16:08:25 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+static int	go_to_oldpwd(t_vec *env);
 
 static int	change_dir_to(const char *path, t_vec *env)
 {
@@ -18,7 +20,7 @@ static int	change_dir_to(const char *path, t_vec *env)
 	int			exit_status;
 
 	exit_status = 0;
-	if (ft_strcmp("-", path) == 0)
+	if (ft_strcmp("-", (char *)path) == 0)
 		exit_status = go_to_oldpwd(env);
 	if (stat(path, &buf) < 0)
 	{

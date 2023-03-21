@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 16:17:05 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 17:37:51 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_vec			cmd_args(t_expression *expr);
 /*Gets extra arguments of cmd*/
 t_vec			extra_args(t_expression *expr, t_vec *args);
 /*Gets the new expression with the extra arguments for a specific command*/
-t_expression	*get_new_expression(t_vec *expressions, size_t *i);
+t_expression	*get_new_expression(t_vec *expressions, size_t i);
 /*Separates file from other expression*/
 t_expression	*get_file_only(t_expression *expr);
 
