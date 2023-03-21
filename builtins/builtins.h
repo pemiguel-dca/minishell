@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 12:53:31 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 15:57:31 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 int	_env(t_expression *expr, t_vec *env);
 int	_pwd(t_expression *expr);
-int	_cd(t_expression *expr, t_vec **env);
+int	_cd(t_expression *expr, t_vec *env);
 int	_unset(t_expression *expr, t_vec **env);
 int	_export(t_expression *expr, t_vec *env);
 
@@ -62,7 +62,7 @@ static inline void	execute_child_builtin(t_expression *expr, t_vec *env)
 static inline void	execute_parent_builtin(t_expression *expr, t_vec *env)
 {
 	if (ft_strcmp((char *)expr->args.buf[0], "cd") == 0)
-		_cd(expr, &env);
+		_cd(expr, env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "unset") == 0)
 		_unset(expr, &env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "export") == 0)
