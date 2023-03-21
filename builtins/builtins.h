@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 15:57:31 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:20:16 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ static inline bool	is_parent_builtin(char *cmd)
 		|| ft_strcmp(cmd, "export") == 0);
 		//|| ft_strcmp(cmd, "echo") == 0
 }
+
+int	change_dir_to(const char *path, t_vec *env);
 
 static inline void	execute_child_builtin(t_expression *expr, t_vec *env)
 {

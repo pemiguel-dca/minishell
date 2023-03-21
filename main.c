@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/21 18:05:58 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/21 19:05:25 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,38 +68,41 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	t_vec		env;
 	t_vec		tokens;
-	// t_vec		expressions_old;
+	t_vec		expressions_old;
 	t_vec		expressions;
 	t_executer	*params;
 	char		*input;
 
 	env = create_envs(envp);
-	// while (true)
-	// {
+	while (true)
+	{
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		add_history(input);
 		tokens = tokenize(input);
 		/*Find better names for this two functions*/
-		expressions = construct_expressions(&tokens);
-		// expressions = parse(expressions_old);
+		expressions_old = construct_expressions(&tokens);
+		expressions = parse(expressions_old);
 		// __debug_lexer(&tokens);
 		__debug_parser(&expressions);
 		//__debug_envs(&env);
 		params = initialize_executer_params(&expressions);
 		if (!check_errors_parser(&expressions))
 			executer(&expressions, params, &env);
-		for (size_t i = 0; i < expressions.len; ++i)
+		/* temos algum problema aqui caralho
+		for (size_t i = 0; i < expressions_old.len; ++i)
 		{
-			t_expression *sexooo = expressions.buf[i];
+			t_expression *sexooo = expressions_old.buf[i];
 			vec_free(&sexooo->args);
 		}
+		*/
+		free(expressions_old.buf);
 		vec_free(&expressions);
 		vec_free(&tokens);
 		if (params->new_files)
 			free(params->new_files);
 		free(params);
 		free(input);
-	// }
+	}
 	vec_free(&env);
 	return (0);
 }

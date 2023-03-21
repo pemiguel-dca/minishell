@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 17:38:19 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/21 19:01:29 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,16 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 // TODO: algum caralho aqui ta a dar leaks
 static t_expression	*get_next(t_parser *parser)
 {
-	t_expression	*expr;
-	t_vec			args;
-	t_states		prev_state;
+	t_expression		*expr;
+	t_vec				args;
+	static t_states		prev_state = DEFAULT;
 
 	expr = NULL;
-	prev_state = DEFAULT;
 	args = vec_new();
 	while (parser->i < parser->tokens->len)
 	{
 		vec_push(&args, (char *)parser->tokens->buf[parser->i]);
-		if (expr)
-			prev_state = expr->state;
+
 		if ((parser->tokens->len != parser->i + 1
 				&& is_operator((char *)parser->tokens->buf[parser->i + 1]))
 			|| is_operator((char *)parser->tokens->buf[parser->i])
@@ -56,6 +54,7 @@ static t_expression	*get_next(t_parser *parser)
 			//t_vec clone = { .buf = args.buf, .cap = args.cap, .len = args.len };
 			*expr = (t_expression){.args = args,
 				.state = get_state(&args, prev_state)};
+			prev_state = expr->state;
 			parser->i += 1;
 			//vec_free(&args);
 			return (expr);
@@ -101,14 +100,16 @@ t_vec	parse(t_vec expressions)
 		{
 			new_expr = get_new_expression(&expressions, i);
 			vec_push(&new, new_expr);
-			vec_free(&expr->args);
+			//vec_free(&expr->args);
+			free(expr->args.buf);
 			free(expr);
 		}
 		else if (expr->state == FL && expr->args.len > 1)
 		{
 			new_expr = get_file_only(expr);
 			vec_push(&new, new_expr);
-			vec_free(&expr->args);
+			//vec_free(&expr->args);
+			free(expr->args.buf);
 			free(expr);
 		}
 		else

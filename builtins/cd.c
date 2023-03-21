@@ -3,18 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:34:25 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 16:08:25 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:22:18 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static int	go_to_oldpwd(t_vec *env);
+/**/
+static int	go_to_oldpwd(t_vec *env)
+{
+	int	i;
+	int	exit_status;
 
-static int	change_dir_to(const char *path, t_vec *env)
+	i = pos_env_var(env, "OLDPWD");
+	exit_status = 0;
+	if (i == -1)
+	{
+		printf("cd: OLDPWD not set\n");
+		exit_status = 1;
+	}
+	else
+		exit_status = change_dir_to(env->buf[i] + 7, env);
+	return (exit_status);
+}
+
+
+static int	go_home(t_vec *env)
+{
+	int	pos_home;
+	int	exit_status;
+
+	pos_home = pos_env_var(env, "HOME");
+	exit_status = 0;
+	if (pos_home == -1)
+	{
+		printf("cd: HOME not set\n");
+		exit_status = 1;
+	}
+	else
+		exit_status = change_dir_to(env->buf[pos_home] + 5, env);
+	return (exit_status);
+}
+
+int	change_dir_to(const char *path, t_vec *env)
 {
 	struct stat	buf;
 	int			exit_status;
@@ -40,38 +74,39 @@ static int	change_dir_to(const char *path, t_vec *env)
 	return (exit_status);
 }
 
-static int	go_to_oldpwd(t_vec *env)
+static char	*get_path_before(char *curr_path)
 {
-	int	i;
-	int	exit_status;
+	size_t	i;
+	char	*path_before;
 
-	i = pos_env_var(env, "OLDPWD");
-	exit_status = 0;
-	if (i == -1)
-	{
-		printf("cd: OLDPWD not set\n");
-		exit_status = 1;
-	}
-	else
-		exit_status = change_dir_to(env->buf[i] + 7, env);
-	return (exit_status);
+	i = ft_strlen(curr_path) - 1;
+	while (i != 0 && curr_path[i] != '/')
+		i -= 1;
+	path_before = ft_substr(curr_path, 0, i);
+	return (path_before);
 }
 
-static int	go_home(t_vec *env)
-{
-	int	pos_home;
-	int	exit_status;
 
-	pos_home = pos_env_var(env, "HOME");
-	exit_status = 0;
-	if (pos_home == -1)
+static void	set_pwds(t_expression *expr, char *curr_pwd, t_vec *env)
+{
+	char	*new_pwd;
+	//char	*pwd_full;
+
+	new_pwd = NULL;
+	if (expr->args.len == 1)
+		set_env(&env, "PWD", env->buf[pos_env_var(env, "HOME") + 5]);
+	else if (ft_strcmp("..", (char *)expr->args.buf[1]) == 0)
 	{
-		printf("cd: HOME not set\n");
-		exit_status = 1;
+		new_pwd = get_path_before(curr_pwd);
+		set_env(&env, "PWD", new_pwd);
 	}
 	else
-		exit_status = change_dir_to(env->buf[pos_home] + 5, env);
-	return (exit_status);
+	{
+		new_pwd = ft_strjoin(env->buf[pos_env_var(env, "PWD")], (char *)expr->args.buf[1]);
+		set_env(&env, "PWD", new_pwd);
+	}
+	set_env(&env, "OLDPWD", curr_pwd);
+	free(new_pwd);
 }
 
 int	_cd(t_expression *expr, t_vec *env)
@@ -91,12 +126,7 @@ int	_cd(t_expression *expr, t_vec *env)
 	else if (expr->args.len == 2)
 		exit_status = change_dir_to(expr->args.buf[1], env);
 	if (exit_status == 0)
-	{
-		if (expr->args.len == 1)
-			set_env(&env, "PWD", env->buf[pos_env_var(env, "HOME") + 5]);
-		else
-			set_env(&env, "PWD", (char *)expr->args.buf[1]);
-		set_env(&env, "OLDPWD", curr_pwd);
-	}
+		set_pwds(expr, curr_pwd, env);
 	return (exit_status);
 }
+
