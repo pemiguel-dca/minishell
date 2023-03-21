@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 22:54:23 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:24:58 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ Mas se tentarmos inicializar uma variavel da seguinte maneira "ls | export MY_VA
 /*Funciona com mais de um argumento, "export A=a B=b"*/
 #include "builtins.h"
 
-static void	print_export(t_vec *env)
+static void		print_export(t_vec *env)
 {
 	size_t	i;
 
@@ -42,7 +42,7 @@ static t_vec	copy_current_envs(t_vec *env)
 	return (copy);
 }
 
-static void	organized_envs(t_vec *env)
+static void		organized_envs(t_vec *env)
 {
 	size_t	i;
 	size_t	j;
@@ -67,31 +67,46 @@ static void	organized_envs(t_vec *env)
 	print_export(env);
 }
 
-/*Não criar variavel nova se ja existir simplesmente substituir*/
-int	_export(t_expression *expr, t_vec *env)
+static int		create_vars(t_expression *expr, t_vec *env)
 {
 	size_t	i;
-	t_vec	copy;
 
 	i = 1;
-	copy = copy_current_envs(env);
-	if (expr->args.len == 1)
-		organized_envs(&copy);
-	else
+	while (i < expr->args.len)
 	{
-		while (i < expr->args.len)
+		if (pos_env_var(env, (char *)expr->args.buf[i]) == -1)
 		{
-			if (ft_strchr((char *)expr->args.buf[i], '=')
-				&& ((char *)expr->args.buf[i])[0] != '=')
-				vec_push(env, ft_strdup(expr->args.buf[i]));
-			else if (!ft_isalpha(((char *)expr->args.buf[i])[0]))
+			if (!ft_isalpha(((char *)expr->args.buf[i])[0]))
 			{
 				printf("export: '%s': not a valid identifier\n", (char *)expr->args.buf[i]);
 				return (1);
 			}
-			i += 1;
+			else if (ft_strchr((char *)expr->args.buf[i], '='))
+				vec_push(env, ft_strdup(expr->args.buf[i]));
 		}
+		else
+		{
+			vec_del(&env, pos_env_var(env, (char *)expr->args.buf[i]));
+			vec_push(env, ft_strdup(expr->args.buf[i]));
+		}
+		i += 1;
 	}
 	return (0);
+}
+
+int		_export(t_expression *expr, t_vec *env)
+{
+	size_t	i;
+	t_vec	copy;
+	int		exit_status;
+
+	i = 1;
+	copy = copy_current_envs(env);
+	exit_status = 0;
+	if (expr->args.len == 1)
+		organized_envs(&copy);
+	else
+		exit_status = create_vars(expr, env);
+	return (exit_status);
 }
 

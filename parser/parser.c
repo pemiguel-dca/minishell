@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 19:46:42 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 13:16:34 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,12 @@ int	check_errors_parser(t_vec *expressions)
 	while (i < expressions->len)
 	{
 		expr = expressions->buf[i];
-		if (expr->state > 3 && i + 1 == expressions->len)
+		if (expr->state > 2 && i + 1 == expressions->len)
 		{
-			printf("syntax error near unexpected token 'newline'\n");
+			if (expr->state == PIPED)
+				printf("close your pipes!\n");
+			else
+				printf("syntax error near unexpected token 'newline'\n");
 			return (EXIT_FAILURE);
 		}
 		i += 1;

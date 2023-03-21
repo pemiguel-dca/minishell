@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 22:00:03 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 12:53:31 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include "../env_vars/env.h"
 # include "../parser/parser.h"
 # include "../libft/libft.h"
 # include "../lexer/lexer.h"

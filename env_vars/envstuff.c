@@ -6,30 +6,36 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 16:04:49 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 22:37:03 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:46:26 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 #include "../libft/libft.h"
-/*
-static int pos_env_var(t_vec *env, char *find)
+
+int	pos_env_var(t_vec *env, char *find)
 {
 	size_t	i;
+	size_t	equal_sign;
 	char	*env_var;
 
 	i = 0;
+	equal_sign = 0;
+	while (find[equal_sign] && find[equal_sign] != '=')
+		equal_sign += 1;
 	while (i < env->len)
 	{
-		env_var = env->buf[i]; 
-		if (ft_strncmp(find, env_var, ft_strlen(find)) == 0)
+		env_var = env->buf[i];
+		if (ft_strncmp(find, env_var, equal_sign) == 0)
+			return (i);
 		i += 1;
 	}
+	return (-1);
 }
-
+/*
 void	set_env(t_vec **env)
 {
-	
+
 }
 */
 
