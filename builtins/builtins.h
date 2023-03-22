@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:22:29 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:51:20 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,15 @@ static inline size_t	execute_child_builtin(t_expression *expr, t_vec *env)
 	size_t	exit_status;
 
 	exit_status = 0;
-	if (ft_strcmp((char *)expr->args.buf[0], "pwd") == 0)
+	if (ft_strcmp((char *)expr->args->buf[0], "pwd") == 0)
 		exit_status = _pwd(expr);
-	else if (ft_strcmp((char *)expr->args.buf[0], "env") == 0)
+	else if (ft_strcmp((char *)expr->args->buf[0], "env") == 0)
 		exit_status = _env(expr, env);
 	/*
 	else if (ft_strcmp((char *)expr->args.buf[0], "echo") == 0)
 	else if (ft_strcmp((char *)expr->args.buf[0], "exit") == 0)
 	*/
+	return (exit_status);
 }
 
 static inline size_t	execute_parent_builtin(t_expression *expr, t_vec *env)
@@ -81,14 +82,13 @@ static inline size_t	execute_parent_builtin(t_expression *expr, t_vec *env)
 	size_t	exit_status;
 
 	exit_status = 0;
-	if (ft_strcmp((char *)expr->args.buf[0], "cd") == 0)
+	if (ft_strcmp((char *)expr->args->buf[0], "cd") == 0)
 		exit_status = _cd(expr, env);
-	else if (ft_strcmp((char *)expr->args.buf[0], "unset") == 0)
+	else if (ft_strcmp((char *)expr->args->buf[0], "unset") == 0)
 		exit_status = _unset(expr, &env);
-	else if (ft_strcmp((char *)expr->args.buf[0], "export") == 0)
+	else if (ft_strcmp((char *)expr->args->buf[0], "export") == 0)
 		exit_status = _export(expr, env);
-	/*
-	*/
+	return (exit_status);
 }
 
 #endif

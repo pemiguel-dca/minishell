@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:21:53 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:55:14 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_executer	*initialize_executer_params(t_vec *expressions)
 	return (params);
 }
 
-char	*bin_path(t_expression expr)
+char	*bin_path(t_expression *expr)
 {
 	char		*res;
 	char		*with_delim;
@@ -38,7 +38,7 @@ char	*bin_path(t_expression expr)
 	size_t		i;
 
 	res = NULL;
-	with_delim = ft_strjoin("/", expr.args.buf[0]);
+	with_delim = ft_strjoin("/", expr->args->buf[0]);
 	path_env = ft_split(getenv("PATH"), ':');
 	i = 0;
 	while (path_env[i])
@@ -63,28 +63,18 @@ char	*bin_path(t_expression expr)
 	return (res);
 }
 
-size_t	execute_cmd(t_expression *expr, t_vec *env)
+size_t	execute_cmd(t_expression *expr, t_vec *env, char *path)
 {
-	char	*path;
-
-	path = bin_path(*expr);
-	if (path || is_child_builtin(expr->args.buf[0])
-		|| is_parent_builtin(expr->args.buf[0]))
+	if (!is_child_builtin(expr->args->buf[0]))
 	{
-		if (!is_child_builtin(expr->args.buf[0]))
-		{
-			vec_push(env, 0);
-			vec_push(&expr->args, 0);
-			execve(path, (char **)expr->args.buf, (char **)env->buf);
-		}
-		else
-			return (execute_child_builtin(expr, env));
+		vec_push(env, 0);
+		vec_push(expr->args, 0);
+		execve(path, (char **)expr->args->buf, (char **)env->buf);
 	}
 	else
 	{
-		printf("Command not found: %s\n", (char *)expr->args.buf[0]);
-		return (127);
-		exit(EXIT_FAILURE);
+		free(path);
+		return (execute_child_builtin(expr, env));
 	}
 	free(path);
 	return (0);

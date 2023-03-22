@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 18:45:17 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:54:31 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
 
-static void	set_pipe_channels(t_vec *expressions, t_executer *params)
+void	set_pipe_channels(t_vec *expressions, t_executer *params)
 {
 	if (params->i + 1 < expressions->len)
 	{
@@ -43,10 +43,12 @@ static void	set_pipe_channels(t_vec *expressions, t_executer *params)
 static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
+	char			*path;
 
 	expr = expressions->buf[params->i];
 	if (expr->state == CMD)
 	{
+		// TODO: leak nesta merda
 		if (theres_a_need_to_redir(expressions, params->i))
 		{
 			while (!last_in(expressions, params->i))
@@ -54,14 +56,18 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 				params->input_fd = read_fd(file(expressions, params->i + 2));
 				params->i += 2;
 			}
-			set_pipe_channels(expressions, params);
-			execute_cmd(expr, env);
 		}
 		else
 		{
 			params->i += times_in(expressions, params->i);
+		}
+
+		path = bin_path(expr);
+		if (path) {
 			set_pipe_channels(expressions, params);
-			execute_cmd(expr, env);
+			execute_cmd(expr, env, path);
+		} else if (!is_parent_builtin(expr->args->buf[0])) {
+			printf("Command not found: %s\n", (char *)expr->args->buf[0]);
 		}
 	}
 	exit(EXIT_SUCCESS);
@@ -84,6 +90,7 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 			executer(expressions, params, env);
 			break ;
 		}
+		// TODO: stop execution if command isnt found
 		else if ((expr->state == OUT || expr->state == APPEND)
 			&& last_out_append(expressions, params->i))
 		{
@@ -98,16 +105,18 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
+	pid_t			pid;
 
-	expr = expressions->buf[params->i];
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
-	if (fork() == 0)
+	pid = fork();
+	if (pid == 0)
 		child_process(expressions, params, env);
 	else
 	{
 		wait(NULL);
-		if (is_parent_builtin(expr->args.buf[0])
+		expr = expressions->buf[params->i];
+		if (is_parent_builtin(expr->args->buf[0])
 			&& expressions->len == 1)
 			execute_parent_builtin(expr, env);
 		if (params->i + 1 < expressions->len)

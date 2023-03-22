@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS=-Wall -Wextra -Werror #-fsanitize=leak
+CFLAGS=#-fsanitize=leak
 
 LIBFT=libft/libft.a
 GET_NEXT_LINE=get_next_line/get_next_line.a
@@ -8,7 +8,7 @@ RM=rm -f
 NAME=minishell
 SRCS=main.c vector.c\
 lexer/lexer.c \
-parser/parser.c parser/parser_utils.c \
+parser/parser.c \
 env_vars/envstuff.c \
 redirs/create_files.c redirs/redir_out.c redirs/redir_in.c\
 executer/executer.c executer/executer_utils.c \

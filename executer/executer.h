@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:17:56 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:54:20 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,14 @@ typedef struct executer
 /*Where the magic happens*/
 int					executer(t_vec *expressions, t_executer *params, t_vec *env);
 
+void	set_pipe_channels(t_vec *expressions, t_executer *params);
+
 static inline char	*file(t_vec *expressions, size_t i)
 {
 	t_expression	*expr;
 
 	expr = expressions->buf[i];
-	return (expr->args.buf[0]);
+	return (expr->args->buf[0]);
 }
 
 static inline void	close_file_descriptors(t_executer *params)
@@ -65,8 +67,8 @@ static inline void	close_file_descriptors(t_executer *params)
 /*Initialize all the paramaters needed for executer*/
 t_executer			*initialize_executer_params(t_vec *expressions);
 /*Searches for binary path*/
-char				*bin_path(t_expression expr);
+char				*bin_path(t_expression *expr);
 /*Execute a specific command*/
-size_t					execute_cmd(t_expression *expr, t_vec *env);
+size_t				execute_cmd(t_expression *expr, t_vec *env, char *path);
 
 #endif

@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/19 02:31:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:46:18 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdbool.h>
 #include "lexer.h"
-#include "../libft/libft.h"
-#include "../globals.h"
 
 static char	*get_next(t_lexer *lexer);
 
@@ -114,6 +111,57 @@ static char	*get_next(t_lexer *lexer)
 	return (NULL);
 }
 
+static void	join_channels(t_vec *rearranged, t_vec *redirs)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < redirs->len)
+	{
+		vec_push(rearranged, ft_strdup(redirs->buf[i]));
+		i += 1;
+	}
+	vec_free(redirs);
+	*redirs = vec_new();
+}
+
+static t_vec	rearrange_tokens(t_vec *tokens)
+{
+	size_t	i;
+	t_vec	rearranged;
+	t_vec	redirs;
+
+	i = 0;
+	rearranged = vec_new();
+	redirs = vec_new();
+	while (i < tokens->len)
+	{
+		char *t = tokens->buf[i];
+
+		if (is_redir(t))
+		{
+			vec_push(&redirs, ft_strdup(t));
+			i += 1;
+			char *rhs = tokens->buf[i];
+			vec_push(&redirs, ft_strdup(rhs));
+		}
+		else if (ft_strcmp(t, LIT_PIPE) == 0)
+		{
+			join_channels(&rearranged, &redirs);
+			vec_push(&rearranged, ft_strdup(t));
+		}
+		else
+		{
+			vec_push(&rearranged, ft_strdup(t));
+		}
+		i += 1;
+	}
+	join_channels(&rearranged, &redirs);
+	vec_free(&redirs);
+	vec_free(tokens);
+	return (rearranged);
+}
+
 t_vec	tokenize(const char *buf)
 {
 	t_vec	tokens;
@@ -130,5 +178,5 @@ t_vec	tokenize(const char *buf)
 		else
 			break ;
 	}
-	return (tokens);
+	return (rearrange_tokens(&tokens));
 }

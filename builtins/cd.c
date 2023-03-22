@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:34:25 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:22:36 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:55:05 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,16 @@ static void	set_pwds(t_expression *expr, char *curr_pwd, t_vec *env)
 	char	*new_pwd;
 
 	new_pwd = NULL;
-	if (expr->args.len == 1)
+	if (expr->args->len == 1)
 		set_env(&env, "PWD", env->buf[pos_env_var(env, "HOME") + 5]);
-	else if (ft_strcmp("..", (char *)expr->args.buf[1]) == 0)
+	else if (ft_strcmp("..", (char *)expr->args->buf[1]) == 0)
 	{
 		new_pwd = get_path_before(curr_pwd);
 		set_env(&env, "PWD", new_pwd);
 	}
 	else
 	{
-		new_pwd = ft_strjoin(env->buf[pos_env_var(env, "PWD")], (char *)expr->args.buf[1]);
+		new_pwd = ft_strjoin(env->buf[pos_env_var(env, "PWD")], (char *)expr->args->buf[1]);
 		set_env(&env, "PWD", new_pwd);
 	}
 	set_env(&env, "OLDPWD", curr_pwd);
@@ -100,15 +100,15 @@ size_t	_cd(t_expression *expr, t_vec *env)
 
 	getcwd(curr_pwd, PATH_MAX);
 	exit_status = 0;
-	if (expr->args.len == 1 || ft_strcmp("~", (char *)expr->args.buf[0]) == 0)
+	if (expr->args->len == 1 || ft_strcmp("~", (char *)expr->args->buf[0]) == 0)
 		exit_status = go_home(env);
-	else if (expr->args.len > 2)
+	else if (expr->args->len > 2)
 	{
 		printf("cd: too many arguments\n");
 		exit_status = 1;
 	}
-	else if (expr->args.len == 2)
-		exit_status = change_dir_to(expr->args.buf[1], env);
+	else if (expr->args->len == 2)
+		exit_status = change_dir_to(expr->args->buf[1], env);
 	if (exit_status == 0)
 		set_pwds(expr, curr_pwd, env);
 	return (exit_status);

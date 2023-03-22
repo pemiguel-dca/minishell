@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 17:37:51 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:52:30 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef enum s_states
 
 typedef struct expression
 {
-	t_vec			args;
+	t_vec			*args;
 	t_states		state;
 }	t_expression;
 
@@ -78,23 +78,10 @@ static inline bool	is_operator(char *token)
 /*Divide the tokens in expressions*/
 t_vec			construct_expressions(const t_vec *tokens);
 /*Check if expressions need to be refatored (any adicional arguments)*/
-t_vec			parse(t_vec expressions);
+t_vec			parse(const t_vec *tokens);
 /*Checks for any parse errors*/
 int				check_errors_parser(t_vec *expressions);
 /*Get the state of token*/
 t_states		get_state(const t_vec *args, t_states prev_state);
-
-/*parser_utils.c*/
-
-/*Checks if cmd as adicional args after any redir*/
-int				adicional_args(t_vec *expressions);
-/*Gets inicial cmd args*/
-t_vec			cmd_args(t_expression *expr);
-/*Gets extra arguments of cmd*/
-t_vec			extra_args(t_expression *expr, t_vec *args);
-/*Gets the new expression with the extra arguments for a specific command*/
-t_expression	*get_new_expression(t_vec *expressions, size_t i);
-/*Separates file from other expression*/
-t_expression	*get_file_only(t_expression *expr);
 
 #endif

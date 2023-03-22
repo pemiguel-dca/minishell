@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 19:01:29 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:50:40 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 	return (state);
 }
 
-// TODO: algum caralho aqui ta a dar leaks
 static t_expression	*get_next(t_parser *parser)
 {
 	t_expression		*expr;
@@ -50,13 +49,10 @@ static t_expression	*get_next(t_parser *parser)
 			|| parser->tokens->len == parser->i + 1)
 		{
 			expr = malloc(sizeof(t_expression));
-			// esta merda provavelmente acaba os leaks
-			//t_vec clone = { .buf = args.buf, .cap = args.cap, .len = args.len };
-			*expr = (t_expression){.args = args,
+			*expr = (t_expression){.args = &args,
 				.state = get_state(&args, prev_state)};
 			prev_state = expr->state;
 			parser->i += 1;
-			//vec_free(&args);
 			return (expr);
 		}
 		parser->i += 1;
@@ -65,7 +61,7 @@ static t_expression	*get_next(t_parser *parser)
 	return (NULL);
 }
 
-t_vec	construct_expressions(const t_vec *tokens)
+t_vec	parse(const t_vec *tokens)
 {
 	t_vec			expressions;
 	t_parser		parser;
@@ -82,43 +78,6 @@ t_vec	construct_expressions(const t_vec *tokens)
 			break ;
 	}
 	return (expressions);
-}
-
-t_vec	parse(t_vec expressions)
-{
-	size_t			i;
-	t_expression	*expr;
-	t_expression	*new_expr;
-	t_vec			new;
-
-	new = vec_new();
-	i = 0;
-	while (i < expressions.len)
-	{
-		expr = expressions.buf[i];
-		if (expr->state == CMD && adicional_args(&expressions))
-		{
-			new_expr = get_new_expression(&expressions, i);
-			vec_push(&new, new_expr);
-			//vec_free(&expr->args);
-			free(expr->args.buf);
-			free(expr);
-		}
-		else if (expr->state == FL && expr->args.len > 1)
-		{
-			new_expr = get_file_only(expr);
-			vec_push(&new, new_expr);
-			//vec_free(&expr->args);
-			free(expr->args.buf);
-			free(expr);
-		}
-		else
-		{
-			vec_push(&new, expr);
-		}
-		i += 1;
-	}
-	return (new);
 }
 
 int	check_errors_parser(t_vec *expressions)

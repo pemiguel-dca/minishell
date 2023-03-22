@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 14:23:05 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:55:50 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,22 +72,22 @@ static size_t	create_vars(t_expression *expr, t_vec *env)
 	size_t	i;
 
 	i = 1;
-	while (i < expr->args.len)
+	while (i < expr->args->len)
 	{
-		if (pos_env_var(env, (char *)expr->args.buf[i]) == -1)
+		if (pos_env_var(env, (char *)expr->args->buf[i]) == -1)
 		{
-			if (!ft_isalpha(((char *)expr->args.buf[i])[0]))
+			if (!ft_isalpha(((char *)expr->args->buf[i])[0]))
 			{
-				printf("export: '%s': not a valid identifier\n", (char *)expr->args.buf[i]);
+				printf("export: '%s': not a valid identifier\n", (char *)expr->args->buf[i]);
 				return (1);
 			}
-			else if (ft_strchr((char *)expr->args.buf[i], '='))
-				vec_push(env, ft_strdup(expr->args.buf[i]));
+			else if (ft_strchr((char *)expr->args->buf[i], '='))
+				vec_push(env, ft_strdup(expr->args->buf[i]));
 		}
 		else
 		{
-			vec_del(&env, pos_env_var(env, (char *)expr->args.buf[i]));
-			vec_push(env, ft_strdup(expr->args.buf[i]));
+			vec_del(&env, pos_env_var(env, (char *)expr->args->buf[i]));
+			vec_push(env, ft_strdup(expr->args->buf[i]));
 		}
 		i += 1;
 	}
@@ -103,7 +103,7 @@ size_t		_export(t_expression *expr, t_vec *env)
 	i = 1;
 	copy = copy_current_envs(env);
 	exit_status = 0;
-	if (expr->args.len == 1)
+	if (expr->args->len == 1)
 		organized_envs(&copy);
 	else
 		exit_status = create_vars(expr, env);
