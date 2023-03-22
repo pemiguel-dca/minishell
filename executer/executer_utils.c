@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 18:09:36 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:21:53 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_executer	*initialize_executer_params(t_vec *expressions)
 	params->input_fd = STDIN_FILENO;
 	params->output_fd = STDOUT_FILENO;
 	params->pos_file = 0;
+	params->exit_status = 0;
 	if (files_to_be_created(expressions) && params->i == 0)
 		params->new_files = create_files(expressions);
 	else
@@ -62,7 +63,7 @@ char	*bin_path(t_expression expr)
 	return (res);
 }
 
-void	execute_cmd(t_expression *expr, t_vec *env)
+size_t	execute_cmd(t_expression *expr, t_vec *env)
 {
 	char	*path;
 
@@ -77,12 +78,14 @@ void	execute_cmd(t_expression *expr, t_vec *env)
 			execve(path, (char **)expr->args.buf, (char **)env->buf);
 		}
 		else
-			execute_child_builtin(expr, env);
+			return (execute_child_builtin(expr, env));
 	}
 	else
 	{
 		printf("Command not found: %s\n", (char *)expr->args.buf[0]);
+		return (127);
 		exit(EXIT_FAILURE);
 	}
 	free(path);
+	return (0);
 }

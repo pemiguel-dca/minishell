@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 17:45:06 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:17:56 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ typedef struct executer
 	int		output_fd;
 	int		pipe_fd[2];
 	int		*new_files;
+	size_t	exit_status;
 	size_t	pos_file;
 }	t_executer;
 
 /*executer.c*/
 
 /*Where the magic happens*/
-int	executer(t_vec *expressions, t_executer *params, t_vec *env);
+int					executer(t_vec *expressions, t_executer *params, t_vec *env);
 
 static inline char	*file(t_vec *expressions, size_t i)
 {
@@ -66,6 +67,6 @@ t_executer			*initialize_executer_params(t_vec *expressions);
 /*Searches for binary path*/
 char				*bin_path(t_expression expr);
 /*Execute a specific command*/
-void				execute_cmd(t_expression *expr, t_vec *env);
+size_t					execute_cmd(t_expression *expr, t_vec *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 14:24:58 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:23:05 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void		organized_envs(t_vec *env)
 	print_export(env);
 }
 
-static int		create_vars(t_expression *expr, t_vec *env)
+static size_t	create_vars(t_expression *expr, t_vec *env)
 {
 	size_t	i;
 
@@ -94,11 +94,11 @@ static int		create_vars(t_expression *expr, t_vec *env)
 	return (0);
 }
 
-int		_export(t_expression *expr, t_vec *env)
+size_t		_export(t_expression *expr, t_vec *env)
 {
 	size_t	i;
 	t_vec	copy;
-	int		exit_status;
+	size_t	exit_status;
 
 	i = 1;
 	copy = copy_current_envs(env);

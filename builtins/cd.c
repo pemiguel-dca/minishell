@@ -6,13 +6,12 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:34:25 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/21 18:22:18 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:22:36 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-/**/
 static int	go_to_oldpwd(t_vec *env)
 {
 	int	i;
@@ -29,7 +28,6 @@ static int	go_to_oldpwd(t_vec *env)
 		exit_status = change_dir_to(env->buf[i] + 7, env);
 	return (exit_status);
 }
-
 
 static int	go_home(t_vec *env)
 {
@@ -56,7 +54,7 @@ int	change_dir_to(const char *path, t_vec *env)
 	exit_status = 0;
 	if (ft_strcmp("-", (char *)path) == 0)
 		exit_status = go_to_oldpwd(env);
-	if (stat(path, &buf) < 0)
+	else if (stat(path, &buf) < 0)
 	{
 		printf("cd: no such file or directory: %s\n", path);
 		exit_status = 1;
@@ -74,23 +72,9 @@ int	change_dir_to(const char *path, t_vec *env)
 	return (exit_status);
 }
 
-static char	*get_path_before(char *curr_path)
-{
-	size_t	i;
-	char	*path_before;
-
-	i = ft_strlen(curr_path) - 1;
-	while (i != 0 && curr_path[i] != '/')
-		i -= 1;
-	path_before = ft_substr(curr_path, 0, i);
-	return (path_before);
-}
-
-
 static void	set_pwds(t_expression *expr, char *curr_pwd, t_vec *env)
 {
 	char	*new_pwd;
-	//char	*pwd_full;
 
 	new_pwd = NULL;
 	if (expr->args.len == 1)
@@ -109,7 +93,7 @@ static void	set_pwds(t_expression *expr, char *curr_pwd, t_vec *env)
 	free(new_pwd);
 }
 
-int	_cd(t_expression *expr, t_vec *env)
+size_t	_cd(t_expression *expr, t_vec *env)
 {
 	int		exit_status;
 	char	curr_pwd[PATH_MAX];

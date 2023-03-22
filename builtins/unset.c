@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 18:12:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 21:32:06 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:23:27 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	**get_var_names(const t_expression *expr)
 	return (var_names);
 }
 
-int	_unset(t_expression *expr, t_vec **env)
+size_t	_unset(t_expression *expr, t_vec **env)
 {
 	t_vec	*temp_env;
 	size_t	i;

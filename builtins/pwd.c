@@ -6,13 +6,13 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:24:51 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 21:32:20 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:23:23 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	_pwd(t_expression *expr)
+size_t	_pwd(t_expression *expr)
 {
 	char	cwd[PATH_MAX];
 
