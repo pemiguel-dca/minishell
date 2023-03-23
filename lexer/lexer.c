@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/22 22:55:22 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 13:30:32 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,8 @@ static t_vec	rearrange_tokens(t_vec *tokens)
 		i += 1;
 	}
 	join_channels(&rearranged, &redirs);
-	vec_free(&redirs);
+	if (redirs.buf)
+		vec_free(&redirs);
 	vec_free(tokens);
 	return (rearranged);
 }
@@ -170,6 +171,7 @@ t_vec	tokenize(const char *buf)
 
 	tokens = vec_new();
 	lexer = (t_lexer){.input = buf};
+	printf("Input :%s", lexer.input);
 	while (true)
 	{
 		token = get_next(&lexer);

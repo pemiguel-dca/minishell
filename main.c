@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/22 22:55:33 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 14:53:40 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,21 @@ int	main(int argc, char **argv, char **envp)
 		tokens = tokenize(input);
 		expressions = parse(&tokens);
 		__debug_lexer(&tokens);
-		//__debug_parser(&expressions);
-		//__debug_envs(&env);
+		free(input);
 		params = initialize_executer_params(&expressions);
-		//if (!check_errors_parser(&expressions))
-		//	executer(&expressions, params, &env);
-		free(params->new_files);
-		free(params);
+		__debug_parser(&expressions);
+		//__debug_envs(&env);
+		if (!check_errors_parser(&expressions))
+			executer(&expressions, params, &env);
+
 		for (size_t i = 0; i < expressions.len; i++)
 			vec_free(&((t_expression *)expressions.buf[i])->args);
 		vec_free(&expressions);
+		free(params->new_files);
+		free(params);
 		vec_free(&tokens);
-		free(input);
 	}
+
 	vec_free(&env);
 	return (0);
 }

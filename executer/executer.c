@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 22:39:29 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 14:55:03 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,13 @@ void	set_pipe_channels(t_vec *expressions, t_executer *params)
 	}
 }
 
-static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
+static void	child_process(t_vec *expressions, t_executer *params, t_vec *env, t_expression	*expr)
 {
-	t_expression	*expr;
 	char			*path;
 
 	expr = expressions->buf[params->i];
 	if (expr->state == CMD)
 	{
-		// TODO: leak nesta merda
 		if (theres_a_need_to_redir(expressions, params->i))
 		{
 			while (!last_in(expressions, params->i))
@@ -62,13 +60,14 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 			params->i += times_in(expressions, params->i);
 		}
 
-		path = bin_path(expr);
-		if (path) {
+		path = bin_path(expr, env);
+		if (path)
+		{
 			set_pipe_channels(expressions, params);
 			execute_cmd(expr, env, path);
-		} else if (!is_parent_builtin(expr->args.buf[0])) {
-			printf("Command not found: %s\n", (char *)expr->args.buf[0]);
 		}
+		else if (!is_parent_builtin(expr->args.buf[0]))
+			printf("Command not found: %s\n", (char *)expr->args.buf[0]);
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -111,7 +110,7 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 		exit(EXIT_FAILURE);
 	pid = fork();
 	if (pid == 0)
-		child_process(expressions, params, env);
+		child_process(expressions, params, env, expr);
 	else
 	{
 		wait(NULL);

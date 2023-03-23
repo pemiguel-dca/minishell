@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 22:18:14 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 14:57:05 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ t_executer	*initialize_executer_params(t_vec *expressions)
 	return (params);
 }
 
-char	*bin_path(t_expression *expr)
+char	*bin_path(t_expression *expr, t_vec *env)
 {
+	char		*path;
 	char		*res;
 	char		*with_delim;
 	char		*full_path;
@@ -38,8 +39,9 @@ char	*bin_path(t_expression *expr)
 	size_t		i;
 
 	res = NULL;
-	with_delim = ft_strjoin("/", expr->args.buf[0]);
-	path_env = ft_split(getenv("PATH"), ':');
+	path = ft_strdup(env->buf[pos_env_var(env, "PATH")]);
+	with_delim = ft_strjoin("/", ft_strdup((char *)expr->args.buf[0]));
+	path_env = ft_split(path, ':');
 	i = 0;
 	while (path_env[i])
 	{
@@ -58,6 +60,7 @@ char	*bin_path(t_expression *expr)
 		free(path_env[i]);
 		i++;
 	}
+	free(path);
 	free(path_env);
 	free(with_delim);
 	return (res);
@@ -69,7 +72,9 @@ size_t	execute_cmd(t_expression *expr, t_vec *env, char *path)
 	{
 		vec_push(env, 0);
 		vec_push(&expr->args, 0);
-		execve(path, (char **)expr->args.buf, (char **)env->buf);
+		printf("%s", (char *)expr->args.buf[0]);
+		printf("%s", (char *)expr->args.buf[1]);
+		//execve(path, (char **)expr->args.buf, (char **)env->buf);
 	}
 	else
 	{
