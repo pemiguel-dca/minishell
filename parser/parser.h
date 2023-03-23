@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 22:16:11 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 16:50:46 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include "../globals.h"
 # include "../vector.h"
 
-// TODO: execute relative files
 typedef enum s_states
 {
 	ENV,
@@ -47,32 +46,39 @@ typedef struct parser
 	const t_vec	*tokens;
 }	t_parser;
 
-/*Gets the operator state*/
-inline static t_states	operator_type(char *op)
+inline static char	*p_curr(const t_parser *parser, size_t i)
 {
-	if (ft_strcmp(op, LIT_PIPE) == 0)
+	if (i < parser->tokens->len) {
+		return (parser->tokens->buf[i]);
+	} else {
+		return (NULL);
+	}
+}
+
+inline static t_states	operator_type(const char *op)
+{
+	if (ft_strcmp((char *)op, LIT_PIPE) == 0)
 		return (PIPED);
-	else if (ft_strcmp(op, LIT_REDIR_APPEND) == 0)
+	else if (ft_strcmp((char *)op, LIT_REDIR_APPEND) == 0)
 		return (APPEND);
-	else if (ft_strcmp(op, LIT_REDIR_DEL) == 0)
+	else if (ft_strcmp((char *)op, LIT_REDIR_DEL) == 0)
 		return (DELIMITER);
-	else if (ft_strcmp(op, LIT_REDIR_OUT) == 0)
+	else if (ft_strcmp((char *)op, LIT_REDIR_OUT) == 0)
 		return (OUT);
-	else if (ft_strcmp(op, LIT_REDIR_IN) == 0)
+	else if (ft_strcmp((char *)op, LIT_REDIR_IN) == 0)
 		return (IN);
 	assert(0);
 }
 
-/*parser.c*/
-
-/*Checks if token is an operator*/
-static inline bool	is_operator(char *token)
+inline static bool	is_operator(const char *token)
 {
-	return (ft_strcmp(token, LIT_PIPE) == 0
-		|| ft_strcmp(token, LIT_REDIR_APPEND) == 0
-		|| ft_strcmp(token, LIT_REDIR_DEL) == 0
-		|| ft_strcmp(token, LIT_REDIR_IN) == 0
-		|| ft_strcmp(token, LIT_REDIR_OUT) == 0);
+	if (!token)
+		return (false);
+	return (ft_strcmp((char *)token, LIT_PIPE) == 0
+		|| ft_strcmp((char *)token, LIT_REDIR_APPEND) == 0
+		|| ft_strcmp((char *)token, LIT_REDIR_DEL) == 0
+		|| ft_strcmp((char *)token, LIT_REDIR_IN) == 0
+		|| ft_strcmp((char *)token, LIT_REDIR_OUT) == 0);
 }
 
 /*Divide the tokens in expressions*/

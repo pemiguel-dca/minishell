@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:28:38 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/23 13:28:33 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 16:38:55 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@
 
 typedef struct lexer
 {
+	size_t		i;
 	const char	*input;
 }	t_lexer;
 
-inline static char	*curr(const t_lexer *lexer, size_t i)
+inline static char	*l_curr(const t_lexer *lexer, size_t i)
 {
 	return ((char *)lexer->input + i);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/23 13:30:32 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 16:45:47 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ static char	*dispatch_string(t_lexer *lexer, size_t i)
 	char	*tmp;
 	size_t	delta;
 
-	start = curr(lexer, i);
+	start = l_curr(lexer, i);
 	delim = *start;
-	end = ft_strchr(curr(lexer, i) + 1, delim);
+	end = ft_strchr(l_curr(lexer, i) + 1, delim);
 	if (!end)
 	{
 		printf("Unended quote/dquote\n");
@@ -64,7 +64,7 @@ static char	*dispatch_string(t_lexer *lexer, size_t i)
 	delta = end - start;
 	token = ft_substr(lexer->input, 1, delta - 1);
 	lexer->input += delta + 1;
-	if (*curr(lexer, 0) && !ft_isspace(*curr(lexer, 0)))
+	if (*l_curr(lexer, 0) && !ft_isspace(*l_curr(lexer, 0)))
 	{
 		join = get_next(lexer);
 		tmp = token;
@@ -86,27 +86,29 @@ static char	*dispatch_normal(t_lexer *lexer, size_t i)
 static char	*get_next(t_lexer *lexer)
 {
 	size_t	i;
+	char	c;
 
 	i = 0;
-	while (*curr(lexer, i) && ft_isspace(*curr(lexer, i)))
+	while (*l_curr(lexer, i) && ft_isspace(*l_curr(lexer, i)))
 		++lexer->input;
 	while (*lexer->input)
 	{
-		if (ft_isspace(*curr(lexer, i)) || !*curr(lexer, i))
+		c = *l_curr(lexer, i);
+		if (ft_isspace(c) || !c)
 			return (dispatch_normal(lexer, i));
-		else if (*curr(lexer, i) == LIT_QUOTE
-			|| *curr(lexer, i) == LIT_DOUBLE_QUOTE)
+		else if (c == LIT_QUOTE
+			|| c == LIT_DOUBLE_QUOTE)
 			return (dispatch_string(lexer, i));
-		else if (*curr(lexer, i) == *LIT_REDIR_OUT
-			|| *curr(lexer, i) == *LIT_REDIR_IN
-			|| *curr(lexer, i) == *LIT_PIPE)
+		else if (c == *LIT_REDIR_OUT
+			|| c == *LIT_REDIR_IN
+			|| c == *LIT_PIPE)
 		{
 			if (i == 0)
 				return (dispatch_operator(lexer));
 			else
 				return (dispatch_normal(lexer, i));
 		}
-		++i;
+		i += 1;
 	}
 	return (NULL);
 }
@@ -157,8 +159,7 @@ static t_vec	rearrange_tokens(t_vec *tokens)
 		i += 1;
 	}
 	join_channels(&rearranged, &redirs);
-	if (redirs.buf)
-		vec_free(&redirs);
+	vec_free(&redirs);
 	vec_free(tokens);
 	return (rearranged);
 }
@@ -171,7 +172,6 @@ t_vec	tokenize(const char *buf)
 
 	tokens = vec_new();
 	lexer = (t_lexer){.input = buf};
-	printf("Input :%s", lexer.input);
 	while (true)
 	{
 		token = get_next(&lexer);

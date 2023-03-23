@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 22:15:38 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 16:51:47 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,34 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 
 static t_expression	*get_next(t_parser *parser)
 {
-	t_expression		*expr;
 	t_vec				args;
 	static t_states		prev_state = DEFAULT;
 
-	expr = NULL;
 	args = vec_new();
 	while (parser->i < parser->tokens->len)
 	{
-		vec_push(&args, (char *)parser->tokens->buf[parser->i]);
+		vec_push(&args, ft_strdup(p_curr(parser, parser->i)));
 
-		if ((parser->tokens->len != parser->i + 1
-				&& is_operator((char *)parser->tokens->buf[parser->i + 1]))
-			|| is_operator((char *)parser->tokens->buf[parser->i])
-			|| parser->tokens->len == parser->i + 1)
-		{
-			expr = malloc(sizeof(t_expression));
+		if (
+			// if there's a next token and it is an operator
+			is_operator(p_curr(parser, parser->i + 1))
+			// or if this token is an operator
+			|| is_operator(p_curr(parser, parser->i))
+			// or if there's no more tokens
+			|| parser->tokens->len == parser->i + 1
+		) {
+			t_expression	*expr = malloc(sizeof(t_expression));
+
 			*expr = (t_expression){.args = args,
 				.state = get_state(&args, prev_state)};
+
 			prev_state = expr->state;
+
 			parser->i += 1;
+
 			return (expr);
 		}
+
 		parser->i += 1;
 	}
 	vec_free(&args);
