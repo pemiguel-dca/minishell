@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/22 18:49:02 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:55:33 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "env_vars/env.h"
 #include "globals.h"
 
-/*
 void __debug_lexer(const t_vec *tokens)
 {
 	printf("[");
@@ -28,9 +27,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
-*/
 
-/*
 void	__debug_parser(const t_vec *expressions)
 {
 	for (size_t i = 0; i < expressions->len; i += 1)
@@ -48,8 +45,6 @@ void	__debug_parser(const t_vec *expressions)
 		printf("]\n");
 	}
 }
-*/
-
 /*
 void __debug_envs(const t_vec *env)
 {
@@ -80,18 +75,19 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		add_history(input);
 		tokens = tokenize(input);
-		/*Find better names for this two functions*/
 		expressions = parse(&tokens);
-		// __debug_lexer(&tokens);
-		// __debug_parser(&expressions);
+		__debug_lexer(&tokens);
+		//__debug_parser(&expressions);
 		//__debug_envs(&env);
-		// params = initialize_executer_params(&expressions);
-		// if (!check_errors_parser(&expressions)) {}
-			// executer(&expressions, params, &env);
+		params = initialize_executer_params(&expressions);
+		//if (!check_errors_parser(&expressions))
+		//	executer(&expressions, params, &env);
+		free(params->new_files);
+		free(params);
+		for (size_t i = 0; i < expressions.len; i++)
+			vec_free(&((t_expression *)expressions.buf[i])->args);
 		vec_free(&expressions);
 		vec_free(&tokens);
-		// free(params->new_files);
-		// free(params);
 		free(input);
 	}
 	vec_free(&env);

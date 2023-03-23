@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 18:55:14 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:18:14 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*bin_path(t_expression *expr)
 	size_t		i;
 
 	res = NULL;
-	with_delim = ft_strjoin("/", expr->args->buf[0]);
+	with_delim = ft_strjoin("/", expr->args.buf[0]);
 	path_env = ft_split(getenv("PATH"), ':');
 	i = 0;
 	while (path_env[i])
@@ -65,11 +65,11 @@ char	*bin_path(t_expression *expr)
 
 size_t	execute_cmd(t_expression *expr, t_vec *env, char *path)
 {
-	if (!is_child_builtin(expr->args->buf[0]))
+	if (!is_child_builtin(expr->args.buf[0]))
 	{
 		vec_push(env, 0);
-		vec_push(expr->args, 0);
-		execve(path, (char **)expr->args->buf, (char **)env->buf);
+		vec_push(&expr->args, 0);
+		execve(path, (char **)expr->args.buf, (char **)env->buf);
 	}
 	else
 	{

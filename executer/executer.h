@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 18:54:20 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:18:36 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static inline char	*file(t_vec *expressions, size_t i)
 	t_expression	*expr;
 
 	expr = expressions->buf[i];
-	return (expr->args->buf[0]);
+	return (expr->args.buf[0]);
 }
 
 static inline void	close_file_descriptors(t_executer *params)

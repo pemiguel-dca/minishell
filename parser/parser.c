@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 18:50:40 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:15:38 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static t_expression	*get_next(t_parser *parser)
 			|| parser->tokens->len == parser->i + 1)
 		{
 			expr = malloc(sizeof(t_expression));
-			*expr = (t_expression){.args = &args,
+			*expr = (t_expression){.args = args,
 				.state = get_state(&args, prev_state)};
 			prev_state = expr->state;
 			parser->i += 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 18:52:30 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:16:11 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef enum s_states
 
 typedef struct expression
 {
-	t_vec			*args;
+	t_vec			args;
 	t_states		state;
 }	t_expression;
 

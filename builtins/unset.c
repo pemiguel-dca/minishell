@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 18:12:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 18:55:41 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:19:11 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ static char	**get_var_names(const t_expression *expr)
 	char	**var_names;
 
 	i = 0;
-	var_names = malloc(expr->args->len * sizeof(char *));
-	while (i < expr->args->len - 1)
+	var_names = malloc(expr->args.len * sizeof(char *));
+	while (i < expr->args.len - 1)
 	{
-		var_names[i] = ft_strdup(expr->args->buf[i + 1]);
+		var_names[i] = ft_strdup(expr->args.buf[i + 1]);
 		i += 1;
 	}
 	var_names[i] = 0;
@@ -56,7 +56,7 @@ size_t	_unset(t_expression *expr, t_vec **env)
 	{
 		env_var = temp_env->buf[i];
 		j = 0;
-		while (j < expr->args->len - 1)
+		while (j < expr->args.len - 1)
 		{
 			if (ft_strncmp(var_names[j], env_var, ft_strlen(var_names[j])) == 0
 				&& env_var[ft_strlen(var_names[j])] == '=')
@@ -65,6 +65,6 @@ size_t	_unset(t_expression *expr, t_vec **env)
 		}
 		i -= 1;
 	}
-	free_vars(var_names, expr->args->len - 1);
+	free_vars(var_names, expr->args.len - 1);
 	return (0);
 }

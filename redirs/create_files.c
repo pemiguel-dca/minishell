@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 02:42:07 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 18:52:42 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:20:38 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	*create_files(t_vec *expressions)
 		expr = (t_expression *)expressions->buf[j];
 		if (expr->state == FL && (prev->state == OUT || prev->state == APPEND))
 		{
-			files[i] = create_specific_file(expr->args->buf[0], prev->state);
+			files[i] = create_specific_file(expr->args.buf[0], prev->state);
 			i += 1;
 		}
 		if (j + 1 != expressions->len

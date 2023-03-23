@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 18:54:31 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:39:29 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		if (path) {
 			set_pipe_channels(expressions, params);
 			execute_cmd(expr, env, path);
-		} else if (!is_parent_builtin(expr->args->buf[0])) {
-			printf("Command not found: %s\n", (char *)expr->args->buf[0]);
+		} else if (!is_parent_builtin(expr->args.buf[0])) {
+			printf("Command not found: %s\n", (char *)expr->args.buf[0]);
 		}
 	}
 	exit(EXIT_SUCCESS);
@@ -90,13 +90,13 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 			executer(expressions, params, env);
 			break ;
 		}
-		// TODO: stop execution if command isnt found
 		else if ((expr->state == OUT || expr->state == APPEND)
 			&& last_out_append(expressions, params->i))
 		{
 			params->pos_file = get_pos_fd(expressions, params->i);
 			redir_out_append(params->pipe_fd[READ_END],
 				params->new_files[params->pos_file]);
+			break ;
 		}
 		params->i += 1;
 	}
@@ -116,15 +116,13 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 	{
 		wait(NULL);
 		expr = expressions->buf[params->i];
-		if (is_parent_builtin(expr->args->buf[0])
+		if (is_parent_builtin(expr->args.buf[0])
 			&& expressions->len == 1)
 			execute_parent_builtin(expr, env);
-		if (params->i + 1 < expressions->len)
+		else if (params->i + 1 < expressions->len)
 			run_expressions(expressions, params, env);
 		else
 			close_file_descriptors(params);
-		if (params->i >= expressions->len)
-			params->i = 0;
 	}
 	return (0);
 }

@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS=#-fsanitize=leak
+CFLAGS= -fsanitize=leak
 
 LIBFT=libft/libft.a
 GET_NEXT_LINE=get_next_line/get_next_line.a
