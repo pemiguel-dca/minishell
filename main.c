@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/23 16:53:29 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/23 18:11:22 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	main(int argc, char **argv, char **envp)
 	t_vec		env;
 	t_vec		tokens;
 	t_vec		expressions;
-	// t_executer	*params;
+	t_executer	*params;
 	char		*input;
 
 	env = create_envs(envp);
@@ -74,29 +74,21 @@ int	main(int argc, char **argv, char **envp)
 	{
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		add_history(input);
-
 		tokens = tokenize(input);
 		// __debug_lexer(&tokens);
-
 		expressions = parse(&tokens);
-		__debug_parser(&expressions);
-
-		// params = initialize_executer_params(&expressions);
-		// __debug_envs(&env);
-		// if (!check_errors_parser(&expressions))
-		// 	executer(&expressions, params, &env);
-
-		// free(params->new_files);
-		// free(params);
-
+		//__debug_parser(&expressions);
+		params = initialize_executer_params(&expressions);
+		if (!check_errors_parser(&expressions))
+		 	executer(&expressions, params, &env);
 		for (size_t i = 0; i < expressions.len; i++)
 			vec_free(&((t_expression *)expressions.buf[i])->args);
 		vec_free(&expressions);
-
 		vec_free(&tokens);
+		free(params->new_files);
+		free(params);
 		free(input);
 	}
-
 	vec_free(&env);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 02:42:07 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 22:20:38 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 18:06:41 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	*create_files(t_vec *expressions)
 	size_t			i;
 	size_t			j;
 
-	files = malloc(files_to_be_created(expressions) * sizeof(int));
+	files = malloc((files_to_be_created(expressions) + 1) * sizeof(int));
 	i = 0;
 	j = 0;
 	while (j < expressions->len)

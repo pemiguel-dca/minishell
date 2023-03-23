@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS=
+CFLAGS= -fsanitize=address
 
 LIBFT=libft/libft.a
 GET_NEXT_LINE=get_next_line/get_next_line.a

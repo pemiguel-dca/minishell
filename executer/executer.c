@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 14:55:03 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 18:13:34 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ void	set_pipe_channels(t_vec *expressions, t_executer *params)
 	}
 }
 
-static void	child_process(t_vec *expressions, t_executer *params, t_vec *env, t_expression	*expr)
+static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 {
+	t_expression *expr;
 	char			*path;
 
 	expr = expressions->buf[params->i];
@@ -59,7 +60,6 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env, t_
 		{
 			params->i += times_in(expressions, params->i);
 		}
-
 		path = bin_path(expr, env);
 		if (path)
 		{
@@ -95,7 +95,6 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 			params->pos_file = get_pos_fd(expressions, params->i);
 			redir_out_append(params->pipe_fd[READ_END],
 				params->new_files[params->pos_file]);
-			break ;
 		}
 		params->i += 1;
 	}
@@ -104,13 +103,11 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
-	pid_t			pid;
 
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
-	pid = fork();
-	if (pid == 0)
-		child_process(expressions, params, env, expr);
+	if (fork() == 0)
+		child_process(expressions, params, env);
 	else
 	{
 		wait(NULL);

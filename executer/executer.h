@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 13:40:06 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 17:58:32 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,6 @@
 
 # define READ_END 0
 # define WRITE_END 1
-
-typedef struct executer
-{
-	size_t	i;
-	int		input_fd;
-	int		output_fd;
-	int		pipe_fd[2];
-	int		*new_files;
-	size_t	exit_status;
-	size_t	pos_file;
-}	t_executer;
 
 /*executer.c*/
 

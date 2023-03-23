@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 14:57:05 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 18:00:07 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*bin_path(t_expression *expr, t_vec *env)
 
 	res = NULL;
 	path = ft_strdup(env->buf[pos_env_var(env, "PATH")]);
-	with_delim = ft_strjoin("/", ft_strdup((char *)expr->args.buf[0]));
+	with_delim = ft_strjoin("/", (char *)expr->args.buf[0]);
 	path_env = ft_split(path, ':');
 	i = 0;
 	while (path_env[i])
@@ -72,9 +72,7 @@ size_t	execute_cmd(t_expression *expr, t_vec *env, char *path)
 	{
 		vec_push(env, 0);
 		vec_push(&expr->args, 0);
-		printf("%s", (char *)expr->args.buf[0]);
-		printf("%s", (char *)expr->args.buf[1]);
-		//execve(path, (char **)expr->args.buf, (char **)env->buf);
+		execve(path, (char **)expr->args.buf, (char **)env->buf);
 	}
 	else
 	{
