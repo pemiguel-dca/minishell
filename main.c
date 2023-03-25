@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/24 21:47:41 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:10:56 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "expander/expander.h"
 #include "env_vars/env.h"
 #include "globals.h"
+
+long long	g_exit_status;
 
 /*
 void __debug_lexer(const t_vec *tokens)
@@ -29,7 +31,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
-*/
+
 void	__debug_parser(const t_vec *expressions)
 {
 	for (size_t i = 0; i < expressions->len; i += 1)
@@ -47,7 +49,7 @@ void	__debug_parser(const t_vec *expressions)
 		printf("]\n");
 	}
 }
-/*
+
 void __debug_envs(const t_vec *env)
 {
 	printf("[");
@@ -70,7 +72,7 @@ void	free_all(t_vec expressions, t_executer *params, t_vec tokens, char *input)
 	{
 		vec_free(&((t_expression *)expressions.buf[i])->args);
 		i += 1;
-	}	
+	}
 	vec_free(&expressions);
 	vec_free(&tokens);
 	free(input);
@@ -83,7 +85,7 @@ void	free_all(t_vec expressions, t_executer *params, t_vec tokens, char *input)
 	else
 	{
 		free(params->new_files);
-		free(params);	
+		free(params);
 	}
 }
 
@@ -91,26 +93,30 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
+	size_t		expander_res;
 	t_vec		env;
 	t_vec		tokens;
 	t_vec		expressions;
 	t_executer	*params;
 	char		*input;
-	static int	last_exit_status;
 
 	env = create_envs(envp);
 	while (true)
 	{
+		expander_res = 0;
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		add_history(input);
 		tokens = tokenize(input);
-		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
-		expander(&expressions, &env, params);
-		params = initialize_executer_params(&expressions);
-		__debug_parser(&expressions);
-		if (!check_errors_parser(&expressions))
-		 	executer(&expressions, params, &env);
+		expander_res = expander(&expressions, &env);
+		params = initialize_executer_params(&expressions, expander_res);
+		if (!check_errors_parser(&expressions) && !expander_res)
+		{
+			executer(&expressions, params, &env);
+			g_exit_status = params->exit_status;
+		}
+		else
+			g_exit_status = 1;//ambigous redirect
 		free_all(expressions, params, tokens, input);
 	}
 	vec_free(&env);

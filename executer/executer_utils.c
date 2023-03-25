@@ -6,13 +6,13 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 21:46:50 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/25 16:30:22 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
 
-t_executer	*initialize_executer_params(t_vec *expressions)
+t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
 {
 	t_executer	*params;
 
@@ -23,7 +23,7 @@ t_executer	*initialize_executer_params(t_vec *expressions)
 	params->pos_file = 0;
 	params->exit_status = 0;
 	params->exit = 0;
-	if (files_to_be_created(expressions) && params->i == 0)
+	if (files_to_be_created(expressions) && params->i == 0 && !executer_res)
 		params->new_files = create_files(expressions);
 	else
 		params->new_files = NULL;
@@ -78,5 +78,4 @@ void	execute_cmd(t_expression *expr, t_vec *env, char *path, t_executer *params)
 	else
 		execute_child_builtin(expr, env, params);
 	free(path);
-	
 }

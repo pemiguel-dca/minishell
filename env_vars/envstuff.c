@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 16:04:49 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/24 17:06:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:08:12 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	set_env(t_vec **env, char *name, char *value)
 	full_name = ft_strjoin(name, "=");
 	new_var = ft_strjoin(full_name, value);
 	new_env_var = ft_strdup(new_var);
-	((t_vec *)*env)->buf[i] = new_env_var;
+	vec_push(*env, new_env_var);
+	free(new_env_var);
 	free(full_name);
 	free(new_var);
-	free(new_env_var);
 }
 
 char	*get_var_value(char *var)
@@ -55,7 +55,7 @@ char	*get_var_value(char *var)
 	size_t	i;
 
 	i = 0;
-	while (var[i] != '=')
+	while (var[i] && var[i] != '=')
 		i += 1;
 	i += 1;
 	return (var + i);

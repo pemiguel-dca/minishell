@@ -6,17 +6,17 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:25:31 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/20 15:04:44 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/25 15:39:38 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_swap(char **s1, char **s2)
+void	ft_swap(void *s1, void *s2)
 {
-	char	*temp;
+	void	*temp;
 
-	temp = *s1;
-	*s1 = *s2;
-	*s2 = temp;
+	temp = s1;
+	s1 = s2;
+	s2 = temp;
 }

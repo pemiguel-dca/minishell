@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 16:51:47 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/25 15:47:31 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 	else if (args->len == 1 && is_operator(args->buf[0]))
 		state = operator_type(args->buf[0]);
 	else if (args->len == 1 && ft_strchr(args->buf[0], '='))
-		state = ENV;
+		state = CMD;
 	return (state);
 }
 

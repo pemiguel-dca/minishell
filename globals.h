@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/23 21:29:55 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/25 17:42:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@
 typedef struct executer
 {
 	size_t	i;
-	int		input_fd;
-	int		output_fd;
-	int		pipe_fd[2];
-	int		*new_files;
-	size_t	exit;
-	size_t	exit_status;
-	size_t	pos_file;
+	int			input_fd;
+	int			output_fd;
+	int			pipe_fd[2];
+	int			*new_files;
+	size_t		exit;
+	long long	exit_status;
+	size_t		pos_file;
 }	t_executer;
 
 #endif

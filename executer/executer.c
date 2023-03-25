@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 21:41:02 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/25 17:43:21 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 			execute_cmd(expr, env, path, params);
 		}
 		else if (!is_parent_builtin(expr->args.buf[0]))
-			printf("Command not found: %s\n", (char *)expr->args.buf[0]);
+		{
+			printf("%s: command not found\n", (char *)expr->args.buf[0]);
+			exit(127);
+		}
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -103,14 +106,17 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
+	pid_t			pid;
 
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
-	if (fork() == 0)
+	pid = fork();
+	if (pid == 0)
 		child_process(expressions, params, env);
 	else
 	{
-		wait(NULL);
+		waitpid(pid, (int *)&params->exit_status, 0);
+		params->exit_status = WEXITSTATUS(params->exit_status);
 		expr = expressions->buf[params->i];
 		if (is_parent_builtin(expr->args.buf[0])
 			&& expressions->len == 1)

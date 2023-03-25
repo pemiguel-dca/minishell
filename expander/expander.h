@@ -6,12 +6,14 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:28:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/24 21:41:05 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/25 16:36:43 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
+
+extern long long	g_exit_status;
 
 # include "../builtins/builtins.h"
 # include "../parser/parser.h"
@@ -24,7 +26,7 @@ static inline int	is_expand_export(char *arg)
 	size_t	i;
 	int		equal;
 
-	i = 1;
+	i = 0;
 	equal = 0;
 	if (ft_isalpha(arg[i]))
 	{
@@ -38,25 +40,32 @@ static inline int	is_expand_export(char *arg)
 			return (0);
 		else
 			return (1);
-		
 	}
 	return (0);
-} 
-
-static inline int	as_dollar_sign(char *arg)
-{
-	if (arg[0] == '$')
-		return (1);
-	return (0);
 }
 
-static inline int	is_last_status(char *arg)
+static inline bool	as_dollar_sign(char *arg)
 {
-	if (ft_strcmp("$?", arg) == 0)
-		return (1);
-	return (0);
+	return (arg[0] == '$');
 }
 
-int	expander(t_vec *expressions, t_vec *env, t_executer *params);
+static inline bool	is_last_status(char *arg)
+{
+	return (ft_strcmp("$?", arg) == 0);
+}
+
+static inline bool	is_home(char *arg)
+{
+	return (ft_strcmp("~", arg) == 0);
+}
+
+static inline bool	is_ambiguous_redir(t_states prev_state, int pos)
+{
+	return (pos == -1 && (prev_state == APPEND
+			|| prev_state == IN
+			|| prev_state == OUT));
+}
+
+size_t	expander(t_vec *expressions, t_vec *env);
 
 #endif
