@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:56:41 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 17:58:07 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:50:09 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,5 @@ void	mini_exit(t_expression *expr, t_executer *params)
 		else if (expr->args.len == 2)
 			params->exit_status = ft_atoi((char *)expr->args.buf[1]);
 	}
+	return ;
 }

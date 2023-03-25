@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 18:13:34 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:41:02 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		if (path)
 		{
 			set_pipe_channels(expressions, params);
-			execute_cmd(expr, env, path);
+			execute_cmd(expr, env, path, params);
 		}
 		else if (!is_parent_builtin(expr->args.buf[0]))
 			printf("Command not found: %s\n", (char *)expr->args.buf[0]);
@@ -114,7 +114,7 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 		expr = expressions->buf[params->i];
 		if (is_parent_builtin(expr->args.buf[0])
 			&& expressions->len == 1)
-			execute_parent_builtin(expr, env);
+			execute_parent_builtin(expr, env, params);
 		else if (params->i + 1 < expressions->len)
 			run_expressions(expressions, params, env);
 		else

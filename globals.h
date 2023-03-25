@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/23 17:58:41 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:29:55 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct executer
 	int		output_fd;
 	int		pipe_fd[2];
 	int		*new_files;
+	size_t	exit;
 	size_t	exit_status;
 	size_t	pos_file;
 }	t_executer;

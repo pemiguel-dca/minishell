@@ -6,16 +6,18 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/23 18:11:22 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/24 21:47:41 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer/lexer.h"
 #include "executer/executer.h"
 #include "builtins/builtins.h"
+#include "expander/expander.h"
 #include "env_vars/env.h"
 #include "globals.h"
 
+/*
 void __debug_lexer(const t_vec *tokens)
 {
 	printf("[");
@@ -27,7 +29,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
-
+*/
 void	__debug_parser(const t_vec *expressions)
 {
 	for (size_t i = 0; i < expressions->len; i += 1)
@@ -59,6 +61,32 @@ void __debug_envs(const t_vec *env)
 }
 */
 
+void	free_all(t_vec expressions, t_executer *params, t_vec tokens, char *input)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < expressions.len)
+	{
+		vec_free(&((t_expression *)expressions.buf[i])->args);
+		i += 1;
+	}	
+	vec_free(&expressions);
+	vec_free(&tokens);
+	free(input);
+	if (params->exit)
+	{
+		free(params->new_files);
+		free(params);
+		exit (0);
+	}
+	else
+	{
+		free(params->new_files);
+		free(params);	
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -68,6 +96,7 @@ int	main(int argc, char **argv, char **envp)
 	t_vec		expressions;
 	t_executer	*params;
 	char		*input;
+	static int	last_exit_status;
 
 	env = create_envs(envp);
 	while (true)
@@ -77,17 +106,12 @@ int	main(int argc, char **argv, char **envp)
 		tokens = tokenize(input);
 		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
-		//__debug_parser(&expressions);
+		expander(&expressions, &env, params);
 		params = initialize_executer_params(&expressions);
+		__debug_parser(&expressions);
 		if (!check_errors_parser(&expressions))
 		 	executer(&expressions, params, &env);
-		for (size_t i = 0; i < expressions.len; i++)
-			vec_free(&((t_expression *)expressions.buf[i])->args);
-		vec_free(&expressions);
-		vec_free(&tokens);
-		free(params->new_files);
-		free(params);
-		free(input);
+		free_all(expressions, params, tokens, input);
 	}
 	vec_free(&env);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 16:04:49 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 14:00:55 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/24 17:06:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,16 @@ void	set_env(t_vec **env, char *name, char *value)
 	free(new_env_var);
 }
 
+char	*get_var_value(char *var)
+{
+	size_t	i;
+
+	i = 0;
+	while (var[i] != '=')
+		i += 1;
+	i += 1;
+	return (var + i);
+}
 
 t_vec	create_envs(char **envp)
 {

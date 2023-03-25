@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 17:58:32 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:37:35 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ t_executer			*initialize_executer_params(t_vec *expressions);
 /*Searches for binary path*/
 char				*bin_path(t_expression *expr, t_vec *env);
 /*Execute a specific command*/
-size_t				execute_cmd(t_expression *expr, t_vec *env, char *path);
+void	execute_cmd(t_expression *expr, t_vec *env, char *path, t_executer *params);
 
 #endif

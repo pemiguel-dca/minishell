@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 18:00:07 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:46:50 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_executer	*initialize_executer_params(t_vec *expressions)
 	params->output_fd = STDOUT_FILENO;
 	params->pos_file = 0;
 	params->exit_status = 0;
+	params->exit = 0;
 	if (files_to_be_created(expressions) && params->i == 0)
 		params->new_files = create_files(expressions);
 	else
@@ -66,7 +67,7 @@ char	*bin_path(t_expression *expr, t_vec *env)
 	return (res);
 }
 
-size_t	execute_cmd(t_expression *expr, t_vec *env, char *path)
+void	execute_cmd(t_expression *expr, t_vec *env, char *path, t_executer *params)
 {
 	if (!is_child_builtin(expr->args.buf[0]))
 	{
@@ -75,10 +76,7 @@ size_t	execute_cmd(t_expression *expr, t_vec *env, char *path)
 		execve(path, (char **)expr->args.buf, (char **)env->buf);
 	}
 	else
-	{
-		free(path);
-		return (execute_child_builtin(expr, env));
-	}
+		execute_child_builtin(expr, env, params);
 	free(path);
-	return (0);
+	
 }

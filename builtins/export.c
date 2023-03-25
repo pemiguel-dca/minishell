@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/22 22:19:03 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:47:40 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ static t_vec	copy_current_envs(t_vec *env)
 {
 	t_vec	copy;
 	size_t	i;
+	char	*var_copy;
 
 	copy = vec_new();
 	i = 0;
 	while (i < env->len)
 	{
-		vec_push(&copy, ft_strdup(env->buf[i]));
+		var_copy = ft_strdup(env->buf[i]);
+		vec_push(&copy, var_copy);
 		i += 1;
 	}
 	return (copy);
@@ -107,6 +109,7 @@ size_t		_export(t_expression *expr, t_vec *env)
 		organized_envs(&copy);
 	else
 		exit_status = create_vars(expr, env);
+	vec_free(&copy);
 	return (exit_status);
 }
 
