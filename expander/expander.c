@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:31:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/25 17:56:48 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:05:39 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 	if (is_last_status(find))//$?
 	{
 		free(expr->args.buf[i]);
-		expr->args.buf[i] = ft_itoa(g_exit_status);
+		expr->args.buf[i] = ft_itoa(g_signals.exit_status);
 	}
 	else if (is_ambiguous_redir(prev_state, pos))//ls > $ola, $ola has no value
 	{

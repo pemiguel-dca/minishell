@@ -6,7 +6,7 @@ GET_NEXT_LINE=get_next_line/get_next_line.a
 RM=rm -f
 
 NAME=minishell
-SRCS=main.c vector.c\
+SRCS=main.c vector.c signals.c\
 lexer/lexer.c \
 parser/parser.c \
 env_vars/envstuff.c \

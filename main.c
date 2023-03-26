@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/25 18:10:56 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/26 18:59:39 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 #include "expander/expander.h"
 #include "env_vars/env.h"
 #include "globals.h"
+#include <termios.h>
 
-long long	g_exit_status;
+t_signals	g_signals;
 
 /*
 void __debug_lexer(const t_vec *tokens)
@@ -65,7 +66,7 @@ void __debug_envs(const t_vec *env)
 
 void	free_all(t_vec expressions, t_executer *params, t_vec tokens, char *input)
 {
-	size_t	i;
+	size_t		i;
 
 	i = 0;
 	while (i < expressions.len)
@@ -76,19 +77,11 @@ void	free_all(t_vec expressions, t_executer *params, t_vec tokens, char *input)
 	vec_free(&expressions);
 	vec_free(&tokens);
 	free(input);
-	if (params->exit)
-	{
-		free(params->new_files);
-		free(params);
-		exit (0);
-	}
-	else
-	{
-		free(params->new_files);
-		free(params);
-	}
+	free(params->new_files);
+	free(params);
 }
 
+//TODO:Fix signals
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -99,12 +92,21 @@ int	main(int argc, char **argv, char **envp)
 	t_vec		expressions;
 	t_executer	*params;
 	char		*input;
+	size_t		should_exit = 0;
 
 	env = create_envs(envp);
 	while (true)
 	{
+		g_signals.pid = 0;
+		g_signals.sig_int = false;
+		g_signals.sig_quit = false;
 		expander_res = 0;
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
+		if (!input || ft_is_all_whitespace(input))
+		{
+			free(input);
+			continue ;
+		}
 		add_history(input);
 		tokens = tokenize(input);
 		expressions = parse(&tokens);
@@ -112,12 +114,18 @@ int	main(int argc, char **argv, char **envp)
 		params = initialize_executer_params(&expressions, expander_res);
 		if (!check_errors_parser(&expressions) && !expander_res)
 		{
-			executer(&expressions, params, &env);
-			g_exit_status = params->exit_status;
+			if (((t_expression *)expressions.buf[0])->args.len == 0)
+				continue ;
+			else
+				executer(&expressions, params, &env);
+			g_signals.exit_status = params->exit_status;
 		}
 		else
-			g_exit_status = 1;//ambigous redirect
+			g_signals.exit_status = 1;//ambigous redirect
+		should_exit = params->exit;
 		free_all(expressions, params, tokens, input);
+		if (should_exit)
+			exit (0);
 	}
 	vec_free(&env);
 	return (0);

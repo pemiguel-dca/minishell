@@ -6,20 +6,21 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:28:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/25 16:36:43 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:05:35 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
-extern long long	g_exit_status;
-
+# include "../globals.h"
 # include "../builtins/builtins.h"
 # include "../parser/parser.h"
 # include "../env_vars/env.h"
 # include "../libft/libft.h"
 # include "../vector.h"
+
+extern t_signals	g_signals;
 
 static inline int	is_expand_export(char *arg)
 {

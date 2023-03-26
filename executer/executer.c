@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/25 17:43:21 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/26 18:15:03 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,7 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 			}
 		}
 		else
-		{
 			params->i += times_in(expressions, params->i);
-		}
 		path = bin_path(expr, env);
 		if (path)
 		{
@@ -106,16 +104,17 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
-	pid_t			pid;
 
+	signal(SIGINT, &sig_int);
+	signal(SIGQUIT, &sig_quit);
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
-	pid = fork();
-	if (pid == 0)
+	g_signals.pid = fork();
+	if (g_signals.pid == 0)
 		child_process(expressions, params, env);
 	else
 	{
-		waitpid(pid, (int *)&params->exit_status, 0);
+		waitpid(g_signals.pid, (int *)&params->exit_status, 0);
 		params->exit_status = WEXITSTATUS(params->exit_status);
 		expr = expressions->buf[params->i];
 		if (is_parent_builtin(expr->args.buf[0])
@@ -125,6 +124,8 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 			run_expressions(expressions, params, env);
 		else
 			close_file_descriptors(params);
+		if (g_signals.sig_int == true || g_signals.sig_quit == true)
+			return (g_signals.exit_status);
 	}
 	return (0);
 }
