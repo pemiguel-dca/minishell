@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   globals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/26 17:31:38 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 17:55:22 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,12 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
+# include <stdint.h>
 
 typedef struct signals
 {
-	bool		sig_int;
-	bool		sig_quit;
 	int			pid;
-	long long	exit_status;
+	uint8_t		exit_status;
 }	t_signals;
 
 typedef struct executer
@@ -48,7 +47,6 @@ typedef struct executer
 	int			pipe_fd[2];
 	int			*new_files;
 	size_t		exit;
-	long long	exit_status;
 	size_t		pos_file;
 }	t_executer;
 

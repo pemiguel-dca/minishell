@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 15:29:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 17:34:19 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 		child_process(expressions, params, env);
 	else
 	{
-		waitpid(g_signals.pid, (int *)&params->exit_status, 0);
-		params->exit_status = WEXITSTATUS(params->exit_status);
+		waitpid(g_signals.pid, (int *)&g_signals.exit_status, 0);
+		g_signals.exit_status = WEXITSTATUS(g_signals.exit_status);
 		expr = expressions->buf[params->i];
 		if (is_parent_builtin(expr->args.buf[0])
 			&& expressions->len == 1)
@@ -122,8 +122,6 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 			run_expressions(expressions, params, env);
 		else
 			close_file_descriptors(params);
-		//if (g_signals.sig_int == true || g_signals.sig_quit == true)
-			//return (g_signals.exit_status);
 	}
 	return (0);
 }

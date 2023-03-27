@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envstuff.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 16:04:49 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/25 18:08:12 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:15:22 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_vec	create_envs(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		vec_push(&env, envp[i]);
+		vec_push(&env, ft_strdup(envp[i]));
 		i += 1;
 	}
 	return (env);

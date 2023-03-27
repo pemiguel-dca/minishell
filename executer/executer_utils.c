@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/26 16:42:02 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:45:43 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
 	params->input_fd = STDIN_FILENO;
 	params->output_fd = STDOUT_FILENO;
 	params->pos_file = 0;
-	params->exit_status = 0;
+	g_signals.exit_status = 0;
 	params->exit = 0;
 	if (files_to_be_created(expressions) && params->i == 0 && !executer_res)
 		params->new_files = create_files(expressions);

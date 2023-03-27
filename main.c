@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/27 15:29:45 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 17:58:18 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,23 @@ void __debug_envs(const t_vec *env)
 }
 */
 
-void	free_all(t_vec expressions, t_executer *params, t_vec tokens, char *input)
+void	free_all(t_vec *expressions, t_executer *params, t_vec *tokens, char *input)
 {
 	size_t		i;
 
 	i = 0;
-	while (i < expressions.len)
+	while (i < expressions->len)
 	{
-		vec_free(&((t_expression *)expressions.buf[i])->args);
+		vec_free(&((t_expression *)expressions->buf[i])->args);
 		i += 1;
 	}
-	vec_free(&expressions);
-	vec_free(&tokens);
+	vec_free(expressions);
+	vec_free(tokens);
 	free(input);
 	free(params->new_files);
 	free(params);
 }
 
-//TODO:Fix signals
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -94,17 +93,19 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	size_t		should_exit = 0;
 
+	g_signals = (t_signals){ .exit_status = 0, .pid = 0 };
+
 	env = create_envs(envp);
 	while (true)
 	{
-		g_signals.pid = 0;
-		g_signals.sig_int = false;
-		g_signals.sig_quit = false;
-		signal(SIGINT, &sig_int);
-		signal(SIGQUIT, &sig_quit);
+		signal(SIGINT, sig_int);
 		expander_res = 0;
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
-		if (!input || ft_is_all_whitespace(input))
+		if (!input)
+		{
+			free(input);
+			break ;
+		} else if (ft_is_all_whitespace(input)) // TODO: eventually replace with !*input
 		{
 			free(input);
 			continue ;
@@ -116,17 +117,14 @@ int	main(int argc, char **argv, char **envp)
 		params = initialize_executer_params(&expressions, expander_res);
 		//__debug_parser(&expressions);
 		if (!check_errors_parser(&expressions) && !expander_res)
-		{
 			executer(&expressions, params, &env);
-			g_signals.exit_status = params->exit_status;
-		}
 		else
 			g_signals.exit_status = 1;//ambigous redirect
 		should_exit = params->exit;
-		free_all(expressions, params, tokens, input);
+		free_all(&expressions, params, &tokens, input);
 		if (should_exit)
-			exit (0);
+			break;
 	}
 	vec_free(&env);
-	return (0);
+	return (g_signals.exit_status);
 }

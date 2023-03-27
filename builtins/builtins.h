@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/24 14:47:55 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:46:12 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include "../libft/libft.h"
 # include "../lexer/lexer.h"
 # include "../vector.h"
+
+extern t_signals	g_signals;
 
 size_t	_env(t_expression *expr, t_vec *env);
 size_t	_pwd(t_expression *expr);
@@ -65,21 +67,21 @@ static inline char	*get_path_before(char *curr_path)
 static inline void	execute_child_builtin(t_expression *expr, t_vec *env, t_executer *params)
 {
 	if (ft_strcmp((char *)expr->args.buf[0], "pwd") == 0)
-		params->exit_status = _pwd(expr);
+		g_signals.exit_status = _pwd(expr);
 	else if (ft_strcmp((char *)expr->args.buf[0], "env") == 0)
-		params->exit_status = _env(expr, env);
+		g_signals.exit_status = _env(expr, env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "echo") == 0)
-		params->exit_status = _echo(expr);
+		g_signals.exit_status = _echo(expr);
 }
 
 static inline void	execute_parent_builtin(t_expression *expr, t_vec *env, t_executer *params)
 {
 	if (ft_strcmp((char *)expr->args.buf[0], "cd") == 0)
-		params->exit_status = _cd(expr, env);
+		g_signals.exit_status = _cd(expr, env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "unset") == 0)
-		params->exit_status = _unset(expr, &env);
+		g_signals.exit_status = _unset(expr, &env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "export") == 0)
-		params->exit_status = _export(expr, env);
+		g_signals.exit_status = _export(expr, env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "exit") == 0)
 		mini_exit(expr, params);
 }

@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/23 16:45:47 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:34:18 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,11 @@ static t_vec	rearrange_tokens(t_vec *tokens)
 		{
 			vec_push(&redirs, ft_strdup(t));
 			i += 1;
-			char *rhs = tokens->buf[i];
-			vec_push(&redirs, ft_strdup(rhs));
+			if (i < tokens->len)
+			{
+				char *rhs = tokens->buf[i];
+				vec_push(&redirs, ft_strdup(rhs));
+			}
 		}
 		else if (ft_strcmp(t, LIT_PIPE) == 0)
 		{

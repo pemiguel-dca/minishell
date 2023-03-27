@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:31:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 13:19:47 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 17:33:12 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 			expr->args.buf[i] = ft_strdup(get_var_value(env->buf[pos]));
 		}
 	}
-	else if (prev_state != DELIMITER)//if not there, delete args, example: "ls $eadadaea", output sera 'ls' normal
-		vec_del(&args, i);
+	else if (prev_state != DELIMITER)//TODO: if not there, delete args, example: "ls $eadadaea", output sera 'ls' normal
+		free(expr->args.buf[i]);
 	free(find);
 	return (0);
 }
