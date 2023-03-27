@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 17:34:19 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/27 19:06:09 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		}
 		else
 			params->i += times_in(expressions, params->i);
+		if (theres_a_need_to_heredoc(expressions, params->i))
+		{
+
+		}
 		path = bin_path(expr, env);
 		if (path)
 		{
