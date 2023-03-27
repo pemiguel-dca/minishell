@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 16:45:43 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:15:29 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
 	params->i = 0;
 	params->input_fd = STDIN_FILENO;
 	params->output_fd = STDOUT_FILENO;
+	params->heredoc_fd = create_specific_file("heredoc.tmp", DELIMITER);
 	params->pos_file = 0;
-	g_signals.exit_status = 0;
 	params->exit = 0;
 	if (files_to_be_created(expressions) && params->i == 0 && !executer_res)
 		params->new_files = create_files(expressions);

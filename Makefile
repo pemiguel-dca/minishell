@@ -11,7 +11,7 @@ lexer/lexer.c \
 parser/parser.c \
 env_vars/envstuff.c \
 expander/expander.c \
-redirs/create_files.c redirs/redir_out.c redirs/redir_in.c\
+redirs/create_files.c redirs/redir_out.c redirs/redir_in.c redirs/heredoc.c\
 executer/executer.c executer/executer_utils.c \
 builtins/cd.c builtins/pwd.c builtins/env.c builtins/unset.c builtins/export.c builtins/exit.c builtins/echo.c\
 

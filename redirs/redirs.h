@@ -6,13 +6,14 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:30 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 18:58:57 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:12:54 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REDIRS_H
 # define REDIRS_H
 
+# include "../libft/libft.h"
 # include "../lexer/lexer.h"
 # include "../parser/parser.h"
 # include "wait.h"
@@ -57,9 +58,10 @@ int		last_in(t_vec *expressions, size_t i);
 /*heredoc.c*/
 
 
-int		last_heredoc(t_vec *expressions, size_t i);
+size_t	count_delims(t_vec *expressions);
 
-int		theres_a_need_to_heredoc(t_vec *expressions, size_t i);
+char	**get_delimiters(t_vec *expressions);
 
-int		heredoc_tmp(int read_fd);
+int 	heredoc_on(char *line, t_vec *expressions);
+
 #endif

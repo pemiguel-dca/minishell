@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 19:06:09 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:10:34 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	set_pipe_channels(t_vec *expressions, t_executer *params)
 
 static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 {
-	t_expression *expr;
+	t_expression 	*expr;
 	char			*path;
 
 	expr = expressions->buf[params->i];
@@ -58,9 +58,16 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		}
 		else
 			params->i += times_in(expressions, params->i);
-		if (theres_a_need_to_heredoc(expressions, params->i))
+		if (count_delims(expressions))
 		{
-
+			char	*line;
+			printf("\n >");
+			line = get_next_line(STDIN_FILENO);
+			
+			while (heredoc_on(line, expressions))
+			{
+				
+			}
 		}
 		path = bin_path(expr, env);
 		if (path)

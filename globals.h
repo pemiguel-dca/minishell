@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   globals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/27 17:55:22 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:16:02 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct executer
 	size_t		i;
 	int			input_fd;
 	int			output_fd;
+	int			heredoc_fd;
 	int			pipe_fd[2];
 	int			*new_files;
 	size_t		exit;
@@ -51,6 +52,5 @@ typedef struct executer
 }	t_executer;
 
 void	sig_int(int n);
-void	sig_quit(int n);
 
 #endif
