@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 15:53:22 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/26 18:02:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:38:21 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	sig_int(int n)
 	else
 		g_signals.exit_status = 130;
 	printf("\n");
-	rl_replace_line("", 0);
-	rl_redisplay();
+	rl_redisplay();//fix this
+	rl_on_new_line();
 	g_signals.sig_int = true;
 }
 

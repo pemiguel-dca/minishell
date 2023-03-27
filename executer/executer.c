@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/26 18:15:03 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:29:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,6 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 
-	signal(SIGINT, &sig_int);
-	signal(SIGQUIT, &sig_quit);
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
 	g_signals.pid = fork();
@@ -124,8 +122,8 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 			run_expressions(expressions, params, env);
 		else
 			close_file_descriptors(params);
-		if (g_signals.sig_int == true || g_signals.sig_quit == true)
-			return (g_signals.exit_status);
+		//if (g_signals.sig_int == true || g_signals.sig_quit == true)
+			//return (g_signals.exit_status);
 	}
 	return (0);
 }

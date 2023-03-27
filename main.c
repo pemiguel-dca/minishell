@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/26 18:59:39 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:29:45 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
-
+*/
 void	__debug_parser(const t_vec *expressions)
 {
 	for (size_t i = 0; i < expressions->len; i += 1)
@@ -50,7 +50,7 @@ void	__debug_parser(const t_vec *expressions)
 		printf("]\n");
 	}
 }
-
+/*
 void __debug_envs(const t_vec *env)
 {
 	printf("[");
@@ -100,6 +100,8 @@ int	main(int argc, char **argv, char **envp)
 		g_signals.pid = 0;
 		g_signals.sig_int = false;
 		g_signals.sig_quit = false;
+		signal(SIGINT, &sig_int);
+		signal(SIGQUIT, &sig_quit);
 		expander_res = 0;
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		if (!input || ft_is_all_whitespace(input))
@@ -112,12 +114,10 @@ int	main(int argc, char **argv, char **envp)
 		expressions = parse(&tokens);
 		expander_res = expander(&expressions, &env);
 		params = initialize_executer_params(&expressions, expander_res);
+		//__debug_parser(&expressions);
 		if (!check_errors_parser(&expressions) && !expander_res)
 		{
-			if (((t_expression *)expressions.buf[0])->args.len == 0)
-				continue ;
-			else
-				executer(&expressions, params, &env);
+			executer(&expressions, params, &env);
 			g_signals.exit_status = params->exit_status;
 		}
 		else

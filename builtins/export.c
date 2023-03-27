@@ -6,13 +6,10 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/24 20:47:40 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:18:04 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*Export funcionara no child so se nao tiver nenhum argumento.
-Mas se tentarmos inicializar uma variavel da seguinte maneira "ls | export MY_VAR=hello" nao ira funcionar*/
-/*Funciona com mais de um argumento, "export A=a B=b"*/
 #include "builtins.h"
 
 static void		print_export(t_vec *env)
@@ -87,10 +84,7 @@ static size_t	create_vars(t_expression *expr, t_vec *env)
 				vec_push(env, ft_strdup(expr->args.buf[i]));
 		}
 		else
-		{
-			vec_del(&env, pos_env_var(env, (char *)expr->args.buf[i]));
-			vec_push(env, ft_strdup(expr->args.buf[i]));
-		}
+			env->buf[pos_env_var(env, (char *)expr->args.buf[i])] = expr->args.buf[i];
 		i += 1;
 	}
 	return (0);
@@ -98,11 +92,9 @@ static size_t	create_vars(t_expression *expr, t_vec *env)
 
 size_t		_export(t_expression *expr, t_vec *env)
 {
-	size_t	i;
 	t_vec	copy;
 	size_t	exit_status;
 
-	i = 1;
 	copy = copy_current_envs(env);
 	exit_status = 0;
 	if (expr->args.len == 1)

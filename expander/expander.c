@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:31:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/26 17:05:39 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/27 13:19:47 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 	size_t	pos;
 	char	*find;
 	t_vec	*args;
+	void	*temp;
 
 	args = &expr->args;
 	find = ft_strdup(expr->args.buf[i]);
@@ -24,9 +25,12 @@ size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 	if (is_expand_export(find))//name=value
 	{
 		vec_push(&expr->args, ft_strdup("export"));
-		ft_swap(expr->args.buf[0], expr->args.buf[1]);
+		temp = expr->args.buf[0];
+		expr->args.buf[0] = expr->args.buf[1];
+		expr->args.buf[1] = temp;
+		//ft_swap(expr->args.buf[0], expr->args.buf[1]);
 	}
-	if (is_last_status(find))//$?
+	else if (is_last_status(find))//$?
 	{
 		free(expr->args.buf[i]);
 		expr->args.buf[i] = ft_itoa(g_signals.exit_status);
