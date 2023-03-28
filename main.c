@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/27 17:58:18 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/28 18:58:24 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
-*/
+
 void	__debug_parser(const t_vec *expressions)
 {
 	for (size_t i = 0; i < expressions->len; i += 1)
@@ -50,7 +50,7 @@ void	__debug_parser(const t_vec *expressions)
 		printf("]\n");
 	}
 }
-/*
+
 void __debug_envs(const t_vec *env)
 {
 	printf("[");
@@ -74,6 +74,8 @@ void	free_all(t_vec *expressions, t_executer *params, t_vec *tokens, char *input
 		vec_free(&((t_expression *)expressions->buf[i])->args);
 		i += 1;
 	}
+	if (count_delims(expressions))
+		unlink ("heredoc.tmp");
 	vec_free(expressions);
 	vec_free(tokens);
 	free(input);
@@ -94,7 +96,6 @@ int	main(int argc, char **argv, char **envp)
 	size_t		should_exit = 0;
 
 	g_signals = (t_signals){ .exit_status = 0, .pid = 0 };
-
 	env = create_envs(envp);
 	while (true)
 	{
@@ -105,7 +106,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			free(input);
 			break ;
-		} else if (ft_is_all_whitespace(input)) // TODO: eventually replace with !*input
+		} else if (ft_is_all_whitespace(input))
 		{
 			free(input);
 			continue ;
@@ -115,7 +116,6 @@ int	main(int argc, char **argv, char **envp)
 		expressions = parse(&tokens);
 		expander_res = expander(&expressions, &env);
 		params = initialize_executer_params(&expressions, expander_res);
-		//__debug_parser(&expressions);
 		if (!check_errors_parser(&expressions) && !expander_res)
 			executer(&expressions, params, &env);
 		else

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:20:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 18:58:11 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/28 18:01:55 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	times_in(t_vec *expressions, size_t i)
 	{
 		expr = expressions->buf[i];
 		if (expr->state == IN)
-			count_in++;
+			count_in += 1;
 		i += 1;
 	}
 	return (count_in * 2);

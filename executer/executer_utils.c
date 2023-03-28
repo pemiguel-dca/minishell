@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 22:15:29 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:43:55 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
 	params->i = 0;
 	params->input_fd = STDIN_FILENO;
 	params->output_fd = STDOUT_FILENO;
-	params->heredoc_fd = create_specific_file("heredoc.tmp", DELIMITER);
+	if (count_delims(expressions))
+		params->heredoc_fd = open("heredoc.tmp", O_CREAT | O_TRUNC | O_RDWR, 0644);
 	params->pos_file = 0;
 	params->exit = 0;
 	if (files_to_be_created(expressions) && params->i == 0 && !executer_res)

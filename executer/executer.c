@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 22:10:34 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:49:48 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,8 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		}
 		else
 			params->i += times_in(expressions, params->i);
-		if (count_delims(expressions))
-		{
-			char	*line;
-			printf("\n >");
-			line = get_next_line(STDIN_FILENO);
-			
-			while (heredoc_on(line, expressions))
-			{
-				
-			}
-		}
+		if (count_delims(expressions) && params->i == 0)
+			do_heredoc(expressions, params);
 		path = bin_path(expr, env);
 		if (path)
 		{

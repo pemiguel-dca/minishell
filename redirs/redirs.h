@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:30 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 22:12:54 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/28 18:47:58 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include "../get_next_line/get_next_line.h"
 
 /*create_files.c*/
@@ -57,11 +59,27 @@ int		last_in(t_vec *expressions, size_t i);
 
 /*heredoc.c*/
 
+static inline void	free_delims(char **delims)
+{
+	size_t	i;
+
+	i = 0;
+	while (delims[i])
+	{
+		free(delims[i]);
+		i += 1;
+	}
+	free(delims);
+}
 
 size_t	count_delims(t_vec *expressions);
 
 char	**get_delimiters(t_vec *expressions);
 
 int 	heredoc_on(char *line, t_vec *expressions);
+
+size_t	skip_delims(t_vec *expressions);
+
+void	do_heredoc(t_vec *expressions, t_executer *params);
 
 #endif
