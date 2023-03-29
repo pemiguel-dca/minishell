@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/28 18:58:24 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/29 16:29:31 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ void	free_all(t_vec *expressions, t_executer *params, t_vec *tokens, char *input
 		vec_free(&((t_expression *)expressions->buf[i])->args);
 		i += 1;
 	}
-	if (count_delims(expressions))
-		unlink ("heredoc.tmp");
+	//if (count_delims(expressions))
+		//unlink ("heredoc.tmp");
 	vec_free(expressions);
 	vec_free(tokens);
 	free(input);

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 18:34:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/28 18:54:28 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:07:55 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,23 +94,54 @@ size_t	skip_delims(t_vec *expressions)
 	return (count_delims * 2);
 }
 
+int	delete_adicional_delims(int heredoc_fd, t_vec *expressions, size_t total_lines)
+{
+	int		new_fd;
+	size_t	i;
+	size_t	lines_to_delete;
+	char	*line;
+
+	lines_to_delete = count_delims(expressions);
+	i = 0;
+	new_fd = open("new.tmp", O_CREAT | O_TRUNC | O_RDWR, 0644);
+	while (i < total_lines - lines_to_delete)
+	{
+		line = get_next_line(dup(heredoc_fd));
+		write(new_fd, line, ft_strlen(line));
+		i += 1;
+	}
+	write(new_fd, 0, 1);
+	new_fd = open("new.tmp", O_RDONLY);
+	return (new_fd);
+}
+
 void	do_heredoc(t_vec *expressions, t_executer *params)
 {
 	char	*line;
+	size_t	done;
+	size_t	lines_in_file;
 
+	done = 0;
+	lines_in_file = 1;
 	while (true)
 	{
 		//TODO: Handle crtlD while in heredoc
 		line = get_next_line(params->input_fd);
-		if (heredoc_on(line, expressions) || line[0] == 0x4)
+		done = heredoc_on(line, expressions);
+		if (done)
 		{
 			free(line);
 			break ;
 		}
-		write(params->heredoc_fd, line, ft_strlen(line));
+
+		if (count_delims(expressions) == 1)
+			write(params->heredoc_fd, line, ft_strlen(line));
+		lines_in_file += 1;
 		free(line);
 	}
+	params->heredoc_fd = open("heredoc.tmp", O_RDONLY | 0644);
+	//if (count_delims(expressions) > 1 && lines_in_file > count_delims(expressions))
+		//params->heredoc_fd = delete_adicional_delims(dup(params->heredoc_fd), expressions, lines_in_file);
 	params->i += skip_delims(expressions);
-	params->heredoc_fd = open("heredoc.tmp", O_RDONLY);
 	params->input_fd = params->heredoc_fd;
 }
