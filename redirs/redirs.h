@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:30 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/28 18:47:58 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 15:16:58 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/libft.h"
 # include "../lexer/lexer.h"
 # include "../parser/parser.h"
+# include "../executer/executer.h"
 # include "wait.h"
 # include <sys/stat.h>
 # include <fcntl.h>
@@ -76,10 +77,10 @@ size_t	count_delims(t_vec *expressions);
 
 char	**get_delimiters(t_vec *expressions);
 
-int 	heredoc_on(char *line, t_vec *expressions);
+bool	heredoc_on(char *line, t_vec *expressions, t_executer *params);
 
 size_t	skip_delims(t_vec *expressions);
 
-void	do_heredoc(t_vec *expressions, t_executer *params);
+size_t	do_heredoc(t_vec *expressions, t_executer *params, t_vec *env);
 
 #endif

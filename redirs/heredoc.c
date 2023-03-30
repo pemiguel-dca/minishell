@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 18:34:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/29 17:07:55 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 15:32:25 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,6 @@ char	**get_delimiters(t_vec *expressions)
 	}
 	delims[j] = 0;
 	return (delims);
-}
-
-int	heredoc_on(char *line, t_vec *expressions)
-{
-	static size_t	finish = 0;
-	char	**delims;
-
-	delims = get_delimiters(expressions);
-	if (ft_strncmp(line, delims[finish], ft_strlen(line) - 1) == 0)
-		finish += 1;
-	else
-		finish = 0;
-	if (finish == count_delims(expressions))
-	{
-		finish = 0;
-		free_delims(delims);
-		return (1);
-	}
-	return (0);
 }
 
 size_t	count_delims(t_vec *expressions)
@@ -94,28 +75,23 @@ size_t	skip_delims(t_vec *expressions)
 	return (count_delims * 2);
 }
 
-int	delete_adicional_delims(int heredoc_fd, t_vec *expressions, size_t total_lines)
+bool	heredoc_on(char *line, t_vec *expressions, t_executer *params)
 {
-	int		new_fd;
-	size_t	i;
-	size_t	lines_to_delete;
-	char	*line;
+	static size_t	finish = 0;
 
-	lines_to_delete = count_delims(expressions);
-	i = 0;
-	new_fd = open("new.tmp", O_CREAT | O_TRUNC | O_RDWR, 0644);
-	while (i < total_lines - lines_to_delete)
+	if (!line)
+		return (true);
+	else if (ft_strcmp(line, "\n") == 0)
+		return (false);
+	else if (ft_strncmp(line, params->delims[finish], ft_strlen(line) - 1) == 0)
 	{
-		line = get_next_line(dup(heredoc_fd));
-		write(new_fd, line, ft_strlen(line));
-		i += 1;
+		finish += 1;
+		return (true);
 	}
-	write(new_fd, 0, 1);
-	new_fd = open("new.tmp", O_RDONLY);
-	return (new_fd);
+	return (false);
 }
 
-void	do_heredoc(t_vec *expressions, t_executer *params)
+size_t	do_heredoc(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	char	*line;
 	size_t	done;
@@ -125,23 +101,19 @@ void	do_heredoc(t_vec *expressions, t_executer *params)
 	lines_in_file = 1;
 	while (true)
 	{
-		//TODO: Handle crtlD while in heredoc
-		line = get_next_line(params->input_fd);
-		done = heredoc_on(line, expressions);
+		line = ft_strjoin(readline("> "), "\n");
+		done = heredoc_on(line, expressions, params);
 		if (done)
 		{
 			free(line);
 			break ;
 		}
-
-		if (count_delims(expressions) == 1)
-			write(params->heredoc_fd, line, ft_strlen(line));
+		write(params->heredoc_fd, line, ft_strlen(line));
 		lines_in_file += 1;
 		free(line);
 	}
 	params->heredoc_fd = open("heredoc.tmp", O_RDONLY | 0644);
-	//if (count_delims(expressions) > 1 && lines_in_file > count_delims(expressions))
-		//params->heredoc_fd = delete_adicional_delims(dup(params->heredoc_fd), expressions, lines_in_file);
 	params->i += skip_delims(expressions);
 	params->input_fd = params->heredoc_fd;
+	return (1);
 }

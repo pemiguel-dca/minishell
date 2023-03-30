@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/29 16:29:31 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 15:46:23 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,11 @@ void	free_all(t_vec *expressions, t_executer *params, t_vec *tokens, char *input
 		vec_free(&((t_expression *)expressions->buf[i])->args);
 		i += 1;
 	}
-	//if (count_delims(expressions))
-		//unlink ("heredoc.tmp");
+	if (count_delims(expressions))
+	{
+		free_delims(params->delims);
+		unlink ("heredoc.tmp");
+	}
 	vec_free(expressions);
 	vec_free(tokens);
 	free(input);
@@ -95,18 +98,19 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	size_t		should_exit = 0;
 
-	g_signals = (t_signals){ .exit_status = 0, .pid = 0 };
+	g_signals = (t_signals){ .exit_status = 0, .pid = 0, .sig_int = false};
 	env = create_envs(envp);
 	while (true)
 	{
-		signal(SIGINT, sig_int);
 		expander_res = 0;
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		if (!input)
 		{
+			printf("exit\n");
 			free(input);
 			break ;
-		} else if (ft_is_all_whitespace(input))
+		}
+		else if (ft_is_all_whitespace(input))
 		{
 			free(input);
 			continue ;

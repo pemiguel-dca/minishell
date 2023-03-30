@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/27 22:16:02 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 14:08:49 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # define LIT_QUOTE '\''
 # define LIT_DOUBLE_QUOTE '"'
 
+#include <stdio.h>
+#include <stdlib.h>
 # include <stdbool.h>
 # include <signal.h>
 # include <readline/readline.h>
@@ -36,7 +38,8 @@
 typedef struct signals
 {
 	int			pid;
-	uint8_t		exit_status;
+	bool		sig_int;
+	long long	exit_status;
 }	t_signals;
 
 typedef struct executer
@@ -45,6 +48,7 @@ typedef struct executer
 	int			input_fd;
 	int			output_fd;
 	int			heredoc_fd;
+	char		**delims;
 	int			pipe_fd[2];
 	int			*new_files;
 	size_t		exit;

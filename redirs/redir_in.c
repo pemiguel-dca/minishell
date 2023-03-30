@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 16:20:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/28 18:01:55 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 15:55:45 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	theres_a_need_to_redir(t_vec *expressions, size_t i)
 	size_t			cmd_as_args;
 	size_t			no_operator_before;
 
+	if (i + 1 >= expressions->len)
+		return (0);
 	cmd_as_args = 0;
 	expr = expressions->buf[i];
 	no_operator_before = 0;
@@ -53,6 +55,8 @@ int	times_in(t_vec *expressions, size_t i)
 	t_expression	*expr;
 	size_t			count_in;
 
+	if (i + 1 >= expressions->len)
+		return (0);
 	expr = expressions->buf[i];
 	count_in = 0;
 	while (i < expressions->len && expr->state != PIPED)

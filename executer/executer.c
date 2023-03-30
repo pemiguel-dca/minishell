@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/28 17:49:48 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 15:54:15 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,18 @@ void	set_pipe_channels(t_vec *expressions, t_executer *params)
 static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression 	*expr;
+	static size_t	times = 0;
 	char			*path;
 
 	expr = expressions->buf[params->i];
 	if (expr->state == CMD)
 	{
+		if (count_delims(expressions))
+			while (times < count_delims(expressions))
+			{
+				params->heredoc_fd = open("heredoc.tmp", O_CREAT | O_TRUNC | O_RDWR, 0644);
+				times += do_heredoc(expressions, params, env);
+			}
 		if (theres_a_need_to_redir(expressions, params->i))
 		{
 			while (!last_in(expressions, params->i))
@@ -58,8 +65,6 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		}
 		else
 			params->i += times_in(expressions, params->i);
-		if (count_delims(expressions) && params->i == 0)
-			do_heredoc(expressions, params);
 		path = bin_path(expr, env);
 		if (path)
 		{
@@ -107,6 +112,7 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 
+	signal(SIGINT, sig_int);
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
 	g_signals.pid = fork();

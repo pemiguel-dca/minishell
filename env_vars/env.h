@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 14:21:12 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/24 17:05:05 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 18:51:42 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ int		pos_env_var(t_vec *env, char *find);
 char	*get_var_value(char *var);
 
 /*Sets a new value to env name*/
-void	set_env(t_vec **env, char *name, char *value);
+void	set_env(t_vec *env, char *name, char *value);
 
 #endif

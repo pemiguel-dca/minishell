@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:34:25 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/25 14:36:08 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/30 18:51:48 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,19 @@ static void	set_pwds(t_expression *expr, char *curr_pwd, t_vec *env)
 
 	new_pwd = NULL;
 	if (expr->args.len == 1)
-		set_env(&env, "PWD", env->buf[pos_env_var(env, "HOME") + 5]);
+		set_env(env, "PWD", env->buf[pos_env_var(env, "HOME") + 5]);
 	else if (ft_strcmp("..", (char *)expr->args.buf[1]) == 0)
 	{
 		new_pwd = get_path_before(curr_pwd);
-		set_env(&env, "PWD", new_pwd);
+		set_env(env, "PWD", new_pwd);
 	}
 	else
 	{
 		new_pwd = ft_strjoin((env->buf[pos_env_var(env, "PWD")]),
 			(char *)expr->args.buf[1]);
-		set_env(&env, "PWD", new_pwd);
+		set_env(env, "PWD", new_pwd);
 	}
-	set_env(&env, "OLDPWD", curr_pwd);
+	set_env(env, "OLDPWD", curr_pwd);
 	free(new_pwd);
 }
 
