@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 22:28:04 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/24 19:46:38 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:06:02 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	flag_on(t_expression *expr)
 {
-	if (expr->args.len > 1 
+	if (expr->args.len > 1
 		&& ft_strcmp("-n", (char *)expr->args.buf[1]) == 0)
 		return (1);
 	return (0);
@@ -42,7 +42,7 @@ size_t	_echo(t_expression *expr)
 	size_t	j;
 	char	**echo_print;
 	char	*spaced_args;
-	
+
 	i = 1 + flag_on(expr);
 	j = 0;
 	echo_print = malloc((expr->args.len - flag_on(expr)) * sizeof(char *));

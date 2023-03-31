@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 16:04:49 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/30 19:09:26 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 14:59:49 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,14 @@ int	pos_env_var(t_vec *env, char *find)
 void	set_env(t_vec *env, char *name, char *value)
 {
 	size_t	i;
-	char	*new_env_var;
 	char	*full_name;
 	char	*new_var;
 
 	i = pos_env_var(env, name);
 	full_name = ft_strjoin(name, "=");
 	new_var = ft_strjoin(full_name, value);
-	new_env_var = ft_strdup(new_var);
 	free(env->buf[i]);
-	env->buf[i] = new_env_var;
+	env->buf[i] = ft_strdup(new_var);
 	free(full_name);
 	free(new_var);
 }

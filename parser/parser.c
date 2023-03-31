@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 17:04:08 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:28:22 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,20 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 static t_expression	*get_next(t_parser *parser)
 {
 	t_vec				args;
+	t_expression		*expr;
 	static t_states		prev_state = DEFAULT;
 
 	args = vec_new();
 	while (parser->i < parser->tokens->len)
 	{
 		vec_push(&args, ft_strdup(p_curr(parser, parser->i)));
-		if (
-			is_operator(p_curr(parser, parser->i + 1))
+		if (is_operator(p_curr(parser, parser->i + 1))
 			|| is_operator(p_curr(parser, parser->i))
-			|| parser->tokens->len == parser->i + 1
-		) {
-			t_expression	*expr = malloc(sizeof(t_expression));
-			*expr = (t_expression){.args = args, .state = get_state(&args, prev_state)};
+			|| parser->tokens->len == parser->i + 1)
+		{
+			expr = malloc(sizeof(t_expression));
+			*expr = (t_expression){.args = args,
+				.state = get_state(&args, prev_state)};
 			prev_state = expr->state;
 			parser->i += 1;
 			return (expr);

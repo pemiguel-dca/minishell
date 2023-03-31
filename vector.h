@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 18:53:07 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/22 22:02:56 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:48:58 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ inline static t_vec	vec_new(void)
 }
 
 /*Deletes one specific vector member*/
-void vec_del(t_vec **vec, size_t pos);
+void		vec_del(t_vec **vec, size_t pos);
 
 /*Free the memory in vector*/
 inline static void	vec_free(t_vec *vec)

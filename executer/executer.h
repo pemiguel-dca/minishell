@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/26 17:04:22 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:25:21 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ extern t_signals	g_signals;
 /*executer.c*/
 
 /*Where the magic happens*/
-int					executer(t_vec *expressions, t_executer *params, t_vec *env);
-
-void	set_pipe_channels(t_vec *expressions, t_executer *params);
+int					executer(t_vec *expressions,
+						t_executer *params, t_vec *env);
 
 static inline char	*file(t_vec *expressions, size_t i)
 {
@@ -58,10 +57,12 @@ static inline void	close_file_descriptors(t_executer *params)
 /*executer_utils.c*/
 
 /*Initialize all the paramaters needed for executer*/
-t_executer			*initialize_executer_params(t_vec *expressions, size_t executer_res);
+t_executer			*initialize_executer_params(t_vec *expressions,
+						size_t executer_res);
 /*Searches for binary path*/
 char				*bin_path(t_expression *expr, t_vec *env);
 /*Execute a specific command*/
-void	execute_cmd(t_expression *expr, t_vec *env, char *path, t_executer *params);
+void				execute_cmd(t_expression *expr, t_vec *env,
+						char *path, t_executer *params);
 
 #endif

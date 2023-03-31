@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 16:46:12 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:04:48 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static inline bool	is_parent_builtin(char *cmd)
 		|| ft_strcmp(cmd, "exit") == 0);
 }
 
-int	change_dir_to(const char *path, t_vec *env);
+int		change_dir_to(const char *path, t_vec *env);
 
 static inline char	*get_path_before(char *curr_path)
 {
@@ -64,7 +64,8 @@ static inline char	*get_path_before(char *curr_path)
 	return (path_before);
 }
 
-static inline void	execute_child_builtin(t_expression *expr, t_vec *env, t_executer *params)
+static inline void	execute_child_builtin(t_expression *expr, t_vec *env,
+		t_executer *params)
 {
 	if (ft_strcmp((char *)expr->args.buf[0], "pwd") == 0)
 		g_signals.exit_status = _pwd(expr);
@@ -74,7 +75,8 @@ static inline void	execute_child_builtin(t_expression *expr, t_vec *env, t_execu
 		g_signals.exit_status = _echo(expr);
 }
 
-static inline void	execute_parent_builtin(t_expression *expr, t_vec *env, t_executer *params)
+static inline void	execute_parent_builtin(t_expression *expr, t_vec *env,
+		t_executer *params)
 {
 	if (ft_strcmp((char *)expr->args.buf[0], "cd") == 0)
 		g_signals.exit_status = _cd(expr, env);

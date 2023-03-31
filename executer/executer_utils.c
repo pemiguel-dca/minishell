@@ -6,11 +6,25 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/30 15:36:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:15:09 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
+
+static void	free_vars(char **path_env, char *with_delim)
+{
+	size_t	i;
+
+	i = 0;
+	while (path_env[i])
+	{
+		free(path_env[i]);
+		i++;
+	}
+	free(path_env);
+	free(with_delim);
+}
 
 t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
 {
@@ -33,7 +47,6 @@ t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
 
 char	*bin_path(t_expression *expr, t_vec *env)
 {
-	char		*path;
 	char		*res;
 	char		*with_delim;
 	char		*full_path;
@@ -41,9 +54,8 @@ char	*bin_path(t_expression *expr, t_vec *env)
 	size_t		i;
 
 	res = NULL;
-	path = ft_strdup(env->buf[pos_env_var(env, "PATH")]);
 	with_delim = ft_strjoin("/", (char *)expr->args.buf[0]);
-	path_env = ft_split(path, ':');
+	path_env = ft_split(env->buf[pos_env_var(env, "PATH")], ':');
 	i = 0;
 	while (path_env[i])
 	{
@@ -56,19 +68,12 @@ char	*bin_path(t_expression *expr, t_vec *env)
 		free(full_path);
 		i++;
 	}
-	i = 0;
-	while (path_env[i])
-	{
-		free(path_env[i]);
-		i++;
-	}
-	free(path);
-	free(path_env);
-	free(with_delim);
+	free_vars(path_env, with_delim);
 	return (res);
 }
 
-void	execute_cmd(t_expression *expr, t_vec *env, char *path, t_executer *params)
+void	execute_cmd(t_expression *expr, t_vec *env, char *path,
+	t_executer *params)
 {
 	if (!is_child_builtin(expr->args.buf[0]))
 	{

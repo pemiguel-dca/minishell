@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 18:34:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/30 15:32:25 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:47:03 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**get_delimiters(t_vec *expressions)
 	size_t			j;
 	char			**delims;
 
-	delims = malloc((count_delims(expressions) + 1) * sizeof(char*));
+	delims = malloc((count_delims(expressions) + 1) * sizeof(char *));
 	i = 0;
 	j = 0;
 	prev_state = DEFAULT;

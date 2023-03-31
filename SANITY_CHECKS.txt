@@ -1,2 +1,0 @@
-minimize libft for what is necessary
-check for leaks!

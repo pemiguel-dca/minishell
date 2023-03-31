@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/23 16:50:46 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:28:56 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,10 @@ typedef struct parser
 
 inline static char	*p_curr(const t_parser *parser, size_t i)
 {
-	if (i < parser->tokens->len) {
+	if (i < parser->tokens->len)
 		return (parser->tokens->buf[i]);
-	} else {
+	else
 		return (NULL);
-	}
 }
 
 inline static t_states	operator_type(const char *op)

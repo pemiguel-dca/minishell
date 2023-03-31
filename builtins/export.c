@@ -6,13 +6,13 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 15:18:04 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:08:57 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-static void		print_export(t_vec *env)
+static void	print_export(t_vec *env)
 {
 	size_t	i;
 
@@ -41,7 +41,7 @@ static t_vec	copy_current_envs(t_vec *env)
 	return (copy);
 }
 
-static void		organized_envs(t_vec *env)
+static void	organized_envs(t_vec *env)
 {
 	size_t	i;
 	size_t	j;
@@ -77,20 +77,22 @@ static size_t	create_vars(t_expression *expr, t_vec *env)
 		{
 			if (!ft_isalpha(((char *)expr->args.buf[i])[0]))
 			{
-				printf("export: '%s': not a valid identifier\n", (char *)expr->args.buf[i]);
+				printf("export: '%s': not a valid identifier\n",
+					(char *)expr->args.buf[i]);
 				return (1);
 			}
 			else if (ft_strchr((char *)expr->args.buf[i], '='))
 				vec_push(env, ft_strdup(expr->args.buf[i]));
 		}
 		else
-			env->buf[pos_env_var(env, (char *)expr->args.buf[i])] = expr->args.buf[i];
+			env->buf[pos_env_var(env, (char *)expr->args.buf[i])]
+				= ft_strdup(expr->args.buf[i]);
 		i += 1;
 	}
 	return (0);
 }
 
-size_t		_export(t_expression *expr, t_vec *env)
+size_t	_export(t_expression *expr, t_vec *env)
 {
 	t_vec	copy;
 	size_t	exit_status;
@@ -104,4 +106,3 @@ size_t		_export(t_expression *expr, t_vec *env)
 	vec_free(&copy);
 	return (exit_status);
 }
-

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:34:25 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/30 18:51:48 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:05:23 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ static int	go_to_oldpwd(t_vec *env)
 		exit_status = 1;
 	}
 	else
+	{
+		printf("%s\n", (char *)env->buf[i] + 7);
 		exit_status = change_dir_to(env->buf[i] + 7, env);
+	}
 	return (exit_status);
 }
 
@@ -78,18 +81,15 @@ static void	set_pwds(t_expression *expr, char *curr_pwd, t_vec *env)
 
 	new_pwd = NULL;
 	if (expr->args.len == 1)
-		set_env(env, "PWD", env->buf[pos_env_var(env, "HOME") + 5]);
+		new_pwd = ft_strdup(env->buf[pos_env_var(env, "HOME")] + 5);
 	else if (ft_strcmp("..", (char *)expr->args.buf[1]) == 0)
-	{
 		new_pwd = get_path_before(curr_pwd);
-		set_env(env, "PWD", new_pwd);
-	}
+	else if (ft_strcmp("-", (char *)expr->args.buf[1]) == 0)
+		new_pwd = ft_strdup(env->buf[pos_env_var(env, "OLDPWD")] + 7);
 	else
-	{
-		new_pwd = ft_strjoin((env->buf[pos_env_var(env, "PWD")]),
-			(char *)expr->args.buf[1]);
-		set_env(env, "PWD", new_pwd);
-	}
+		new_pwd = ft_strjoin((env->buf[pos_env_var(env, "PWD")] + 4),
+				(char *)expr->args.buf[1]);
+	set_env(env, "PWD", new_pwd);
 	set_env(env, "OLDPWD", curr_pwd);
 	free(new_pwd);
 }
@@ -114,4 +114,3 @@ size_t	_cd(t_expression *expr, t_vec *env)
 		set_pwds(expr, curr_pwd, env);
 	return (exit_status);
 }
-

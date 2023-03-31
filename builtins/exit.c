@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:56:41 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/27 16:49:53 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/03/31 15:06:57 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int		digits_in(char *arg)
+int	digits_in(char *arg)
 {
 	size_t	i;
 
@@ -46,7 +46,8 @@ void	mini_exit(t_expression *expr, t_executer *params)
 		else
 		{
 			if (digits_in((char *)expr->args.buf[1]))
-				printf("%s: numeric argument required\n", (char *)expr->args.buf[1]);
+				printf("%s: numeric argument required\n",
+					(char *)expr->args.buf[1]);
 			else
 				g_signals.exit_status = ft_atoi((char *)expr->args.buf[1]);
 		}
