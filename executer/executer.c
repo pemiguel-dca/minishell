@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/02 19:22:48 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/03 17:14:41 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 
-	if (!expr->args.len)
-		return (0);
 	signal(SIGINT, sig_int);
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
