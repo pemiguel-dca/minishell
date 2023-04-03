@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/31 17:45:29 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/03 17:25:39 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 t_signals	g_signals;
 
-/*
 void __debug_lexer(const t_vec *tokens)
 {
 	printf("[");
@@ -32,7 +31,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
-*/
+
 void	__debug_parser(const t_vec *expressions)
 {
 	for (size_t i = 0; i < expressions->len; i += 1)
@@ -119,6 +118,8 @@ int	main(int argc, char **argv, char **envp)
 		}
 		add_history(input);
 		tokens = tokenize(input);
+		__debug_lexer(&tokens);
+		/*
 		expressions = parse(&tokens);
 		expander_res = expander(&expressions, &env);
 		//__debug_parser(&expressions);
@@ -131,7 +132,10 @@ int	main(int argc, char **argv, char **envp)
 		free_all(&expressions, params, &tokens, input);
 		if (should_exit)
 			break;
+		*/
 	}
 	vec_free(&env);
 	return (g_signals.exit_status);
 }
+
+// 'ls''>'" $HOST $HOST "

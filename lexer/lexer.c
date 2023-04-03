@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/27 16:34:18 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/03 19:01:19 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,11 @@ static char	*dispatch_operator(t_lexer *lexer)
 	return (token);
 }
 
-// TODO: better implementation
-static char	*dispatch_string(t_lexer *lexer, size_t i)
+static char	*join_to_next_if_necessary(t_lexer *lexer, char *token)
 {
-	char	*token;
-	char	delim;
-	char	*start;
-	char	*end;
 	char	*join;
 	char	*tmp;
-	size_t	delta;
 
-	start = l_curr(lexer, i);
-	delim = *start;
-	end = ft_strchr(l_curr(lexer, i) + 1, delim);
-	if (!end)
-	{
-		printf("Unended quote/dquote\n");
-		exit(EXIT_FAILURE);
-	}
-	delta = end - start;
-	token = ft_substr(lexer->input, 1, delta - 1);
-	lexer->input += delta + 1;
 	if (*l_curr(lexer, 0) && !ft_isspace(*l_curr(lexer, 0)))
 	{
 		join = get_next(lexer);
@@ -74,13 +57,38 @@ static char	*dispatch_string(t_lexer *lexer, size_t i)
 	return (token);
 }
 
+// TODO: better implementation
+static char	*dispatch_string(t_lexer *lexer, size_t i)
+{
+	char	*token;
+	char	delim;
+	char	*start;
+	char	*end;
+	size_t	delta;
+
+	start = l_curr(lexer, i);
+	delim = *start;
+	end = ft_strchr(start + 1, delim);
+	if (!end)
+	{
+		printf("Unended quote/dquote\n");
+		exit(EXIT_FAILURE);
+	}
+	delta = end - start;
+	token = ft_substr(lexer->input, 1, delta - 1);
+	lexer->input += delta + 1;
+	// TODO: call expander here
+	return (join_to_next_if_necessary(lexer, token));
+}
+
 static char	*dispatch_normal(t_lexer *lexer, size_t i)
 {
 	char	*token;
 
 	token = ft_substr(lexer->input, 0, i);
 	lexer->input += i;
-	return (token);
+	// TODO: call expander here
+	return (join_to_next_if_necessary(lexer, token));
 }
 
 static char	*get_next(t_lexer *lexer)
@@ -98,7 +106,12 @@ static char	*get_next(t_lexer *lexer)
 			return (dispatch_normal(lexer, i));
 		else if (c == LIT_QUOTE
 			|| c == LIT_DOUBLE_QUOTE)
-			return (dispatch_string(lexer, i));
+		{
+			if (i == 0)
+				return (dispatch_string(lexer, i));
+			else
+				return (dispatch_normal(lexer, i));
+		}
 		else if (c == *LIT_REDIR_OUT
 			|| c == *LIT_REDIR_IN
 			|| c == *LIT_PIPE)
