@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/30 15:46:23 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/03/31 17:45:29 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void __debug_lexer(const t_vec *tokens)
 	}
 	printf("]\n");
 }
-
+*/
 void	__debug_parser(const t_vec *expressions)
 {
 	for (size_t i = 0; i < expressions->len; i += 1)
@@ -50,7 +50,7 @@ void	__debug_parser(const t_vec *expressions)
 		printf("]\n");
 	}
 }
-
+/*
 void __debug_envs(const t_vec *env)
 {
 	printf("[");
@@ -98,6 +98,8 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	size_t		should_exit = 0;
 
+
+	//TODO: deal with CTRL'C in heredoc
 	g_signals = (t_signals){ .exit_status = 0, .pid = 0, .sig_int = false};
 	env = create_envs(envp);
 	while (true)
@@ -119,6 +121,7 @@ int	main(int argc, char **argv, char **envp)
 		tokens = tokenize(input);
 		expressions = parse(&tokens);
 		expander_res = expander(&expressions, &env);
+		//__debug_parser(&expressions);
 		params = initialize_executer_params(&expressions, expander_res);
 		if (!check_errors_parser(&expressions) && !expander_res)
 			executer(&expressions, params, &env);

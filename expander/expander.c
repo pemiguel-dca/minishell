@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:31:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/29 17:09:23 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/03 15:38:12 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 
 size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 {
-	size_t	pos;
-	char	*find;
-	t_vec	*args;
-	void	*temp;
+	size_t		pos;
+	t_vec		*args;
+	char		*find;
+	void		*temp;
 
-	args = &expr->args;
 	find = ft_strdup(expr->args.buf[i]);
 	pos = pos_env_var(env, find + 1);
+	args = &expr->args;
 	if (is_expand_export(find))//name=value
 	{
+		//TODO: do with multiple examples
 		vec_push(&expr->args, ft_strdup("export"));
 		temp = expr->args.buf[0];
 		expr->args.buf[0] = expr->args.buf[1];
 		expr->args.buf[1] = temp;
-		//ft_swap(expr->args.buf[0], expr->args.buf[1]);
 	}
 	else if (is_last_status(find))//$?
 	{
@@ -41,7 +41,7 @@ size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 		free(find);
 		return (1);
 	}
-	else if ((pos >= 0 && (!is_expand_export(find) && prev_state != DELIMITER))//expand to their value
+	else if ((pos != - 1 && (!is_expand_export(find) && prev_state != DELIMITER))//expand to their value
 			|| is_home(find))
 	{
 		if (is_home(find))//~
@@ -56,7 +56,7 @@ size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 		}
 	}
 	else if (prev_state != DELIMITER)
-		free(expr->args.buf[i]);
+		vec_del(&args, i);
 	free(find);
 	return (0);
 }
@@ -65,17 +65,19 @@ size_t	change_value(t_expression *expr, t_vec *env)
 {
 	size_t			i;
 	size_t			errors;
+	size_t			initial_len;
 	static t_states	prev_state = DEFAULT;
 
 	i = 0;
 	errors = 0;
-	while (i < expr->args.len)
+	initial_len = expr->args.len;
+	while (i < initial_len)
 	{
 		if (as_dollar_sign(expr->args.buf[i])
-			|| (is_expand_export(expr->args.buf[i]) && expr->args.len == 1)
+			|| (is_expand_export(expr->args.buf[i]))
 			|| is_home(expr->args.buf[i]))
 			errors = real_value(expr, env, i, prev_state);
-			if (is_expand_export(expr->args.buf[i]))
+			if (expr->args.len == 0)//|| (expr->args.buf[i] && is_expand_export(expr->args.buf[i])))
 				break ;
 		prev_state = expr->state;
 		i += 1;

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 13:08:32 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/31 15:08:57 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/02 19:11:06 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static size_t	create_vars(t_expression *expr, t_vec *env)
 		}
 		else
 			env->buf[pos_env_var(env, (char *)expr->args.buf[i])]
-				= ft_strdup(expr->args.buf[i]);
+				= (expr->args.buf[i]);
 		i += 1;
 	}
 	return (0);

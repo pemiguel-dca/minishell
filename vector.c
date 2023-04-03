@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 19:01:35 by pedro             #+#    #+#             */
-/*   Updated: 2023/03/31 15:48:38 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/02 19:21:31 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	vec_del(t_vec **vec, size_t pos)
 	v = *vec;
 	if (pos >= v->len)
 		return ;
+	free(v->buf[pos]);
 	while (pos < v->len - 1)
 	{
 		v->buf[pos] = v->buf[pos + 1];
