@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"expander.h": "c",
+		"stddef.h": "c",
+		"*.tcc": "c"
+	}
+}

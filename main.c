@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/03 17:25:39 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/06 21:17:33 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,12 +117,11 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		add_history(input);
-		tokens = tokenize(input);
-		__debug_lexer(&tokens);
-		/*
+		tokens = tokenize(&env, input);
+		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
+		// __debug_parser(&expressions);
 		expander_res = expander(&expressions, &env);
-		//__debug_parser(&expressions);
 		params = initialize_executer_params(&expressions, expander_res);
 		if (!check_errors_parser(&expressions) && !expander_res)
 			executer(&expressions, params, &env);
@@ -132,7 +131,6 @@ int	main(int argc, char **argv, char **envp)
 		free_all(&expressions, params, &tokens, input);
 		if (should_exit)
 			break;
-		*/
 	}
 	vec_free(&env);
 	return (g_signals.exit_status);
