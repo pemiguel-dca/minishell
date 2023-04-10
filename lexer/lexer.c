@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/10 18:21:44 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:01:22 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ static char	*join_to_next_if_necessary(t_lexer *lexer, const char *token, t_vec 
 	return ((char *)token);
 }
 
+// TODO: problem with 'echo ls">"a'
 // TODO: better implementation
 static char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env)
 {
