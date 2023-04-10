@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/06 21:17:33 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/10 18:00:22 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,6 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	size_t		should_exit = 0;
 
-
-	//TODO: deal with CTRL'C in heredoc
 	g_signals = (t_signals){ .exit_status = 0, .pid = 0, .sig_int = false};
 	env = create_envs(envp);
 	while (true)
@@ -117,7 +115,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		add_history(input);
-		tokens = tokenize(&env, input);
+		tokens = trim_empty(tokenize(&env, input));
 		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
 		// __debug_parser(&expressions);
@@ -135,5 +133,3 @@ int	main(int argc, char **argv, char **envp)
 	vec_free(&env);
 	return (g_signals.exit_status);
 }
-
-// 'ls''>'" $HOST $HOST "

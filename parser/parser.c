@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/31 15:28:22 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/10 18:20:20 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ static t_expression	*get_next(t_parser *parser)
 	return (NULL);
 }
 
-// TODO: join ls'>'a
-// TODO: differentiate between double and single quotes
 t_vec	parse(const t_vec *tokens)
 {
 	t_vec			expressions;

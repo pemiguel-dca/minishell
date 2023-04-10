@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/06 21:18:50 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/10 18:21:44 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ static char	*replace_var(const char *s, const char *sub, const char *with)
 	char	*buf;
 	char	*rem;
 
-	new_len = strlen(s) - strlen(sub) + strlen(with);
-	delta = strstr(s, sub) - s;
+	new_len = ft_strlen(s) - ft_strlen(sub) + ft_strlen(with);
+	delta = ft_strnstr(s, sub, ft_strlen(s)) - s;
 	buf = malloc(sizeof(char) * (new_len + 1));
-	rem = strstr(s, sub) + strlen(sub);
+	rem = ft_strnstr(s, sub, ft_strlen(s)) + ft_strlen(sub);
 
-	memcpy(buf, s, delta);
-	memcpy(buf + delta, with, strlen(with));
-	memcpy(buf + delta + strlen(with), rem, strlen(rem));
+	ft_memcpy(buf, s, delta);
+	ft_memcpy(buf + delta, with, ft_strlen(with));
+	ft_memcpy(buf + delta + ft_strlen(with), rem, ft_strlen(rem));
 
 	buf[new_len] = 0;
 	return buf;
@@ -102,21 +102,23 @@ static char	*expand_token(const char *token, t_vec *env)
 		if (pos_env_var(env, var + 1) != -1) {
 			buf = replace_var(buf, var, get_var_value(env->buf[pos_env_var(env, var + 1)]));
 		} else {
-			buf = replace_var(buf, var, " ");
+			buf = replace_var(buf, var, "");
+			// TODO: ls << $ola
 		}
 		free(tmp);
 		free(var);
 	}
 	return (buf);
-	// " $USER $ $USER " -> " pnobre-m $ pnobre-m "
 }
 
 static char	*join_to_next_if_necessary(t_lexer *lexer, const char *token, t_vec *env)
 {
+	char	curr;
 	char	*join;
 	char	*tmp;
 
-	if (*l_curr(lexer, 0) && !ft_isspace(*l_curr(lexer, 0)))
+	curr = *l_curr(lexer, 0);
+	if (curr && (curr == LIT_QUOTE || curr == LIT_DOUBLE_QUOTE))
 	{
 		join = get_next(env, lexer);
 		tmp = (char *)token;
@@ -146,7 +148,10 @@ static char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env)
 	delta = end - start;
 	token = ft_substr(lexer->input, 1, delta - 1);
 	lexer->input += delta + 1;
-	return (join_to_next_if_necessary(lexer, expand_token(token, env), env));
+	if (delim == LIT_QUOTE)
+		return (join_to_next_if_necessary(lexer, token, env));
+	else
+		return (join_to_next_if_necessary(lexer, expand_token(token, env), env));
 }
 
 static char	*dispatch_normal(t_lexer *lexer, size_t i, t_vec *env)
@@ -155,8 +160,28 @@ static char	*dispatch_normal(t_lexer *lexer, size_t i, t_vec *env)
 
 	token = ft_substr(lexer->input, 0, i);
 	lexer->input += i;
-	// TODO: call expander here
 	return (join_to_next_if_necessary(lexer, expand_token(token, env), env));
+}
+
+t_vec	trim_empty(t_vec tokens)
+{
+	size_t	i;
+	t_vec	new;
+	char	*el;
+
+	i = 0;
+	new = vec_new();
+	while (i < tokens.len)
+	{
+		el = tokens.buf[i];
+		if (ft_strlen(el) > 0)
+		{
+			vec_push(&new, ft_strdup(el));
+		}
+		i += 1;
+	}
+	vec_free(&tokens);
+	return (new);
 }
 
 static char	*get_next(t_vec *env, t_lexer *lexer)

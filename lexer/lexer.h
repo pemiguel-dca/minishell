@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:28:38 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/03 19:39:22 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/10 17:55:51 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ inline static bool	is_redir(const char *token)
 		|| ft_strcmp((char *)token, LIT_REDIR_IN) == 0
 		|| ft_strcmp((char *)token, LIT_REDIR_OUT) == 0);
 }
+
+t_vec	trim_empty(t_vec tokens);
 
 t_vec	tokenize(t_vec *env, const char *buf);
 
