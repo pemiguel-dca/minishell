@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:28:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/26 17:05:35 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:11:13 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,36 @@
 
 extern t_signals	g_signals;
 
-static inline int	is_expand_export(char *arg)
+static inline bool	is_expand_export(t_expression *expr)
 {
 	size_t	i;
+	size_t	j;
 	int		equal;
+	char	*arg;
+	bool	res;
 
-	i = 0;
-	equal = 0;
-	if (ft_isalpha(arg[i]))
+	j = 0;
+	while (j < expr->args.len)
 	{
-		while (arg[i])
+		arg = (char *)expr->args.buf[j];
+		equal = 0;
+		i = 0;
+		if (ft_isalpha(arg[i]))
 		{
-			if (arg[i] == '=')
-				equal += 1;
-			i += 1;
+			while (arg[i])
+			{
+				if (arg[i] == '=')
+					equal += 1;
+				i += 1;
+			}
+			if (equal == 0 || (equal == 1 && arg[i - 1] == '='))
+				res = false;
+			else
+				res = true;
 		}
-		if (equal == 0 || (equal == 1 && arg[i - 1] == '='))
-			return (0);
-		else
-			return (1);
+		j += 1;
 	}
-	return (0);
+	return (res);
 }
 
 static inline bool	as_dollar_sign(char *arg)

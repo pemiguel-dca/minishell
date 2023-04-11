@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 12:24:29 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/27 13:18:20 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:40:40 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int		ft_toupper(int c);
 int		ft_isspace(int c);
 int		ft_is_all_whitespace(char *str);
 
-char	*ft_realloc(void *ptr, int new_size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);

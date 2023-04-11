@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/10 18:00:22 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:33:24 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	while (true)
 	{
 		expander_res = 0;
+		signal(SIGINT, sig_int);
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		if (!input)
 		{
@@ -118,8 +119,8 @@ int	main(int argc, char **argv, char **envp)
 		tokens = trim_empty(tokenize(&env, input));
 		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
-		// __debug_parser(&expressions);
 		expander_res = expander(&expressions, &env);
+		__debug_parser(&expressions);
 		params = initialize_executer_params(&expressions, expander_res);
 		if (!check_errors_parser(&expressions) && !expander_res)
 			executer(&expressions, params, &env);
