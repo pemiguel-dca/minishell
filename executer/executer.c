@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/11 22:29:11 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:05:49 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 	t_expression	*expr;
 	char			*path;
 
+	//TODO: handle this
+	signal(SIG_INT, &child_signal);
 	expr = expressions->buf[params->i];
 	if (expr->state == CMD)
 	{

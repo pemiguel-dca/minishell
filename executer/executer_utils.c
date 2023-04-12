@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/31 15:15:09 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:15:09 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ char	*bin_path(t_expression *expr, t_vec *env)
 		i++;
 	}
 	free_vars(path_env, with_delim);
+	if (is_binary((char *)expr->args.buf[0]))
+		res = (char *)expr->args.buf[0];
 	return (res);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/11 22:33:24 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/12 14:52:04 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	main(int argc, char **argv, char **envp)
 		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
 		expander_res = expander(&expressions, &env);
-		__debug_parser(&expressions);
+		//__debug_parser(&expressions);
 		params = initialize_executer_params(&expressions, expander_res);
 		if (!check_errors_parser(&expressions) && !expander_res)
 			executer(&expressions, params, &env);

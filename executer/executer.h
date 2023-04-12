@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/31 15:25:21 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:21:36 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,16 @@ static inline void	close_file_descriptors(t_executer *params)
 		close(params->input_fd);
 	if (params->output_fd != STDOUT_FILENO)
 		close(params->output_fd);
+}
+
+static inline bool	is_binary(char *arg)
+{
+	bool	res;
+
+	res = false;
+	if (arg[0] == '.' && arg[1] == '/')
+		res = true;
+	return (res);
 }
 
 /*executer_utils.c*/

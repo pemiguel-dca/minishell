@@ -6,13 +6,13 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:31:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/11 22:14:06 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/12 12:40:53 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
 
-static void add_export(t_expression *expr)
+static void	add_export(t_expression *expr)
 {
 	void	*temp;
 
