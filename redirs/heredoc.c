@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 18:34:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/31 15:47:03 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:57:50 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ size_t	skip_delims(t_vec *expressions)
 	return (count_delims * 2);
 }
 
-bool	heredoc_on(char *line, t_vec *expressions, t_executer *params)
+bool	heredoc_on(char *line, t_executer *params)
 {
 	static size_t	finish = 0;
 
@@ -91,7 +91,7 @@ bool	heredoc_on(char *line, t_vec *expressions, t_executer *params)
 	return (false);
 }
 
-size_t	do_heredoc(t_vec *expressions, t_executer *params, t_vec *env)
+size_t	do_heredoc(t_vec *expressions, t_executer *params)
 {
 	char	*line;
 	size_t	done;
@@ -102,7 +102,7 @@ size_t	do_heredoc(t_vec *expressions, t_executer *params, t_vec *env)
 	while (true)
 	{
 		line = ft_strjoin(readline("> "), "\n");
-		done = heredoc_on(line, expressions, params);
+		done = heredoc_on(line, params);
 		if (done)
 		{
 			free(line);

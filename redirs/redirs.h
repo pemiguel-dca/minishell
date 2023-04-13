@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 17:24:30 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/30 15:16:58 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:57:57 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ size_t	count_delims(t_vec *expressions);
 
 char	**get_delimiters(t_vec *expressions);
 
-bool	heredoc_on(char *line, t_vec *expressions, t_executer *params);
+bool	heredoc_on(char *line, t_executer *params);
 
 size_t	skip_delims(t_vec *expressions);
 
-size_t	do_heredoc(t_vec *expressions, t_executer *params, t_vec *env);
+size_t	do_heredoc(t_vec *expressions, t_executer *params);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/31 15:04:48 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:53:25 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ static inline char	*get_path_before(char *curr_path)
 	return (path_before);
 }
 
-static inline void	execute_child_builtin(t_expression *expr, t_vec *env,
-		t_executer *params)
+static inline void	execute_child_builtin(t_expression *expr, t_vec *env)
 {
 	if (ft_strcmp((char *)expr->args.buf[0], "pwd") == 0)
 		g_signals.exit_status = _pwd(expr);

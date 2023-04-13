@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/10 19:01:22 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:54:39 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static char	*replace_var(const char *s, const char *sub, const char *with)
 	ft_memcpy(buf + delta + ft_strlen(with), rem, ft_strlen(rem));
 
 	buf[new_len] = 0;
-	return buf;
+	return (buf);
 }
 
 static char	*expand_token(const char *token, t_vec *env)
@@ -90,7 +90,6 @@ static char	*expand_token(const char *token, t_vec *env)
 	char	*var;
 	char	*buf;
 	char	*tmp;
-	size_t	i;
 
 	buf = (char *)token;
 	while (true)
@@ -99,12 +98,13 @@ static char	*expand_token(const char *token, t_vec *env)
 		if (!var)
 			break ;
 		tmp = buf;
-		if (pos_env_var(env, var + 1) != -1) {
+		if (is_last_status(buf))
+			buf = ft_itoa(g_signals.exit_status);
+		else if (pos_env_var(env, var + 1) != -1)
 			buf = replace_var(buf, var, get_var_value(env->buf[pos_env_var(env, var + 1)]));
-		} else {
+		else
 			buf = replace_var(buf, var, "");
 			// TODO: ls << $ola
-		}
 		free(tmp);
 		free(var);
 	}
@@ -239,14 +239,14 @@ static t_vec	rearrange_tokens(t_vec *tokens)
 	size_t	i;
 	t_vec	rearranged;
 	t_vec	redirs;
+	char *t;
 
 	i = 0;
 	rearranged = vec_new();
 	redirs = vec_new();
 	while (i < tokens->len)
 	{
-		char *t = tokens->buf[i];
-
+		t = tokens->buf[i];
 		if (is_redir(t))
 		{
 			vec_push(&redirs, ft_strdup(t));
@@ -263,9 +263,7 @@ static t_vec	rearrange_tokens(t_vec *tokens)
 			vec_push(&rearranged, ft_strdup(t));
 		}
 		else
-		{
 			vec_push(&rearranged, ft_strdup(t));
-		}
 		i += 1;
 	}
 	join_channels(&rearranged, &redirs);

@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/12 15:21:36 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:59:34 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static inline bool	is_binary(char *arg)
 	res = false;
 	if (arg[0] == '.' && arg[1] == '/')
 		res = true;
+	else if (arg[0] == '/')
+		res = true;
 	return (res);
 }
 
@@ -73,6 +75,6 @@ t_executer			*initialize_executer_params(t_vec *expressions,
 char				*bin_path(t_expression *expr, t_vec *env);
 /*Execute a specific command*/
 void				execute_cmd(t_expression *expr, t_vec *env,
-						char *path, t_executer *params);
+						char *path);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/12 16:05:49 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:59:54 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
 
-static void	redir_input(t_vec *expressions, t_executer *params, t_vec *env)
+static void	redir_input(t_vec *expressions, t_executer *params)
 {
 	static size_t	times = 0;
 
@@ -20,7 +20,7 @@ static void	redir_input(t_vec *expressions, t_executer *params, t_vec *env)
 	{
 		params->heredoc_fd = open("heredoc.tmp", O_CREAT
 				| O_TRUNC | O_RDWR, 0644);
-		times += do_heredoc(expressions, params, env);
+		times += do_heredoc(expressions, params);
 	}
 	if (theres_a_need_to_redir(expressions, params->i))
 	{
@@ -67,17 +67,15 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 	t_expression	*expr;
 	char			*path;
 
-	//TODO: handle this
-	signal(SIG_INT, &child_signal);
 	expr = expressions->buf[params->i];
 	if (expr->state == CMD)
 	{
-		redir_input(expressions, params, env);
+		redir_input(expressions, params);
 		path = bin_path(expr, env);
 		if (path)
 		{
 			set_pipe_channels(expressions, params);
-			execute_cmd(expr, env, path, params);
+			execute_cmd(expr, env, path);
 		}
 		else if (!is_parent_builtin(expr->args.buf[0]))
 		{

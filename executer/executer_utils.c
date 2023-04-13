@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/12 15:15:09 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:59:19 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ char	*bin_path(t_expression *expr, t_vec *env)
 	return (res);
 }
 
-void	execute_cmd(t_expression *expr, t_vec *env, char *path,
-	t_executer *params)
+void	execute_cmd(t_expression *expr, t_vec *env, char *path)
 {
 	if (!is_child_builtin(expr->args.buf[0]))
 	{
@@ -84,6 +83,6 @@ void	execute_cmd(t_expression *expr, t_vec *env, char *path,
 		execve(path, (char **)expr->args.buf, (char **)env->buf);
 	}
 	else
-		execute_child_builtin(expr, env, params);
+		execute_child_builtin(expr, env);
 	free(path);
 }

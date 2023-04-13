@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:31:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/12 12:40:53 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:54:54 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,15 @@ static void	add_export(t_expression *expr)
 	expr->args.buf[expr->args.len - 1] = temp;
 }
 
-size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
+size_t	real_value(t_expression *expr, t_vec *env, size_t i,
+					t_states prev_state)
 {
 	size_t		pos;
 	char		*find;
-	void		*temp;
 
 	find = ft_strdup(expr->args.buf[i]);
 	pos = pos_env_var(env, find + 1);
-	if (is_last_status(find))
-	{
-		free(expr->args.buf[i]);
-		expr->args.buf[i] = ft_itoa(g_signals.exit_status);
-	}
-	else if (is_ambiguous_redir(prev_state, pos))
+	if (is_ambiguous_redir(prev_state, pos))
 	{
 		printf("%s: ambiguous redirect\n", find);
 		free(find);
@@ -43,8 +38,9 @@ size_t	real_value(t_expression *expr, t_vec *env, size_t i, t_states prev_state)
 	}
 	else if (is_home(find))
 	{
-			free(expr->args.buf[i]);
-			expr->args.buf[i] = ft_strdup(get_var_value(env->buf[pos_env_var(env, "HOME")]));
+		free(expr->args.buf[i]);
+		expr->args.buf[i] = ft_strdup(get_var_value(env->buf
+				[pos_env_var(env, "HOME")]));
 	}
 	free(find);
 	return (0);
@@ -62,9 +58,7 @@ size_t	change_value(t_expression *expr, t_vec *env)
 	initial_len = expr->args.len;
 	while (i < initial_len)
 	{
-		if (as_dollar_sign(expr->args.buf[i])
-			|| is_home(expr->args.buf[i]))
-			errors = real_value(expr, env, i, prev_state);
+		errors = real_value(expr, env, i, prev_state);
 		prev_state = expr->state;
 		i += 1;
 	}
