@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:28:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 15:37:43 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:52:43 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,36 +22,39 @@
 
 extern t_signals	g_signals;
 
-static inline void	get_res(size_t equal, char last, bool *res)
+static inline void	get_res(size_t equal, char *arg, bool *res)
 {
-	if (equal == 0 || (equal == 1 && last == '='))
-		*res = false;
-	else
-		*res = true;
+	size_t	i;
+
+	i = 0;
+	if (ft_isalpha(arg[i]))
+	{
+		while (arg[i])
+		{
+			if (arg[i] == '=')
+				equal += 1;
+			i += 1;
+		}
+		if (equal == 0 || (equal == 1 && arg[i - 1] == '='))
+			*res = false;
+		else
+			*res = true;
+	}
 }
 
 static inline bool	is_expand_export(t_expression *expr)
 {
-	size_t	i;
 	size_t	j;
 	int		equal;
+	char	*arg;
 	bool	res;
 
 	j = 0;
 	while (j < expr->args.len)
 	{
+		arg = (char *)expr->args.buf[j];
 		equal = 0;
-		i = 0;
-		if (ft_isalpha(((char *)expr->args.buf[j])[i]))
-		{
-			while (((char *)expr->args.buf[j])[i])
-			{
-				if (((char *)expr->args.buf[j])[i] == '=')
-					equal += 1;
-				i += 1;
-			}
-			get_res(equal, ((char *)expr->args.buf[j])[i - 1], &res);
-		}
+		get_res(equal, arg, &res);
 		j += 1;
 	}
 	return (res);
@@ -69,6 +72,6 @@ static inline bool	is_ambiguous_redir(t_states prev_state, int pos)
 			|| prev_state == OUT));
 }
 
-size_t	expander(t_vec *expressions, t_vec *env);
+void	expander(t_vec *expressions, t_vec *env);
 
 #endif

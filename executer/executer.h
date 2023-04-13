@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 16:04:36 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 15:59:34 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:53:48 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ static inline bool	is_binary(char *arg)
 /*executer_utils.c*/
 
 /*Initialize all the paramaters needed for executer*/
-t_executer			*initialize_executer_params(t_vec *expressions,
-						size_t executer_res);
+t_executer			*initialize_executer_params(t_vec *expressions);
 /*Searches for binary path*/
 char				*bin_path(t_expression *expr, t_vec *env);
 /*Execute a specific command*/

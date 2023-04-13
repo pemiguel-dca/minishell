@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/13 15:47:12 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:53:28 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	size_t		expander_res;
 	t_vec		env;
 	t_vec		tokens;
 	t_vec		expressions;
@@ -101,7 +100,6 @@ int	main(int argc, char **argv, char **envp)
 	env = create_envs(envp);
 	while (true)
 	{
-		expander_res = 0;
 		signal(SIGINT, sig_int);
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		if (!input)
@@ -119,12 +117,12 @@ int	main(int argc, char **argv, char **envp)
 		tokens = trim_empty(tokenize(&env, input));
 		// __debug_lexer(&tokens);
 		expressions = parse(&tokens);
-		expander_res = expander(&expressions, &env);
+		expander(&expressions, &env);
 		__debug_parser(&expressions);
-		params = initialize_executer_params(&expressions, expander_res);
+		params = initialize_executer_params(&expressions);
 		if (!expressions.len)
 			g_signals.exit_status = 0;
-		else if (!check_errors_parser(&expressions) && !expander_res)
+		else if (!check_errors_parser(&expressions))
 			executer(&expressions, params, &env);
 		else
 			g_signals.exit_status = 1;//ambigous redirect

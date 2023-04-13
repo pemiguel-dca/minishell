@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 15:59:19 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:53:53 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	free_vars(char **path_env, char *with_delim)
 	free(with_delim);
 }
 
-t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
+t_executer	*initialize_executer_params(t_vec *expressions)
 {
 	t_executer	*params;
 
@@ -38,7 +38,7 @@ t_executer	*initialize_executer_params(t_vec *expressions, size_t executer_res)
 		params->delims = get_delimiters(expressions);
 	params->pos_file = 0;
 	params->exit = 0;
-	if (files_to_be_created(expressions) && params->i == 0 && !executer_res)
+	if (files_to_be_created(expressions) && params->i == 0)
 		params->new_files = create_files(expressions);
 	else
 		params->new_files = NULL;
