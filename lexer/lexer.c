@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/13 15:54:39 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:41:30 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 #include "lexer.h"
 #include "../env_vars/env.h"
 
-static char	*get_next(t_vec *env, t_lexer *lexer);
+static char	*get_next(t_vec *env, t_lexer *lexer, bool *is_heredoc);
 
-// TODO: better implementation
-static char	*dispatch_operator(t_lexer *lexer)
+static char	*dispatch_operator(t_lexer *lexer, bool *is_heredoc)
 {
 	char	*token;
 	size_t	n;
 
+	if (ft_strnstr(lexer->input, LIT_REDIR_DEL, sizeof(LIT_REDIR_DEL) - 1)) {
+		*is_heredoc = true;
+	}
 	if (
 		ft_strnstr(lexer->input, LIT_REDIR_APPEND, sizeof(LIT_REDIR_APPEND) - 1)
 		|| ft_strnstr(lexer->input, LIT_REDIR_DEL, sizeof(LIT_REDIR_DEL) - 1)
@@ -104,33 +106,33 @@ static char	*expand_token(const char *token, t_vec *env)
 			buf = replace_var(buf, var, get_var_value(env->buf[pos_env_var(env, var + 1)]));
 		else
 			buf = replace_var(buf, var, "");
-			// TODO: ls << $ola
 		free(tmp);
 		free(var);
 	}
 	return (buf);
 }
 
-static char	*join_to_next_if_necessary(t_lexer *lexer, const char *token, t_vec *env)
+static char	*join_to_next_if_necessary(t_lexer *lexer, const char *token, t_vec *env, bool *is_heredoc, bool is_quoted)
 {
 	char	curr;
+	char	prev;
 	char	*join;
 	char	*tmp;
 
 	curr = *l_curr(lexer, 0);
-	if (curr && (curr == LIT_QUOTE || curr == LIT_DOUBLE_QUOTE))
+	prev = *(lexer->input - 1);
+	if (curr && (curr == LIT_QUOTE || curr == LIT_DOUBLE_QUOTE || is_quoted))
 	{
-		join = get_next(env, lexer);
+		join = get_next(env, lexer, is_heredoc);
 		tmp = (char *)token;
 		token = ft_strjoin(token, join);
 		free(tmp);
+		free(join);
 	}
 	return ((char *)token);
 }
 
-// TODO: problem with 'echo ls">"a'
-// TODO: better implementation
-static char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env)
+static char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env, bool *is_heredoc)
 {
 	char	*token;
 	char	delim;
@@ -149,19 +151,26 @@ static char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env)
 	delta = end - start;
 	token = ft_substr(lexer->input, 1, delta - 1);
 	lexer->input += delta + 1;
-	if (delim == LIT_QUOTE)
-		return (join_to_next_if_necessary(lexer, token, env));
-	else
-		return (join_to_next_if_necessary(lexer, expand_token(token, env), env));
+	if (delim == LIT_DOUBLE_QUOTE && !*is_heredoc)
+		return (join_to_next_if_necessary(lexer, expand_token(token, env), env, is_heredoc, true));
+	else {
+		*is_heredoc = false;
+		return (join_to_next_if_necessary(lexer, token, env, is_heredoc, true));
+	}
 }
 
-static char	*dispatch_normal(t_lexer *lexer, size_t i, t_vec *env)
+static char	*dispatch_normal(t_lexer *lexer, size_t i, t_vec *env, bool *is_heredoc)
 {
 	char	*token;
 
 	token = ft_substr(lexer->input, 0, i);
 	lexer->input += i;
-	return (join_to_next_if_necessary(lexer, expand_token(token, env), env));
+	if (!*is_heredoc) {
+		return (join_to_next_if_necessary(lexer, expand_token(token, env), env, is_heredoc, false));
+	} else {
+		*is_heredoc = false;
+		return (join_to_next_if_necessary(lexer, token, env, is_heredoc, false));
+	}
 }
 
 t_vec	trim_empty(t_vec tokens)
@@ -185,7 +194,7 @@ t_vec	trim_empty(t_vec tokens)
 	return (new);
 }
 
-static char	*get_next(t_vec *env, t_lexer *lexer)
+static char	*get_next(t_vec *env, t_lexer *lexer, bool *is_heredoc)
 {
 	size_t	i;
 	char	c;
@@ -197,23 +206,23 @@ static char	*get_next(t_vec *env, t_lexer *lexer)
 	{
 		c = *l_curr(lexer, i);
 		if (ft_isspace(c) || !c)
-			return (dispatch_normal(lexer, i, env));
+			return (dispatch_normal(lexer, i, env, is_heredoc));
 		else if (c == LIT_QUOTE
 			|| c == LIT_DOUBLE_QUOTE)
 		{
 			if (i == 0)
-				return (dispatch_string(lexer, i, env));
+				return (dispatch_string(lexer, i, env, is_heredoc));
 			else
-				return (dispatch_normal(lexer, i, env));
+				return (dispatch_normal(lexer, i, env, is_heredoc));
 		}
 		else if (c == *LIT_REDIR_OUT
 			|| c == *LIT_REDIR_IN
 			|| c == *LIT_PIPE)
 		{
 			if (i == 0)
-				return (dispatch_operator(lexer));
+				return (dispatch_operator(lexer, is_heredoc));
 			else
-				return (dispatch_normal(lexer, i, env));
+				return (dispatch_normal(lexer, i, env, is_heredoc));
 		}
 		i += 1;
 	}
@@ -277,12 +286,14 @@ t_vec	tokenize(t_vec *env, const char *buf)
 	t_vec	tokens;
 	t_lexer	lexer;
 	char	*token;
+	bool	is_heredoc;
 
 	tokens = vec_new();
 	lexer = (t_lexer){.input = buf};
+	is_heredoc = false;
 	while (true)
 	{
-		token = get_next(env, &lexer);
+		token = get_next(env, &lexer, &is_heredoc);
 		if (token)
 			vec_push(&tokens, token);
 		else

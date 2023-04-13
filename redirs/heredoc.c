@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 18:34:26 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 15:57:50 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:40:25 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,16 @@ bool	heredoc_on(char *line, t_executer *params)
 
 size_t	do_heredoc(t_vec *expressions, t_executer *params)
 {
+	char	*rl;
 	char	*line;
 	size_t	done;
-	size_t	lines_in_file;
 
 	done = 0;
-	lines_in_file = 1;
 	while (true)
 	{
-		line = ft_strjoin(readline("> "), "\n");
+		rl = readline("> ");
+		line = ft_strjoin(rl, "\n");
+		free(rl);
 		done = heredoc_on(line, params);
 		if (done)
 		{
@@ -109,7 +110,6 @@ size_t	do_heredoc(t_vec *expressions, t_executer *params)
 			break ;
 		}
 		write(params->heredoc_fd, line, ft_strlen(line));
-		lines_in_file += 1;
 		free(line);
 	}
 	params->heredoc_fd = open("heredoc.tmp", O_RDONLY | 0644);

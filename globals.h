@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   globals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/03/31 15:47:46 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:21:52 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 
 typedef struct signals
 {
-	int			pid;
+	bool		is_in_child;
 	bool		sig_int;
 	long long	exit_status;
 }	t_signals;
