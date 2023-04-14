@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/13 17:57:08 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/14 17:03:04 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ static size_t	process(t_vec env, const char *input)
 		g_signals.exit_status = 0;
 	else if (!check_errors_parser(&expressions))
 		executer(&expressions, params, &env);
-	else
-		g_signals.exit_status = 1;
 	should_exit = params->exit;
 	free_all(&expressions, params, &tokens, (char *)input);
 	return (should_exit);
@@ -116,6 +114,12 @@ void	loop(t_vec env)
 
 	while (true)
 	{
+		g_signals.pid = 14;
+		if (g_signals.pressed_in_child)
+		{
+			printf("\n");
+			g_signals.pressed_in_child = false;
+		}
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		if (!input)
 		{
@@ -140,8 +144,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	g_signals = (t_signals){.is_in_child = false, .exit_status = 0, .sig_int = false};
 	signal(SIGINT, sig_int);
+	g_signals = (t_signals){.pressed_in_child = false, .exit_status = 0};
 	env = create_envs(envp);
 	loop(env);
 	vec_free(&env);

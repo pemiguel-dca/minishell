@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 18:24:43 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/14 17:17:37 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 	t_expression	*expr;
 	char			*path;
 
+	signal(SIGINT, ignore_signal);
 	expr = expressions->buf[params->i];
 	if (expr->state == CMD)
 	{
@@ -83,9 +84,7 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 			exit(127);
 		}
 	}
-	else if (expr->state == DELIMITER)
-		redir_input(expressions, params);
-	exit(EXIT_SUCCESS);
+	exit(0);
 }
 
 static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
@@ -116,25 +115,22 @@ static void	run_expressions(t_vec *expressions, t_executer *params, t_vec *env)
 	}
 }
 
-// TODO: solve random lole shit exit status :D
 int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 
 	if (pipe(params->pipe_fd) < 0)
 		exit(EXIT_FAILURE);
-	if (fork() == 0)
-	{
-		g_signals.is_in_child = true;
+	g_signals.pid = fork();
+	if (g_signals.pid == 0)
 		child_process(expressions, params, env);
-	}
 	else
 	{
-		waitpid(-1, (int *)&g_signals.exit_status, 0);
-		g_signals.is_in_child = false;
+		waitpid(g_signals.pid, (int *)&g_signals.exit_status, 0);
 		if (!WTERMSIG(g_signals.exit_status))
 			g_signals.exit_status = WEXITSTATUS(g_signals.exit_status);
-		printf("%d\n", 130 >> 8);
+		else if (g_signals.pressed_in_child)
+			g_signals.exit_status = 130;
 		expr = expressions->buf[params->i];
 		if (is_parent_builtin(expr->args.buf[0])
 			&& expressions->len == 1)
