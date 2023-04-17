@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/17 18:24:32 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/17 20:58:19 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,48 @@
 #include "globals.h"
 
 t_signals	g_signals;
+
+void	__debug_lexer(const t_vec *tokens)
+{
+	printf("[");
+	for (size_t i = 0; i < tokens->len; i += 1)
+	{
+		printf("'%s'", (char *)tokens->buf[i]);
+		if (i + 1 != tokens->len)
+			printf(", ");
+	}
+	printf("]\n");
+}
+
+// void	__debug_parser(const t_vec *expressions)
+// {
+// 	for (size_t i = 0; i < expressions->len; i += 1)
+// 	{
+// 		printf("[");
+// 		t_expression *expr = expressions->buf[i];
+// 		for (size_t j = 0; j < expr->args.len; j += 1)
+// 		{
+// 			char *arg = expr->args.buf[j];
+// 			printf("'%s'", arg);
+// 			if (j + 1 != expr->args.len)
+// 				printf(", ");
+// 		}
+// 		printf(" | State = %u", expr->state);
+// 		printf("]\n");
+// 	}
+// }
+
+// void __debug_envs(const t_vec *env)
+// {
+// 	printf("[");
+// 	for (size_t i = 0; i < env->len; i += 1)
+// 	{
+// 		printf("'%s'", (char *)env->buf[i]);
+// 		if (i + 1 != env->len)
+// 			printf(", ");
+// 	}
+// 	printf("]\n");
+// }
 
 static void	free_all(t_vec *expressions,
 				t_executer *params,
@@ -54,6 +96,7 @@ static size_t	process(t_vec *env, const char *input)
 	t_executer	*params;
 
 	tokens = trim_empty(tokenize(env, input));
+	// __debug_lexer(&tokens);
 	expressions = parse(&tokens);
 	expander(&expressions, env);
 	params = initialize_executer_params(&expressions);
@@ -118,3 +161,5 @@ int	main(int argc, char **argv, char **envp)
 	vec_free(&env);
 	return (g_signals.exit_status);
 }
+
+// TODO: echo '|' !

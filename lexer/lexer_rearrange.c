@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 18:40:58 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/17 18:48:00 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/17 19:30:30 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	process_token(size_t *i,
 	if (is_redir(t))
 	{
 		vec_push(redirs, ft_strdup(t));
-		i += 1;
+		*i += 1;
 		if (*i < tokens->len)
 		{
 			rhs = tokens->buf[*i];

@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 17:59:12 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/17 18:40:38 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/17 20:01:31 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,13 @@ static char	*next_var(const char *s)
 		if (s[i] == '$')
 		{
 			j = 0;
-			while (s[i + j + 1]
-				&& !ft_isspace(s[i + j + 1]) && s[i + j + 1] != '$')
+			while (s[i + j + 1] && !ft_isspace(s[i + j + 1])
+				&& s[i + j + 1] != '$'
+				&& s[i + j + 1] != *LIT_REDIR_OUT
+				&& s[i + j + 1] != *LIT_REDIR_IN
+				&& s[i + j + 1] != *LIT_PIPE
+				&& s[i + j + 1] != LIT_QUOTE
+				&& s[i + j + 1] != LIT_DOUBLE_QUOTE)
 			{
 				j += 1;
 			}
@@ -117,7 +122,9 @@ char	*join_next(t_lexer *lexer,
 
 	curr = *l_curr(lexer, 0);
 	prev = *(lexer->input - 1);
-	if (curr && (curr == LIT_QUOTE || curr == LIT_DOUBLE_QUOTE || is_quoted))
+	if (curr && !ft_isspace(curr)
+		&& (curr == LIT_QUOTE || curr == LIT_DOUBLE_QUOTE || is_quoted)
+	)
 	{
 		join = get_next(env, lexer);
 		tmp = (char *)token;

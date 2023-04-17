@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executer_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:12:05 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 16:53:53 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/17 20:30:53 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executer.h"
 
-static void	free_vars(char **path_env, char *with_delim)
+static void	free_vars(char **path_env)
 {
 	size_t	i;
 
@@ -23,7 +23,6 @@ static void	free_vars(char **path_env, char *with_delim)
 		i++;
 	}
 	free(path_env);
-	free(with_delim);
 }
 
 t_executer	*initialize_executer_params(t_vec *expressions)
@@ -45,33 +44,32 @@ t_executer	*initialize_executer_params(t_vec *expressions)
 	return (params);
 }
 
-char	*bin_path(t_expression *expr, t_vec *env)
+char	*bin_path(const char *bin, t_expression *expr, t_vec *env)
 {
-	char		*res;
-	char		*with_delim;
 	char		*full_path;
 	char		**path_env;
 	size_t		i;
 
-	res = NULL;
-	with_delim = ft_strjoin("/", (char *)expr->args.buf[0]);
-	path_env = ft_split(env->buf[pos_env_var(env, "PATH")], ':');
-	i = 0;
-	while (path_env[i])
-	{
-		full_path = ft_strjoin(path_env[i], with_delim);
-		if (access(full_path, F_OK) == 0)
-		{
-			res = full_path;
-			break ;
-		}
-		free(full_path);
-		i++;
-	}
-	free_vars(path_env, with_delim);
 	if (is_binary((char *)expr->args.buf[0]))
-		res = (char *)expr->args.buf[0];
-	return (res);
+		return (expr->args.buf[0]);
+	else if (pos_env_var(env, "PATH") != -1)
+	{
+		path_env = ft_split(env->buf[pos_env_var(env, "PATH")], ':');
+		i = 0;
+		while (path_env[i])
+		{
+			full_path = ft_strjoin(path_env[i], bin);
+			if (access(full_path, F_OK) == 0)
+			{
+				free_vars(path_env);
+				return (full_path);
+			}
+			free(full_path);
+			i++;
+		}
+		free_vars(path_env);
+	}
+	return (NULL);
 }
 
 void	execute_cmd(t_expression *expr, t_vec *env, char *path)

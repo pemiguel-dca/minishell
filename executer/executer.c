@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/14 17:17:37 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/17 20:32:20 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,24 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 {
 	t_expression	*expr;
 	char			*path;
+	char			*bin;
 
 	signal(SIGINT, ignore_signal);
 	expr = expressions->buf[params->i];
 	if (expr->state == CMD)
 	{
 		redir_input(expressions, params);
-		path = bin_path(expr, env);
+		bin = ft_strjoin("/", (char *)expr->args.buf[0]);
+		path = bin_path(bin, expr, env);
 		if (path)
 		{
 			set_pipe_channels(expressions, params);
 			execute_cmd(expr, env, path);
+			free(bin);
 		}
 		else if (!is_parent_builtin(expr->args.buf[0]))
 		{
+			free(bin);
 			printf("%s: command not found\n", (char *)expr->args.buf[0]);
 			exit(127);
 		}
