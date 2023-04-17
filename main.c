@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/14 17:03:04 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/17 18:24:32 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,48 +19,6 @@
 #include "globals.h"
 
 t_signals	g_signals;
-
-// void	__debug_lexer(const t_vec *tokens)
-// {
-// 	printf("[");
-// 	for (size_t i = 0; i < tokens->len; i += 1)
-// 	{
-// 		printf("'%s'", (char *)tokens->buf[i]);
-// 		if (i + 1 != tokens->len)
-// 			printf(", ");
-// 	}
-// 	printf("]\n");
-// }
-
-// void	__debug_parser(const t_vec *expressions)
-// {
-// 	for (size_t i = 0; i < expressions->len; i += 1)
-// 	{
-// 		printf("[");
-// 		t_expression *expr = expressions->buf[i];
-// 		for (size_t j = 0; j < expr->args.len; j += 1)
-// 		{
-// 			char *arg = expr->args.buf[j];
-// 			printf("'%s'", arg);
-// 			if (j + 1 != expr->args.len)
-// 				printf(", ");
-// 		}
-// 		printf(" | State = %u", expr->state);
-// 		printf("]\n");
-// 	}
-// }
-
-// void __debug_envs(const t_vec *env)
-// {
-// 	printf("[");
-// 	for (size_t i = 0; i < env->len; i += 1)
-// 	{
-// 		printf("'%s'", (char *)env->buf[i]);
-// 		if (i + 1 != env->len)
-// 			printf(", ");
-// 	}
-// 	printf("]\n");
-// }
 
 static void	free_all(t_vec *expressions,
 				t_executer *params,
@@ -88,38 +46,43 @@ static void	free_all(t_vec *expressions,
 	free(params);
 }
 
-static size_t	process(t_vec env, const char *input)
+static size_t	process(t_vec *env, const char *input)
 {
 	size_t		should_exit;
 	t_vec		tokens;
 	t_vec		expressions;
 	t_executer	*params;
 
-	tokens = trim_empty(tokenize(&env, input));
+	tokens = trim_empty(tokenize(env, input));
 	expressions = parse(&tokens);
-	expander(&expressions, &env);
+	expander(&expressions, env);
 	params = initialize_executer_params(&expressions);
 	if (!expressions.len)
 		g_signals.exit_status = 0;
 	else if (!check_errors_parser(&expressions))
-		executer(&expressions, params, &env);
+		executer(&expressions, params, env);
 	should_exit = params->exit;
 	free_all(&expressions, params, &tokens, (char *)input);
 	return (should_exit);
 }
 
-void	loop(t_vec env)
+static void	set_pid(void)
+{
+	g_signals.pid = 14;
+	if (g_signals.pressed_in_child)
+	{
+		printf("\n");
+		g_signals.pressed_in_child = false;
+	}
+}
+
+void	loop(t_vec *env)
 {
 	char	*input;
 
 	while (true)
 	{
-		g_signals.pid = 14;
-		if (g_signals.pressed_in_child)
-		{
-			printf("\n");
-			g_signals.pressed_in_child = false;
-		}
+		set_pid();
 		input = readline("▲ " COLOR_BOLD COLOR_CYAN "$" COLOR_OFF " ");
 		if (!input)
 		{
@@ -145,12 +108,13 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, sig_int);
-	g_signals = (t_signals){.pressed_in_child = false, .exit_status = 0};
+	g_signals = (t_signals){
+		.pressed_in_child = false,
+		.exit_status = 0,
+		.is_heredoc = false
+	};
 	env = create_envs(envp);
-	loop(env);
+	loop(&env);
 	vec_free(&env);
 	return (g_signals.exit_status);
 }
-
-// TODOs: norminette
-//		  testes como a pica

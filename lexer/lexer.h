@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:28:38 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/13 15:27:31 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/17 18:41:17 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,16 @@ static inline bool	is_last_status(char *arg)
 t_vec	trim_empty(t_vec tokens);
 
 t_vec	tokenize(t_vec *env, const char *buf);
+
+char	*expand_token(const char *token, t_vec *env);
+
+t_vec	rearrange_tokens(t_vec *tokens);
+
+char	*join_next(t_lexer *lexer,
+						const char *token,
+						t_vec *env,
+						bool is_quoted);
+
+char	*get_next(t_vec *env, t_lexer *lexer);
 
 #endif

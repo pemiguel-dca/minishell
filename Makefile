@@ -7,7 +7,7 @@ RM=rm -f
 
 NAME=minishell
 SRCS=main.c vector.c signals.c\
-lexer/lexer.c \
+lexer/lexer.c lexer/lexer_expander.c lexer/lexer_rearrange.c \
 parser/parser.c \
 env_vars/envstuff.c \
 expander/expander.c \
