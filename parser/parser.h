@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/02 19:10:58 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/18 18:36:40 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct parser
 	const t_vec	*tokens;
 }	t_parser;
 
-inline static char	*p_curr(const t_parser *parser, size_t i)
+inline static t_token	*p_curr(const t_parser *parser, size_t i)
 {
 	if (i < parser->tokens->len)
 		return (parser->tokens->buf[i]);
@@ -69,15 +69,20 @@ inline static t_states	operator_type(const char *op)
 	assert(0);
 }
 
-inline static bool	is_operator(const char *token)
+inline static bool	is_operator_s(const char *s)
 {
-	if (!token)
+	return (ft_strcmp((char *)s, LIT_PIPE) == 0
+		|| ft_strcmp((char *)s, LIT_REDIR_APPEND) == 0
+		|| ft_strcmp((char *)s, LIT_REDIR_DEL) == 0
+		|| ft_strcmp((char *)s, LIT_REDIR_IN) == 0
+		|| ft_strcmp((char *)s, LIT_REDIR_OUT) == 0);
+}
+
+inline static bool	is_operator(const t_token *token)
+{
+	if (!token || token->known_literal)
 		return (false);
-	return (ft_strcmp((char *)token, LIT_PIPE) == 0
-		|| ft_strcmp((char *)token, LIT_REDIR_APPEND) == 0
-		|| ft_strcmp((char *)token, LIT_REDIR_DEL) == 0
-		|| ft_strcmp((char *)token, LIT_REDIR_IN) == 0
-		|| ft_strcmp((char *)token, LIT_REDIR_OUT) == 0);
+	return (is_operator_s(token->s));
 }
 
 /*Divide the tokens in expressions*/

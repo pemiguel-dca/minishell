@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:28:38 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/17 18:41:17 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:32:35 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ char	*join_next(t_lexer *lexer,
 						t_vec *env,
 						bool is_quoted);
 
-char	*get_next(t_vec *env, t_lexer *lexer);
+t_token	*get_next(t_vec *env, t_lexer *lexer);
 
 #endif

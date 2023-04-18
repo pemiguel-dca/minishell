@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 15:28:20 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 16:52:43 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:12:08 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static inline void	get_res(size_t equal, char *arg, bool *res)
 	size_t	i;
 
 	i = 0;
+	*res = false;
 	if (ft_isalpha(arg[i]))
 	{
 		while (arg[i])

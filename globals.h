@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/17 18:21:20 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/18 18:35:48 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ typedef struct executer
 	size_t		exit;
 	size_t		pos_file;
 }	t_executer;
+
+typedef struct token
+{
+	bool	known_literal;
+	char	*s;
+}	t_token;
 
 void	sig_int(int n);
 void	ignore_signal(int n);

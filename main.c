@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/17 20:58:19 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/18 18:42:51 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	__debug_lexer(const t_vec *tokens)
 	printf("[");
 	for (size_t i = 0; i < tokens->len; i += 1)
 	{
-		printf("'%s'", (char *)tokens->buf[i]);
+		printf("'%s'", ((t_token *)tokens->buf[i])->s);
 		if (i + 1 != tokens->len)
 			printf(", ");
 	}
@@ -71,6 +71,12 @@ static void	free_all(t_vec *expressions,
 	size_t		i;
 
 	i = 0;
+	while (i < tokens->len)
+	{
+		free(((t_token *)tokens->buf[i])->s);
+		i += 1;
+	}
+	i = 0;
 	while (i < expressions->len)
 	{
 		vec_free(&((t_expression *)expressions->buf[i])->args);
@@ -81,8 +87,8 @@ static void	free_all(t_vec *expressions,
 		free_delims(params->delims);
 		unlink("heredoc.tmp");
 	}
-	vec_free(expressions);
 	vec_free(tokens);
+	vec_free(expressions);
 	free(input);
 	free(params->new_files);
 	free(params);
@@ -96,7 +102,6 @@ static size_t	process(t_vec *env, const char *input)
 	t_executer	*params;
 
 	tokens = trim_empty(tokenize(env, input));
-	// __debug_lexer(&tokens);
 	expressions = parse(&tokens);
 	expander(&expressions, env);
 	params = initialize_executer_params(&expressions);
@@ -161,5 +166,3 @@ int	main(int argc, char **argv, char **envp)
 	vec_free(&env);
 	return (g_signals.exit_status);
 }
-
-// TODO: echo '|' !

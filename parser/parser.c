@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 23:16:01 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/10 18:20:20 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/18 18:38:54 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ t_states	get_state(const t_vec *args, t_states prev_state)
 	state = DEFAULT;
 	if (prev_state > 3 && prev_state < 8)
 		state = FL;
-	else if (((args->len == 1 && !is_operator(args->buf[0])
+	else if (((args->len == 1 && !is_operator_s(args->buf[0])
 				&& !ft_strchr(args->buf[0], '=')) || args->len > 1)
 		&& state == DEFAULT)
 		state = CMD;
-	else if (args->len == 1 && is_operator(args->buf[0]))
+	else if (args->len == 1 && is_operator_s(args->buf[0]))
 		state = operator_type(args->buf[0]);
 	else if (args->len == 1 && ft_strchr(args->buf[0], '='))
 		state = CMD;
@@ -39,7 +39,7 @@ static t_expression	*get_next(t_parser *parser)
 	args = vec_new();
 	while (parser->i < parser->tokens->len)
 	{
-		vec_push(&args, ft_strdup(p_curr(parser, parser->i)));
+		vec_push(&args, ft_strdup(p_curr(parser, parser->i)->s));
 		if (is_operator(p_curr(parser, parser->i + 1))
 			|| is_operator(p_curr(parser, parser->i))
 			|| parser->tokens->len == parser->i + 1)

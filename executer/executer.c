@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/17 20:32:20 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:12:01 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		redir_input(expressions, params);
 		bin = ft_strjoin("/", (char *)expr->args.buf[0]);
 		path = bin_path(bin, expr, env);
-		if (path)
+		if (path || is_child_builtin(expr->args.buf[0]))
 		{
 			set_pipe_channels(expressions, params);
 			execute_cmd(expr, env, path);

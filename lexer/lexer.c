@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/17 20:52:16 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/18 17:06:40 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,16 @@ static char	*dispatch_normal(t_lexer *lexer, size_t i, t_vec *env)
 	}
 }
 
-char	*get_next(t_vec *env, t_lexer *lexer)
+t_token	*get_next(t_vec *env, t_lexer *lexer)
 {
+	t_token	*t;
 	size_t	i;
 	char	c;
 
 	i = 0;
 	while (*l_curr(lexer, i) && ft_isspace(*l_curr(lexer, i)))
 		++lexer->input;
+	t = malloc(sizeof(t_token));
 	while (*lexer->input)
 	{
 		c = *l_curr(lexer, i);
@@ -102,16 +104,26 @@ char	*get_next(t_vec *env, t_lexer *lexer)
 			if (c == *LIT_REDIR_OUT
 				|| c == *LIT_REDIR_IN
 				|| c == *LIT_PIPE)
-				return (dispatch_operator(lexer));
+			{
+				*t = (t_token){.known_literal = false, .s = dispatch_operator(lexer)};
+				return (t);
+			}
 			else if (c == LIT_QUOTE || c == LIT_DOUBLE_QUOTE)
-				return (dispatch_string(lexer, i, env));
+			{
+				*t = (t_token){.known_literal = true, .s = dispatch_string(lexer, i, env)};
+				return (t);
+			}
 		}
 		if ((ft_isspace(c) || !c)
 			|| (c == LIT_QUOTE || c == LIT_DOUBLE_QUOTE)
 			|| (c == *LIT_REDIR_OUT || c == *LIT_REDIR_IN || c == *LIT_PIPE))
-			return (dispatch_normal(lexer, i, env));
+		{
+			*t = (t_token){.known_literal = false, .s = dispatch_normal(lexer, i, env)};
+			return (t);
+		}
 		i += 1;
 	}
+	free(t);
 	return (NULL);
 }
 
@@ -119,7 +131,7 @@ t_vec	tokenize(t_vec *env, const char *buf)
 {
 	t_vec	tokens;
 	t_lexer	lexer;
-	char	*token;
+	t_token	*token;
 
 	tokens = vec_new();
 	lexer = (t_lexer){.input = buf};

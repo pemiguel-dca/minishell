@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 17:59:12 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/17 20:01:31 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/18 18:20:57 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@ t_vec	trim_empty(t_vec tokens)
 {
 	size_t	i;
 	t_vec	new;
-	char	*el;
+	t_token	*el;
 
 	i = 0;
 	new = vec_new();
 	while (i < tokens.len)
 	{
 		el = tokens.buf[i];
-		if (ft_strlen(el) > 0)
+		if (ft_strlen(el->s) > 0)
 		{
-			vec_push(&new, ft_strdup(el));
+			vec_push(&new, el);
 		}
 		i += 1;
 	}
-	vec_free(&tokens);
+	free(tokens.buf);
 	return (new);
 }
 
@@ -126,7 +126,7 @@ char	*join_next(t_lexer *lexer,
 		&& (curr == LIT_QUOTE || curr == LIT_DOUBLE_QUOTE || is_quoted)
 	)
 	{
-		join = get_next(env, lexer);
+		join = get_next(env, lexer)->s;
 		tmp = (char *)token;
 		token = ft_strjoin(token, join);
 		free(tmp);
