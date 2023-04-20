@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 17:59:12 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/18 18:20:57 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/20 16:25:22 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ t_vec	trim_empty(t_vec tokens)
 	{
 		el = tokens.buf[i];
 		if (ft_strlen(el->s) > 0)
-		{
 			vec_push(&new, el);
+		else
+		{
+			free(el->s);
+			free(el);
 		}
 		i += 1;
 	}
@@ -44,19 +47,24 @@ static char	*next_var(const char *s)
 	{
 		if (s[i] == '$')
 		{
-			j = 0;
-			while (s[i + j + 1] && !ft_isspace(s[i + j + 1])
-				&& s[i + j + 1] != '$'
-				&& s[i + j + 1] != *LIT_REDIR_OUT
-				&& s[i + j + 1] != *LIT_REDIR_IN
-				&& s[i + j + 1] != *LIT_PIPE
-				&& s[i + j + 1] != LIT_QUOTE
-				&& s[i + j + 1] != LIT_DOUBLE_QUOTE)
+			if (s[i + 1] && s[i + 1] == '?')
+				return (ft_substr(s, i, 2));
+			else
 			{
-				j += 1;
+				j = 0;
+				while (s[i + j + 1] && !ft_isspace(s[i + j + 1])
+					&& s[i + j + 1] != '$'
+					&& s[i + j + 1] != *LIT_REDIR_OUT
+					&& s[i + j + 1] != *LIT_REDIR_IN
+					&& s[i + j + 1] != *LIT_PIPE
+					&& s[i + j + 1] != LIT_QUOTE
+					&& s[i + j + 1] != LIT_DOUBLE_QUOTE)
+				{
+					j += 1;
+				}
+				if (j)
+					return (ft_substr(s, i, j + 1));
 			}
-			if (j)
-				return (ft_substr(s, i, j + 1));
 		}
 		i += 1;
 	}
@@ -96,7 +104,11 @@ char	*expand_token(const char *token, t_vec *env)
 			break ;
 		tmp = buf;
 		if (is_last_status(buf))
-			buf = ft_itoa(g_signals.exit_status);
+		{
+			char *imdone = ft_itoa(g_signals.exit_status);
+			buf = replace_var(buf, var, imdone);
+			free(imdone);
+		}
 		else if (pos_env_var(env, var + 1) != -1)
 		{
 			var_value = get_var_value(env->buf[pos_env_var(env, var + 1)]);

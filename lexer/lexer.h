@@ -6,7 +6,7 @@
 /*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:28:38 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/18 16:32:35 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/20 16:02:16 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ inline static bool	is_redir(const char *token)
 
 static inline bool	is_last_status(char *arg)
 {
-	return (ft_strcmp("$?", arg) == 0);
+	return (ft_strncmp("$?", arg, 2) == 0);
 }
 
 t_vec	trim_empty(t_vec tokens);

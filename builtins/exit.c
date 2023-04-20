@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:56:41 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/03/31 15:06:57 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/20 16:12:19 by pnobre-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	digits_in(char *arg)
 {
 	size_t	i;
 
-	i = 0;
+	i = 1;
+	if (!ft_isdigit(arg[0]) && !(arg[0] == '-') && !(arg[0] == '+'))
+		return (1);
 	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))
