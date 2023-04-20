@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:28:38 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/20 18:02:26 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/20 21:17:40 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEXER_H
 
 # include <stdbool.h>
+# include "../env_vars/env.h"
 # include "../globals.h"
 # include "../vector.h"
 # include "../libft/libft.h"
@@ -39,7 +40,7 @@ inline static bool	is_redir(const char *token)
 		|| ft_strcmp((char *)token, LIT_REDIR_OUT) == 0);
 }
 
-static inline bool	is_last_status(char *arg)
+inline static bool	is_last_status(char *arg)
 {
 	return (ft_strncmp("$?", arg, 2) == 0);
 }
@@ -107,5 +108,13 @@ static inline t_token	*get_tk(char c, t_lexer *lexer, t_vec *env, size_t i)
 	free(t);
 	return (other_tk(c, lexer, env, i));
 }
+
+char	*exp_var(const char *s, size_t i);
+
+char	*next_var(const char *s);
+
+char	*replace_var(const char *s, const char *sub, const char *with);
+
+char	*help_expand(char *buf, t_vec *env, char *var);
 
 #endif

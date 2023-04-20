@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 12:56:41 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/20 16:12:19 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/20 20:53:07 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ int	digits_in(char *arg)
 
 void	mini_exit(t_expression *expr, t_executer *params)
 {
-	size_t	i;
-
-	i = 0;
 	params->exit = 1;
 	printf("exit\n");
 	if (expr->args.len == 1)

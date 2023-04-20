@@ -3,14 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_rearrange.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 18:40:58 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/18 18:19:59 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/20 21:18:12 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+char	*help_expand(char *buf, t_vec *env, char *var)
+{
+	char	*l_status;
+	char	*var_value;
+
+	if (is_last_status(buf))
+	{
+		l_status = ft_itoa(g_signals.exit_status);
+		buf = replace_var(buf, var, l_status);
+		free(l_status);
+	}
+	else if (pos_env_var(env, var + 1) != -1)
+	{
+		var_value = get_var_value(env->buf[pos_env_var(env, var + 1)]);
+		buf = replace_var(buf, var, var_value);
+	}
+	else
+		buf = replace_var(buf, var, "");
+	return (buf);
+}
+
+char	*exp_var(const char *s, size_t i)
+{
+	size_t	j;
+
+	if (s[i + 1] && s[i + 1] == '?')
+		return (ft_substr(s, i, 2));
+	else
+	{
+		j = 0;
+		while (s[i + j + 1] && !ft_isspace(s[i + j + 1])
+			&& s[i + j + 1] != '$'
+			&& s[i + j + 1] != *LIT_REDIR_OUT
+			&& s[i + j + 1] != *LIT_REDIR_IN
+			&& s[i + j + 1] != *LIT_PIPE
+			&& s[i + j + 1] != LIT_QUOTE
+			&& s[i + j + 1] != LIT_DOUBLE_QUOTE)
+			j += 1;
+		if (j)
+			return (ft_substr(s, i, j + 1));
+	}
+	return (NULL);
+}
 
 static void	join_channels(t_vec *rearranged, t_vec *redirs)
 {
