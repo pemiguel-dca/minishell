@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 00:30:39 by pedro             #+#    #+#             */
-/*   Updated: 2023/04/20 16:22:07 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/20 18:01:05 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "lexer.h"
 
-static char	*dispatch_operator(t_lexer *lexer)
+char	*dispatch_operator(t_lexer *lexer)
 {
 	char	*token;
 	size_t	n;
@@ -41,7 +41,7 @@ static char	*dispatch_operator(t_lexer *lexer)
 	return (token);
 }
 
-static char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env)
+char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env)
 {
 	char	*token;
 	char	delim;
@@ -69,7 +69,7 @@ static char	*dispatch_string(t_lexer *lexer, size_t i, t_vec *env)
 	}
 }
 
-static char	*dispatch_normal(t_lexer *lexer, size_t i, t_vec *env)
+char	*dispatch_normal(t_lexer *lexer, size_t i, t_vec *env)
 {
 	char	*token;
 
@@ -95,35 +95,14 @@ t_token	*get_next(t_vec *env, t_lexer *lexer)
 	i = 0;
 	while (*l_curr(lexer, i) && ft_isspace(*l_curr(lexer, i)))
 		++lexer->input;
-	t = malloc(sizeof(t_token));
 	while (*lexer->input)
 	{
 		c = *l_curr(lexer, i);
-		if (i == 0)
-		{
-			if (c == *LIT_REDIR_OUT
-				|| c == *LIT_REDIR_IN
-				|| c == *LIT_PIPE)
-			{
-				*t = (t_token){.known_literal = false, .s = dispatch_operator(lexer)};
-				return (t);
-			}
-			else if (c == LIT_QUOTE || c == LIT_DOUBLE_QUOTE)
-			{
-				*t = (t_token){.known_literal = true, .s = dispatch_string(lexer, i, env)};
-				return (t);
-			}
-		}
-		if ((ft_isspace(c) || !c)
-			|| (c == LIT_QUOTE || c == LIT_DOUBLE_QUOTE)
-			|| (c == *LIT_REDIR_OUT || c == *LIT_REDIR_IN || c == *LIT_PIPE))
-		{
-			*t = (t_token){.known_literal = false, .s = dispatch_normal(lexer, i, env)};
+		t = get_tk(c, lexer, env, i);
+		if (t)
 			return (t);
-		}
 		i += 1;
 	}
-	free(t);
 	return (NULL);
 }
 

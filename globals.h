@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   globals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 16:51:23 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/18 18:35:48 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/20 17:16:30 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct signals
 	bool		is_heredoc;
 }	t_signals;
 
+extern t_signals	g_signals;
+
 typedef struct executer
 {
 	size_t		i;
@@ -64,5 +66,15 @@ typedef struct token
 
 void	sig_int(int n);
 void	ignore_signal(int n);
+
+static inline void	set_pid(void)
+{
+	g_signals.pid = 14;
+	if (g_signals.pressed_in_child)
+	{
+		printf("\n");
+		g_signals.pressed_in_child = false;
+	}
+}
 
 #endif

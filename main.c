@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 17:21:18 by pnobre-m          #+#    #+#             */
-/*   Updated: 2023/04/20 16:22:55 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/20 16:59:57 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,48 +19,6 @@
 #include "globals.h"
 
 t_signals	g_signals;
-
-void	__debug_lexer(const t_vec *tokens)
-{
-	printf("[");
-	for (size_t i = 0; i < tokens->len; i += 1)
-	{
-		printf("'%s'", ((t_token *)tokens->buf[i])->s);
-		if (i + 1 != tokens->len)
-			printf(", ");
-	}
-	printf("]\n");
-}
-
-// void	__debug_parser(const t_vec *expressions)
-// {
-// 	for (size_t i = 0; i < expressions->len; i += 1)
-// 	{
-// 		printf("[");
-// 		t_expression *expr = expressions->buf[i];
-// 		for (size_t j = 0; j < expr->args.len; j += 1)
-// 		{
-// 			char *arg = expr->args.buf[j];
-// 			printf("'%s'", arg);
-// 			if (j + 1 != expr->args.len)
-// 				printf(", ");
-// 		}
-// 		printf(" | State = %u", expr->state);
-// 		printf("]\n");
-// 	}
-// }
-
-// void __debug_envs(const t_vec *env)
-// {
-// 	printf("[");
-// 	for (size_t i = 0; i < env->len; i += 1)
-// 	{
-// 		printf("'%s'", (char *)env->buf[i]);
-// 		if (i + 1 != env->len)
-// 			printf(", ");
-// 	}
-// 	printf("]\n");
-// }
 
 static void	free_all(t_vec *expressions,
 				t_executer *params,
@@ -112,16 +70,6 @@ static size_t	process(t_vec *env, const char *input)
 	should_exit = params->exit;
 	free_all(&expressions, params, &tokens, (char *)input);
 	return (should_exit);
-}
-
-static void	set_pid(void)
-{
-	g_signals.pid = 14;
-	if (g_signals.pressed_in_child)
-	{
-		printf("\n");
-		g_signals.pressed_in_child = false;
-	}
 }
 
 void	loop(t_vec *env)
