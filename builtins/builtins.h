@@ -6,7 +6,7 @@
 /*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:16:23 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/13 15:53:25 by pemiguel         ###   ########.fr       */
+/*   Updated: 2023/04/21 12:38:23 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ size_t	_export(t_expression *expr, t_vec *env);
 size_t	_echo(t_expression *expr);
 void	mini_exit(t_expression *expr, t_executer *params);
 
-static inline bool	is_child_builtin(char *cmd)
+static inline bool	is_child_builtin(char *cmd, size_t len)
 {
 	return (ft_strcmp(cmd, "pwd") == 0
 		|| ft_strcmp(cmd, "env") == 0
-		|| ft_strcmp(cmd, "echo") == 0);
+		|| ft_strcmp(cmd, "echo") == 0
+		|| (ft_strcmp(cmd, "export") == 0 && len == 1));
 }
 
 static inline bool	is_parent_builtin(char *cmd)
@@ -72,6 +73,8 @@ static inline void	execute_child_builtin(t_expression *expr, t_vec *env)
 		g_signals.exit_status = _env(expr, env);
 	else if (ft_strcmp((char *)expr->args.buf[0], "echo") == 0)
 		g_signals.exit_status = _echo(expr);
+	else if (ft_strcmp((char *)expr->args.buf[0], "export") == 0)
+		g_signals.exit_status = _export(expr, env);
 }
 
 static inline void	execute_parent_builtin(t_expression *expr, t_vec *env,

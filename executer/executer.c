@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pnobre-m <pnobre-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pemiguel <pemiguel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:11:40 by pemiguel          #+#    #+#             */
-/*   Updated: 2023/04/18 16:12:01 by pnobre-m         ###   ########.fr       */
+/*   Updated: 2023/04/21 12:36:13 by pemiguel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	child_process(t_vec *expressions, t_executer *params, t_vec *env)
 		redir_input(expressions, params);
 		bin = ft_strjoin("/", (char *)expr->args.buf[0]);
 		path = bin_path(bin, expr, env);
-		if (path || is_child_builtin(expr->args.buf[0]))
+		if (path || is_child_builtin(expr->args.buf[0], expr->args.len))
 		{
 			set_pipe_channels(expressions, params);
 			execute_cmd(expr, env, path);
@@ -136,7 +136,7 @@ int	executer(t_vec *expressions, t_executer *params, t_vec *env)
 		else if (g_signals.pressed_in_child)
 			g_signals.exit_status = 130;
 		expr = expressions->buf[params->i];
-		if (is_parent_builtin(expr->args.buf[0])
+		if ((is_parent_builtin(expr->args.buf[0]))
 			&& expressions->len == 1)
 			execute_parent_builtin(expr, env, params);
 		else if (params->i + 1 < expressions->len)
